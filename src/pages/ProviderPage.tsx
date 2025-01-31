@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { fetchProviders, addProvider, editProvider } from "@/features/providers/providerSlice";
-import { Plus, MoreHorizontal, Search, Edit, Trash2 } from "lucide-react";
+import { Plus, MoreHorizontal, Search, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { Provider } from "@/types/providers/providers";
 
 export const ProvidersPage = () => {
@@ -36,7 +37,6 @@ export const ProvidersPage = () => {
     type_account: "",
     bank: "",
     status: true,
-    logo: null,
   });
 
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -56,26 +56,40 @@ export const ProvidersPage = () => {
     );
   }, [providers, searchTerm]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingId !== null) {
-      dispatch(editProvider({ id: editingId.toString(), provider: form }));
-      setEditingId(null);
-    } else {
-      dispatch(addProvider(form));
+
+    try {
+      const providerData: Omit<Provider, "id"> = {
+        ...form,
+      };
+
+      if (editingId !== null) {
+        dispatch(editProvider({ id: editingId.toString(), provider: providerData }));
+        setEditingId(null);
+      } else {
+        dispatch(addProvider(providerData));
+      }
+
+      // Limpiar el formulario
+      setForm({
+        name: "",
+        nit: "",
+        email: "",
+        phone: "",
+        address: "",
+        bank_account: "",
+        type_account: "",
+        bank: "",
+        status: true,
+      });
+    } catch (error) {
+      console.error("Error al guardar el proveedor:", error);
     }
-    setForm({
-      name: "",
-      nit: "",
-      email: "",
-      phone: "",
-      address: "",
-      bank_account: "",
-      type_account: "",
-      bank: "",
-      status: true,
-      logo: null,
-    });
   };
 
   const handleEdit = (provider: Provider) => {
@@ -90,13 +104,11 @@ export const ProvidersPage = () => {
       type_account: provider.type_account,
       bank: provider.bank,
       status: provider.status,
-      logo: provider.logo,
     });
   };
 
-
   return (
-    <div className="p-8 min-h-screen">
+    <div className="p-8 bg-[#F5E6D3] min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-[#4A3728]">Gestión de Proveedores</h1>
 
       {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -109,23 +121,109 @@ export const ProvidersPage = () => {
               <Plus className="mr-2 h-4 w-4" /> {editingId ? "Editar Proveedor" : "Añadir Nuevo Proveedor"}
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-[#F5E6D3] sm:max-w-[425px]">
+          <DialogContent className="bg-[#F5E6D3] sm:max-w-[625px]">
             <DialogHeader>
               <DialogTitle className="text-[#4A3728]">{editingId ? "Editar Proveedor" : "Añadir Nuevo Proveedor"}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {Object.keys(form).map((key) => (
-                <div key={key} className="space-y-2">
-                  <Label htmlFor={key}>{key.charAt(0).toUpperCase() + key.slice(1)}</Label>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Nombre</Label>
                   <Input
-                    id={key}
-                    value={(form as any)[key]}
-                    onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                    placeholder={`Ingrese ${key}`}
+                    id="name"
+                    name="name"
+                    value={form.name}
+                    onChange={handleInputChange}
+                    placeholder="Nombre del proveedor"
                     className="border-[#8C7A6B]"
                   />
                 </div>
-              ))}
+                <div className="space-y-2">
+                  <Label htmlFor="nit">NIT</Label>
+                  <Input
+                    id="nit"
+                    name="nit"
+                    value={form.nit}
+                    onChange={handleInputChange}
+                    placeholder="NIT del proveedor"
+                    className="border-[#8C7A6B]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Correo Electrónico</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleInputChange}
+                    placeholder="Correo electrónico"
+                    className="border-[#8C7A6B]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Teléfono</Label>
+                  <Input
+                    id="phone"
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleInputChange}
+                    placeholder="Teléfono"
+                    className="border-[#8C7A6B]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="address">Dirección</Label>
+                  <Input
+                    id="address"
+                    name="address"
+                    value={form.address}
+                    onChange={handleInputChange}
+                    placeholder="Dirección"
+                    className="border-[#8C7A6B]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="bank_account">Cuenta Bancaria</Label>
+                  <Input
+                    id="bank_account"
+                    name="bank_account"
+                    value={form.bank_account}
+                    onChange={handleInputChange}
+                    placeholder="Cuenta bancaria"
+                    className="border-[#8C7A6B]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="type_account">Tipo de Cuenta</Label>
+                  <Input
+                    id="type_account"
+                    name="type_account"
+                    value={form.type_account}
+                    onChange={handleInputChange}
+                    placeholder="Tipo de cuenta"
+                    className="border-[#8C7A6B]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="bank">Banco</Label>
+                  <Input
+                    id="bank"
+                    name="bank"
+                    value={form.bank}
+                    onChange={handleInputChange}
+                    placeholder="Banco"
+                    className="border-[#8C7A6B]"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="status"
+                  checked={form.status}
+                  onCheckedChange={(checked) => setForm({ ...form, status: checked })}
+                />
+                <Label htmlFor="status">Proveedor Activo</Label>
+              </div>
               <Button type="submit" className="w-full bg-[#A9B18F] hover:bg-[#98A17E] text-white">
                 {editingId ? "Actualizar Proveedor" : "Crear Proveedor"}
               </Button>
@@ -151,7 +249,7 @@ export const ProvidersPage = () => {
               <TableHead className="text-white">Nombre</TableHead>
               <TableHead className="text-white">Correo Electrónico</TableHead>
               <TableHead className="text-white">Teléfono</TableHead>
-              <TableHead className="text-white text-right">Acciones</TableHead>
+              <TableHead className="text-white">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -160,7 +258,7 @@ export const ProvidersPage = () => {
                 <TableCell className="font-medium text-[#4A3728]">{provider.name}</TableCell>
                 <TableCell>{provider.email}</TableCell>
                 <TableCell>{provider.phone}</TableCell>
-                <TableCell className="text-right">
+                <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="h-8 w-8 p-0">
@@ -177,7 +275,6 @@ export const ProvidersPage = () => {
                       <DropdownMenuItem onClick={() => handleEdit(provider)}>
                         <Edit className="mr-2 h-4 w-4" /> Editar
                       </DropdownMenuItem>
-                     
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

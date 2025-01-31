@@ -8,6 +8,5 @@ export interface Provider {
     bank_account: string;
     type_account: string;
     bank: string;
-    logo: string | null;
     status: boolean;
   }
