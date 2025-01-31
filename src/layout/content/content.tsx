@@ -12,7 +12,7 @@ const Layout = () => {
       </div>
 
       <div className="flex-1 flex flex-col">
-        <main className="flex-grow overflow-y-auto p-6 lg:p-8 ">
+        <main className="flex-grow overflow-y-auto p-6 lg:p-8 bg-gradient-to-r from-pink-100 to-amber-100 ">
           <Outlet />
         </main>
       </div>

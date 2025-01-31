@@ -24,13 +24,13 @@ const Sidebar = () => {
     { icon: <Home />, label: 'Inicio', path: '/home' },
     { icon: <Users />, label: 'Proveedores', path: '/providers' },
     { icon: <BarChart2 />, label: 'Tienda', path: '/stores' },
-    { icon: <Folder />, label: 'Compras', path: '/shopping' },
+    // { icon: <Folder />, label: 'Compras', path: '/shopping' },
   ];
 
-  const bottomItems = [
-    { icon: <HelpCircle />, label: 'Ayuda', path: '/help' },
-    { icon: <Settings />, label: 'Configuración', path: '/settings' },
-  ];
+  // const bottomItems = [
+  //   { icon: <HelpCircle />, label: 'Ayuda', path: '/help' },
+  //   { icon: <Settings />, label: 'Configuración', path: '/settings' },
+  // ];
 
   return (
     <div className={`
@@ -48,7 +48,7 @@ const Sidebar = () => {
       border-gray-100
     `}>
       {/* Encabezado con Logo y Botón de Colapso */}
-      <div className="flex items-center justify-between p-5 border-b border-gray-100">
+      <div className="flex items-center justify-between p-5 border-b border-gray-100 ">
         {!isCollapsed && (
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-3">
@@ -125,7 +125,7 @@ const Sidebar = () => {
         mt-auto
       ">
         <ul className="space-y-2">
-          {bottomItems.map((item) => (
+          {/* {bottomItems.map((item) => (
             <li key={item.label}>
               <a
                 href={item.path}
@@ -159,7 +159,7 @@ const Sidebar = () => {
                 )}
               </a>
             </li>
-          ))}
+          ))} */}
 
           {/* Botón de Logout */}
           <li>

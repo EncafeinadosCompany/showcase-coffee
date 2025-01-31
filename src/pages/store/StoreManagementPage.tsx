@@ -77,7 +77,7 @@ export default function Stores() {
   };
 
   return (
-    <div className="p-8 bg-[#F5E6D3] min-h-screen">
+    <div className="p-8 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-[#4A3728]">Gestión de Tiendas</h1>
 
       <div className="flex justify-between items-center mb-6">
