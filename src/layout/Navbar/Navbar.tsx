@@ -19,14 +19,8 @@ const Navbar = () => {
     <nav className="bg-white shadow-xl border-b border-gray-100">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center py-4">
-          {/* Logo con estilo circular */}
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
-              <span className="text-blue-600 font-bold">A</span>
-            </div>
-            <span className="text-xl font-semibold text-gray-800 hidden md:block">
-              Dashboard
-            </span>
+            <img src="../src/assets/images/logos/dark-logo.svg" alt="Logo" className="w-50 h-8" />
           </div>
 
           {/* Menú para pantallas grandes */}
