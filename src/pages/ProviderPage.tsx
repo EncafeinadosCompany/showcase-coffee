@@ -59,7 +59,7 @@ export const ProvidersPage = () => {
   };
 
   return (
-    <div className="p-8 bg-[#F5E6D3] min-h-screen">
+    <div className="p-8 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-[#4A3728]">Gestión de Proveedores</h1>
 
       {error && <p className="text-red-500 mb-4">{error}</p>}
