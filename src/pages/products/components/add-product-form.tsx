@@ -1,29 +1,48 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { brandType } from "@/types/products/brand"
+import {fetchBrands} from "@/features/products/brands/brandSlice";
+import {fetchAttributes, addAttribute} from "@/features/products/attributes/attributeSlice"
+import {addProducts} from "@/features/products/products/productSlice"
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { useAppSelector } from "@/hooks/useAppSelector";
 
 interface AddProductFormProps {
-  brands: Array<{ id: number; name: string }>
   attributes: string[]
   onAddProduct: (product: { name: string; brandId: number; attributes: Array<{ name: string; value: string }> }) => void
-  onAddAttribute: (attribute: string) => void
 }
 
-export default function AddProductForm({ brands, attributes, onAddProduct, onAddAttribute }: AddProductFormProps) {
+export default function AddProductForm({onAddProduct, onAddAttribute }: AddProductFormProps) {
   const [name, setName] = useState("")
   const [brandId, setBrandId] = useState("")
-  const [productAttributes, setProductAttributes] = useState<Array<{ name: string; value: string }>>([])
+  const [productAttributes, setProductAttributes] = useState<Array<{ description: string; value: string }>>([])
   const [newAttribute, setNewAttribute] = useState("")
   const [newAttributeValue, setNewAttributeValue] = useState("")
   const [newCustomAttribute, setNewCustomAttribute] = useState("")
+  const dispatch = useAppDispatch();
+  const {brands} = useAppSelector((state) => state.brands);
+  const {attributes} = useAppSelector((state) => state.attributes);
+  // const {addProduct} = useAppSelector((state) => state.products);
+
+  useEffect(() => {
+    dispatch(fetchBrands());
+    dispatch(fetchAttributes());
+  },[dispatch])
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onAddProduct({
-      name,
-      brandId: Number.parseInt(brandId),
-      attributes: productAttributes,
-    })
+    dispatch(addProducts(
+      {
+      product: {
+        name,
+        id_brand: Number.parseInt(brandId),
+      },
+      attributes: productAttributes
+    }
+  ))
+
+  
     setName("")
     setBrandId("")
     setProductAttributes([])
@@ -35,12 +54,12 @@ export default function AddProductForm({ brands, attributes, onAddProduct, onAdd
   const handleAddAttribute = () => {
     const attributeName = newAttribute === "new" ? newCustomAttribute : newAttribute
     if (attributeName && newAttributeValue) {
-      setProductAttributes([...productAttributes, { name: attributeName, value: newAttributeValue }])
+      setProductAttributes([...productAttributes, { description: attributeName, value: newAttributeValue }])
       setNewAttribute("")
       setNewCustomAttribute("")
       setNewAttributeValue("")
-      if (!attributes.includes(attributeName)) {
-        onAddAttribute(attributeName)
+      if (!attributes.some(attr => attr.description === attributeName)) {
+        dispatch(addAttribute({description: attributeName}))
       }
     }
   }
@@ -74,7 +93,7 @@ export default function AddProductForm({ brands, attributes, onAddProduct, onAdd
         <h3 className="text-sm font-medium text-cafe-dark mb-2">Atributos</h3>
         {productAttributes.map((attr, index) => (
           <div key={index} className="flex gap-2 mb-2">
-            <Input value={attr.name} readOnly className="bg-white border-cafe-medium" />
+            <Input value={attr.description} readOnly className="bg-white border-cafe-medium" />
             <Input value={attr.value} readOnly className="bg-white border-cafe-medium" />
           </div>
         ))}
@@ -85,8 +104,8 @@ export default function AddProductForm({ brands, attributes, onAddProduct, onAdd
             </SelectTrigger>
             <SelectContent>
               {attributes.map((attr) => (
-                <SelectItem key={attr} value={attr}>
-                  {attr}
+                <SelectItem key={attr.id} value={attr.description}>
+                  {attr.description}
                 </SelectItem>
               ))}
               <SelectItem value="new">Agregar nuevo atributo</SelectItem>

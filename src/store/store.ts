@@ -11,7 +11,7 @@ export const store = configureStore({
     providers: providerReducer,
     products: productReducer,
     variants: variantReducer,
-    brans: brandReducer,
+    brands: brandReducer,
     attributes: attributeReducer
 
   },

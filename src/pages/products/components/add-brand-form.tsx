@@ -2,18 +2,18 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import {addBrand} from "@/features/products/brands/brandSlice";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 
-interface AddBrandFormProps {
-  onAddBrand: (brand: { name: string; description: string }) => void
-}
 
-export default function AddBrandForm({ onAddBrand }: AddBrandFormProps) {
+export default function AddBrandForm() {
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onAddBrand({ name, description })
+    dispatch(addBrand({name, description}))
     setName("")
     setDescription("")
   }

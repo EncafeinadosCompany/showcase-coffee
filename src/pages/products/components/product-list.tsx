@@ -3,26 +3,23 @@ import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
+import { useAppSelector } from "@/hooks/useAppSelector";
 import { productType } from "@/types/products/product";
+import { brandType } from "@/types/products/brand"
 interface ProductListProps {
 
   products : productType[]
-  brands?: Brand[]
 }
 
 
-interface Brand {
-  id: number
-  name: string
-  description: string
-}
 
 
-export default function ProductList({ products, brands }: ProductListProps) {
+export default function ProductList({products}: ProductListProps) {
   const [search, setSearch] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [brandFilter, setBrandFilter] = useState("")
   const itemsPerPage = 5
+  const {brands} = useAppSelector((state) => state.brands);
 
   const filteredProducts = products.filter(
     (product) =>
@@ -48,12 +45,12 @@ export default function ProductList({ products, brands }: ProductListProps) {
             <SelectValue placeholder="Filtrar por marca" />
           </SelectTrigger>
           <SelectContent>
-            {/* <SelectItem value="0">Todas las marcas</SelectItem>
-            {brands.map((brand) => (
+            <SelectItem value="0">Todas las marcas</SelectItem>
+            {brands?.map((brand) => (
               <SelectItem key={brand.id} value={brand.id.toString()}>
                 {brand.name}
               </SelectItem>
-            ))} */}
+            ))}
           </SelectContent>
         </Select>
       </div>
