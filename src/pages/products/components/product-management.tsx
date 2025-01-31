@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react"
 import ProductList from "./product-list"
-// import AddBrandForm from "./add-brand-form"
-// import AddProductForm from "./add-product-form"
+import AddBrandForm from "./add-brand-form"
+import AddProductForm from "./add-product-form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface Brand {
@@ -68,7 +68,7 @@ export default function ProductManagement() {
       <TabsContent value="products">
         <ProductList products={products} brands={brands} />
       </TabsContent>
-      {/* <TabsContent value="add-brand">
+      <TabsContent value="add-brand">
         <AddBrandForm onAddBrand={addBrand} />
       </TabsContent>
       <TabsContent value="add-product">
@@ -78,7 +78,7 @@ export default function ProductManagement() {
           onAddProduct={addProduct}
           onAddAttribute={addAttribute}
         />
-      </TabsContent> */}
+      </TabsContent>
     </Tabs>
   )
 }
