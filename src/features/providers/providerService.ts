@@ -1,27 +1,21 @@
 import { axiosInstance } from "../../API/axiosInstance";
+import { Provider } from "../../types/providers/providers";
 
-export interface Provider {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-}
-
-export const getProviders = async () => {
+export const getProviders = async (): Promise<Provider[]> => {
   const response = await axiosInstance.get("/provider");
   return response.data;
 };
 
-export const createProvider = async (provider: Omit<Provider, "id">) => {
+export const createProvider = async (provider: Omit<Provider, "id">): Promise<Provider> => {
   const response = await axiosInstance.post("/provider", provider);
   return response.data;
 };
 
-export const updateProvider = async (id: string, provider: Partial<Provider>) => {
+export const updateProvider = async (id: string, provider: Partial<Provider>): Promise<Provider> => {
   const response = await axiosInstance.put(`/provider/${id}`, provider);
   return response.data;
 };
 
-export const deleteProvider = async (id: string) => {
-  await axiosInstance.delete(`/providers/${id}`);
+export const deleteProvider = async (id: string): Promise<void> => {
+  await axiosInstance.delete(`/provider/${id}`);
 };

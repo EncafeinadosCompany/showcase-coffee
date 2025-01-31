@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import { fetchProviders, addProvider, editProvider, removeProvider } from "@/features/providers/providerSlice";
+import { fetchProviders, addProvider, editProvider } from "@/features/providers/providerSlice";
 import { Plus, MoreHorizontal, Search, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
+import { Provider } from "@/types/providers/providers";
 
 export const ProvidersPage = () => {
   const dispatch = useAppDispatch();
@@ -25,8 +26,20 @@ export const ProvidersPage = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProviders, setFilteredProviders] = useState(providers);
-  const [form, setForm] = useState({ name: "", email: "", phone: "" });
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState<Omit<Provider, "id">>({
+    name: "",
+    nit: "",
+    email: "",
+    phone: "",
+    address: "",
+    bank_account: "",
+    type_account: "",
+    bank: "",
+    status: true,
+    logo: null,
+  });
+
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   useEffect(() => {
     dispatch(fetchProviders());
@@ -45,18 +58,42 @@ export const ProvidersPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingId) {
-      dispatch(editProvider({ id: editingId, provider: form }));
+    if (editingId !== null) {
+      dispatch(editProvider({ id: editingId.toString(), provider: form }));
       setEditingId(null);
     } else {
       dispatch(addProvider(form));
     }
-    setForm({ name: "", email: "", phone: "" });
+    setForm({
+      name: "",
+      nit: "",
+      email: "",
+      phone: "",
+      address: "",
+      bank_account: "",
+      type_account: "",
+      bank: "",
+      status: true,
+      logo: null,
+    });
   };
 
-  const handleDelete = (id: string) => {
-    dispatch(removeProvider(id));
+  const handleEdit = (provider: Provider) => {
+    setEditingId(provider.id);
+    setForm({
+      name: provider.name,
+      nit: provider.nit,
+      email: provider.email,
+      phone: provider.phone,
+      address: provider.address,
+      bank_account: provider.bank_account,
+      type_account: provider.type_account,
+      bank: provider.bank,
+      status: provider.status,
+      logo: provider.logo,
+    });
   };
+
 
   return (
     <div className="p-8 bg-[#F5E6D3] min-h-screen">
@@ -69,48 +106,26 @@ export const ProvidersPage = () => {
         <Dialog>
           <DialogTrigger asChild>
             <Button className="bg-[#A9B18F] hover:bg-[#98A17E] text-white">
-              <Plus className="mr-2 h-4 w-4" /> Añadir Nuevo Proveedor
+              <Plus className="mr-2 h-4 w-4" /> {editingId ? "Editar Proveedor" : "Añadir Nuevo Proveedor"}
             </Button>
           </DialogTrigger>
           <DialogContent className="bg-[#F5E6D3] sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle className="text-[#4A3728]">
-                {editingId ? "Editar Proveedor" : "Añadir Nuevo Proveedor"}
-              </DialogTitle>
+              <DialogTitle className="text-[#4A3728]">{editingId ? "Editar Proveedor" : "Añadir Nuevo Proveedor"}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Nombre</Label>
-                <Input
-                  id="name"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="Nombre del Proveedor"
-                  className="border-[#8C7A6B]"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Correo Electrónico</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  placeholder="Correo Electrónico"
-                  className="border-[#8C7A6B]"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="phone">Teléfono</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  placeholder="Teléfono"
-                  className="border-[#8C7A6B]"
-                />
-              </div>
+              {Object.keys(form).map((key) => (
+                <div key={key} className="space-y-2">
+                  <Label htmlFor={key}>{key.charAt(0).toUpperCase() + key.slice(1)}</Label>
+                  <Input
+                    id={key}
+                    value={(form as any)[key]}
+                    onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                    placeholder={`Ingrese ${key}`}
+                    className="border-[#8C7A6B]"
+                  />
+                </div>
+              ))}
               <Button type="submit" className="w-full bg-[#A9B18F] hover:bg-[#98A17E] text-white">
                 {editingId ? "Actualizar Proveedor" : "Crear Proveedor"}
               </Button>
@@ -159,12 +174,10 @@ export const ProvidersPage = () => {
                         Copiar correo electrónico
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => { setEditingId(provider.id); setForm(provider); }}>
+                      <DropdownMenuItem onClick={() => handleEdit(provider)}>
                         <Edit className="mr-2 h-4 w-4" /> Editar
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleDelete(provider.id)}>
-                        <Trash2 className="mr-2 h-4 w-4" /> Eliminar
-                      </DropdownMenuItem>
+                     
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
