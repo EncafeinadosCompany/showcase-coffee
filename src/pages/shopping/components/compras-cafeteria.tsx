@@ -14,6 +14,7 @@ interface Producto {
   fechaTostion: string
   precioCompra: number
   precioVenta: number
+  porcentajeGanancia: number
 }
 
 export default function ComprasCafeteria() {
@@ -31,6 +32,7 @@ export default function ComprasCafeteria() {
     fechaTostion: "",
     precioCompra: 0,
     precioVenta: 0,
+    porcentajeGanancia: 0,
   })
 
   const buscarProducto = () => {
@@ -46,9 +48,10 @@ export default function ComprasCafeteria() {
       productoActual.cantidad > 0 &&
       productoActual.fechaTostion &&
       productoActual.precioCompra > 0 &&
-      productoActual.precioVenta > 0
+      productoActual.porcentajeGanancia >= 0
     ) {
-      setProductosCompra([...productosCompra, productoActual])
+      const precioVenta = productoActual.precioCompra * (1 + productoActual.porcentajeGanancia / 100)
+      setProductosCompra([...productosCompra, { ...productoActual, precioVenta }])
       setProductoActual({
         id: 0,
         nombre: "",
@@ -56,6 +59,7 @@ export default function ComprasCafeteria() {
         fechaTostion: "",
         precioCompra: 0,
         precioVenta: 0,
+        porcentajeGanancia: 0,
       })
       setBusqueda("")
     }
@@ -65,18 +69,22 @@ export default function ComprasCafeteria() {
     setProductosCompra(productosCompra.filter((producto) => producto.id !== id))
   }
 
+  const calcularPrecioVenta = (precioCompra: number, porcentajeGanancia: number) => {
+    return precioCompra * (1 + porcentajeGanancia / 100)
+  }
+
   const totalCompra = productosCompra.reduce((sum, producto) => sum + producto.precioCompra * producto.cantidad, 0)
 
   return (
-    <div className="min-h-screen bg-[#F5E6D3] p-8">
-      <h1 className="text-4xl font-bold text-[#4A3728] mb-8">Compras de Café</h1>
+    <div >
+      <h1 className="text-4xl font-bold text-[#4A3728] p-4 mb-8">Compras de Café</h1>
 
       <div className="grid gap-8 md:grid-cols-2">
-        <Card className="bg-white shadow-lg">
+        <Card className="bg-white shadow-lg h-[450px] overflow-hidden">
           <CardHeader>
             <CardTitle className="text-2xl text-[#4A3728]">Buscar y Agregar Producto</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="overflow-y-auto h-[calc(100%-130px)]">
             <div className="flex gap-2 mb-4">
               <Input
                 placeholder="Buscar producto"
@@ -102,11 +110,9 @@ export default function ComprasCafeteria() {
                   </Label>
                   <Input
                     id="cantidad"
-                    type="number"
+                    type="text"
                     value={productoActual.cantidad}
-                    onChange={(e) =>
-                      setProductoActual({ ...productoActual, cantidad: Number.parseInt(e.target.value) })
-                    }
+                    onChange={(e) => setProductoActual({ ...productoActual, cantidad: Number(e.target.value) })}
                     className="border-[#8C7A6B]"
                   />
                 </div>
@@ -128,11 +134,29 @@ export default function ComprasCafeteria() {
                   </Label>
                   <Input
                     id="precioCompra"
-                    type="number"
+                    type="text"
                     value={productoActual.precioCompra}
-                    onChange={(e) =>
-                      setProductoActual({ ...productoActual, precioCompra: Number.parseFloat(e.target.value) })
-                    }
+                    onChange={(e) => setProductoActual({ ...productoActual, precioCompra: Number(e.target.value) })}
+                    className="border-[#8C7A6B]"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="porcentajeGanancia" className="text-[#4A3728]">
+                    Porcentaje de Ganancia
+                  </Label>
+                  <Input
+                    id="porcentajeGanancia"
+                    type="text"
+                    value={productoActual.porcentajeGanancia}
+                    onChange={(e) => {
+                      const porcentaje = Number(e.target.value)
+                      const precioVenta = calcularPrecioVenta(productoActual.precioCompra, porcentaje)
+                      setProductoActual({
+                        ...productoActual,
+                        porcentajeGanancia: porcentaje,
+                        precioVenta: precioVenta,
+                      })
+                    }}
                     className="border-[#8C7A6B]"
                   />
                 </div>
@@ -143,10 +167,8 @@ export default function ComprasCafeteria() {
                   <Input
                     id="precioVenta"
                     type="number"
-                    value={productoActual.precioVenta}
-                    onChange={(e) =>
-                      setProductoActual({ ...productoActual, precioVenta: Number.parseFloat(e.target.value) })
-                    }
+                    value={productoActual.precioVenta.toFixed(2)}
+                    readOnly
                     className="border-[#8C7A6B]"
                   />
                 </div>
@@ -158,11 +180,11 @@ export default function ComprasCafeteria() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white shadow-lg">
+        <Card className="bg-white shadow-lg h-[450px] overflow-hidden">
           <CardHeader>
             <CardTitle className="text-2xl text-[#4A3728]">Productos en la Compra</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="overflow-y-auto h-[calc(100%-130px)]">
             <ul className="space-y-4">
               {productosCompra.map((producto) => (
                 <li key={producto.id} className="flex items-center justify-between bg-[#F5E6D3] p-4 rounded-md">
@@ -172,8 +194,9 @@ export default function ComprasCafeteria() {
                       ({producto.cantidad} kg - Tostión: {producto.fechaTostion})
                     </span>
                     <div className="text-sm text-[#8C7A6B]">
-                      Compra: ${producto.precioCompra}/kg - Venta: ${producto.precioVenta}/kg
+                      Compra: ${producto.precioCompra}/kg - Venta: ${producto.precioVenta.toFixed(2)}/kg
                     </div>
+                    <div className="text-sm text-[#8C7A6B]">Ganancia: {producto.porcentajeGanancia}%</div>
                   </div>
                   <Button variant="ghost" size="icon" onClick={() => eliminarProducto(producto.id)}>
                     <Trash2 className="h-5 w-5 text-[#4A3728]" />
