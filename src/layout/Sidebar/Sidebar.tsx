@@ -1,29 +1,35 @@
-import React, { useState } from 'react';
-import { 
-  Home, 
-  ChevronLeft, 
-  ChevronRight, 
-  Users, 
-  Settings, 
-  BarChart2, 
-  Folder, 
-  HelpCircle, 
-  LogOut 
-} from 'lucide-react';
+import { Home, ChevronLeft, ChevronRight, Users, Settings, BarChart2, Folder, HelpCircle, LogOut } from 'lucide-react';
+import { useState } from 'react';
+
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { logoutUser } from "@/features/auth/authSlice";
+import { useAuth } from "@/context/AuthContext1";
 
 const Sidebar = () => {
+
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const dispatch = useAppDispatch();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    logout();
+    navigate("/");
+  };
+
   const sidebarItems = [
-    { icon: <Home />, label: 'Inicio', href: '#inicio' },
-    { icon: <Users />, label: 'Usuarios', href: '#usuarios' },
-    { icon: <BarChart2 />, label: 'Análisis', href: '#analisis' },
-    { icon: <Folder />, label: 'Proyectos', href: '#proyectos' },
+    { icon: <Home />, label: 'Inicio', path: '/home' },
+    { icon: <Users />, label: 'Usuarios', path: '/users' },
+    { icon: <BarChart2 />, label: 'Análisis', path: '/analytics' },
+    { icon: <Folder />, label: 'Proyectos', path: '/projects' },
   ];
 
   const bottomItems = [
-    { icon: <HelpCircle />, label: 'Ayuda', href: '#ayuda' },
-    { icon: <Settings />, label: 'Configuración', href: '#configuracion' },
+    { icon: <HelpCircle />, label: 'Ayuda', path: '/help' },
+    { icon: <Settings />, label: 'Configuración', path: '/settings' },
   ];
 
   return (
@@ -45,14 +51,18 @@ const Sidebar = () => {
       <div className="flex items-center justify-between p-5 border-b border-gray-100">
         {!isCollapsed && (
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
-              <span className="text-blue-600 font-bold">A</span>
+            <div className="flex items-center space-x-3">
+              <img
+                src="../src/assets/images/logos/dark-logo.svg"
+                alt="Logo"
+                className="w-50 h-8"
+              />
             </div>
-        
+
           </div>
         )}
-        
-        <button 
+
+        <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="
             p-2 
@@ -71,8 +81,8 @@ const Sidebar = () => {
         <ul className="space-y-2 px-4">
           {sidebarItems.map((item) => (
             <li key={item.label}>
-              <a 
-                href={item.href} 
+              <a
+                href={item.path}
                 className={`
                   flex 
                   items-center 
@@ -117,8 +127,8 @@ const Sidebar = () => {
         <ul className="space-y-2">
           {bottomItems.map((item) => (
             <li key={item.label}>
-              <a 
-                href={item.href} 
+              <a
+                href={item.path}
                 className={`
                   flex 
                   items-center 
@@ -150,11 +160,11 @@ const Sidebar = () => {
               </a>
             </li>
           ))}
-          
+
           {/* Botón de Logout */}
           <li>
-            <a 
-              href="#logout" 
+            <button
+              onClick={handleLogout}
               className={`
                 flex 
                 items-center 
@@ -183,8 +193,11 @@ const Sidebar = () => {
                   Cerrar Sesión
                 </span>
               )}
-            </a>
+            </button>
           </li>
+
+
+
         </ul>
       </div>
     </div>
