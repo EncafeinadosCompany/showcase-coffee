@@ -22,9 +22,9 @@ const Sidebar = () => {
 
   const sidebarItems = [
     { icon: <Home />, label: 'Inicio', path: '/home' },
-    { icon: <Users />, label: 'Usuarios', path: '/users' },
-    { icon: <BarChart2 />, label: 'Análisis', path: '/analytics' },
-    { icon: <Folder />, label: 'Proyectos', path: '/projects' },
+    { icon: <Users />, label: 'Proveedores', path: '/providers' },
+    { icon: <BarChart2 />, label: 'Tienda', path: '/stores' },
+    { icon: <Folder />, label: 'Compras', path: '/shopping' },
   ];
 
   const bottomItems = [

@@ -5,15 +5,18 @@ import productReducer from "../features/products/products/productSlice";
 import variantReducer from "../features/products/variants/vatiantSlice";
 import brandReducer from "../features/products/brands/brandSlice";
 import attributeReducer from "../features/products/attributes/attributeSlice";
+import storeReducer from "../features/stores/storeSlice";
+
+
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     providers: providerReducer,
     products: productReducer,
     variants: variantReducer,
-    brands: brandReducer,
-    attributes: attributeReducer
-
+    brans: brandReducer,
+    attributes: attributeReducer,
+    stores: storeReducer
   },
 });
 
