@@ -21,6 +21,7 @@ const PrivateRoute = ({ children }: { children: JSX.Element }) => {
 
 import Layout from '../layout/content/content';
 import { HomePage } from "@/pages/home/home";
+import { VariantsPage } from "@/pages/variantsPage";
 
 export function AppRouter() {
   return (
@@ -42,7 +43,9 @@ export function AppRouter() {
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
           <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
           <Route path='/stores' element={<PrivateRoute><Stores /></PrivateRoute>} />
+          <Route path='/variants' element={<PrivateRoute><VariantsPage /></PrivateRoute>} />
         </Route>
+        
 
       </Routes>
     </AuthProvider>

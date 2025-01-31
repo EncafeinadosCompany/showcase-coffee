@@ -63,28 +63,28 @@ export default function Shopping() {
     }
   };
 
-  // const addProduct = () => {
-  //   if (
-  //     currentProduct.name &&
-  //     currentProduct.quantity > 0 &&
-  //     currentProduct.roastingDate &&
-  //     currentProduct.shoppingPrice > 0 &&
-  //     currentProduct.porcentage >= 0
-  //   ) {
-  //     const salePrice = currentProduct.shoppingPrice * (1 + currentProduct.porcentage / 100);
-  //     setcartProducts([...cartProducts, { ...currentProduct, salePrice }]);
-  //     setcurrentProduct({
-  //       id: 0,
-  //       name: "",
-  //       quantity: 0,
-  //       roastingDate: "",
-  //       shoppingPrice: 0,
-  //       salePrice: 0,
-  //       porcentage: 0,
-  //     });
-  //     setSearch("");
-  //   }
-  // };
+  const addProduct = () => {
+    if (
+      currentProduct.name &&
+      currentProduct.quantity > 0 &&
+      currentProduct.roastingDate &&
+      currentProduct.shoppingPrice > 0 &&
+      currentProduct.porcentage >= 0
+    ) {
+      const salePrice = currentProduct.shoppingPrice * (1 + currentProduct.porcentage / 100);
+      setcartProducts([...cartProducts, { ...currentProduct, salePrice }]);
+      setcurrentProduct({
+        id: 0,
+        name: "",
+        quantity: 0,
+        roastingDate: "",
+        shoppingPrice: 0,
+        salePrice: 0,
+        porcentage: 0,
+      });
+      setSearch("");
+    }
+  };
 
   const deleteProduct = (id: number) => {
     setcartProducts(cartProducts.filter((producto) => producto.id !== id));
