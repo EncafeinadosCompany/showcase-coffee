@@ -2,10 +2,12 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { LoginPage } from "@/pages/LoginPage";
 import { AuthProvider, useAuth } from "@/context/AuthContext1";
 import { ProvidersPage } from "@/pages/ProviderPage";
-import { Shopping } from "@/pages/shopping/shopping";
 import { Liquidations } from "@/pages/payments/liquidation";
 import { Products } from "@/pages/products/products";
+
 import Stores from "@/pages/store/StoreManagementPage";
+import Shopping from "@/pages/shopping/shopping";
+
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -37,14 +39,11 @@ export function AppRouter() {
           <Route path="/liquiduidations" element={<PrivateRoute><Liquidations /></PrivateRoute>} />
           <Route path="/shopping" element={<PrivateRoute><Shopping /></PrivateRoute>} />
 
-          {/* <Route path="productos" element={<Productos />} />
-  <Route path="proveedores" element={<Proveedores />} /> */}
-
+          <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
+          <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
+          <Route path='/stores' element={<PrivateRoute><Stores /></PrivateRoute>} />
         </Route>
 
-        <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
-        <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
-        <Route path='/stores' element={<PrivateRoute><Stores /></PrivateRoute>} />
       </Routes>
     </AuthProvider>
   );
