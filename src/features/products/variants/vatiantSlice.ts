@@ -133,18 +133,6 @@ const variantSlice = createSlice({
           (variant) => variant.id !== action.payload
         );
       })
-      .addCase(getVariantById.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(getVariantById.fulfilled, (state, action) => {
-        state.isLoading = false;
-        console.log("Variante obtenida:", action.payload);
-      })
-      .addCase(getVariantById.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload as string;
-      });
   },
 });
 
