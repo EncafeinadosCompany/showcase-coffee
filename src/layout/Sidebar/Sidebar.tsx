@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { logoutUser } from "@/features/auth/authSlice";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext1";
 
 const Sidebar = () => {
 
@@ -21,15 +21,15 @@ const Sidebar = () => {
   };
 
   const sidebarItems = [
-    { icon: <Home />, label: 'Inicio', href: '#inicio' },
-    { icon: <Users />, label: 'Usuarios', href: '#usuarios' },
-    { icon: <BarChart2 />, label: 'Análisis', href: '#analisis' },
-    { icon: <Folder />, label: 'Proyectos', href: '#proyectos' },
+    { icon: <Home />, label: 'Inicio', path: '/home' },
+    { icon: <Users />, label: 'Usuarios', path: '/users' },
+    { icon: <BarChart2 />, label: 'Análisis', path: '/analytics' },
+    { icon: <Folder />, label: 'Proyectos', path: '/projects' },
   ];
 
   const bottomItems = [
-    { icon: <HelpCircle />, label: 'Ayuda', href: '#ayuda' },
-    { icon: <Settings />, label: 'Configuración', href: '#configuracion' },
+    { icon: <HelpCircle />, label: 'Ayuda', path: '/help' },
+    { icon: <Settings />, label: 'Configuración', path: '/settings' },
   ];
 
   return (
@@ -82,7 +82,7 @@ const Sidebar = () => {
           {sidebarItems.map((item) => (
             <li key={item.label}>
               <a
-                href={item.href}
+                href={item.path}
                 className={`
                   flex 
                   items-center 
@@ -128,7 +128,7 @@ const Sidebar = () => {
           {bottomItems.map((item) => (
             <li key={item.label}>
               <a
-                href={item.href}
+                href={item.path}
                 className={`
                   flex 
                   items-center 

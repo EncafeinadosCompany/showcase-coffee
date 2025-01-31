@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { LoginPage } from "@/pages/LoginPage";
-import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { AuthProvider, useAuth } from "@/context/AuthContext1";
 import { ProvidersPage } from "@/pages/ProviderPage";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
