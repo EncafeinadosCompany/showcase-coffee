@@ -5,6 +5,6 @@ import { Products } from "./pages/products/products.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Products />
+    <Products/>
   </StrictMode>
 );

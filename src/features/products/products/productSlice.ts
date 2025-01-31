@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {getIdProduct, getProduct, createProduct} from "./productService";
-import { productType } from "@/types/products";
+import { getIdProduct, getProduct, createProduct } from "./productService";
+import { productType } from "@/types/products/product";
 
 interface ProductState {
   products: productType[];
@@ -14,30 +14,44 @@ const initialState: ProductState = {
   error: null,
 };
 
-export const fetchProducts = createAsyncThunk("products/fetchAll", async (_, { rejectWithValue }) => {
-  try {
-    return await getProduct();
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Error al obtener proveedores");
+export const fetchProducts = createAsyncThunk(
+  "products/fetchAll",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getProduct();
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Error al obtener proveedores"
+      );
+    }
   }
-});
+);
 
-export const addProducts = createAsyncThunk("products/add", async (products: Omit<productType, "id">, { rejectWithValue }) => {
-  try {
-    return await createProduct(products);
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Error al agregar proveedor");
+export const addProducts = createAsyncThunk(
+  "products/add",
+  async (products: Omit<productType, "id">, { rejectWithValue }) => {
+    try {
+      return await createProduct(products);
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Error al agregar proveedor"
+      );
+    }
   }
+);
 
-});
-
-export const getID = createAsyncThunk("products/getID", async (id: string, { rejectWithValue }) => {
-  try {
-    return await getIdProduct(id);
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Error al obtener el producto por ID");
+export const getID = createAsyncThunk(
+  "products/getID",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      return await getIdProduct(id);
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Error al obtener el producto por ID"
+      );
+    }
   }
-});
+);
 
 const productSlice = createSlice({
   name: "products",
@@ -66,7 +80,6 @@ const productSlice = createSlice({
       })
       .addCase(getID.fulfilled, (state, action) => {
         state.isLoading = false;
-        // Puedes manejar los datos según sea necesario, por ejemplo, guardarlos en un estado separado
         console.log("Producto obtenido:", action.payload);
       })
       .addCase(getID.rejected, (state, action) => {
