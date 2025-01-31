@@ -48,7 +48,7 @@ const Sidebar = () => {
             <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
               <span className="text-blue-600 font-bold">A</span>
             </div>
-            <img src="../../../assets/images/logos/dark-logo.svg" alt="Logo" className="w-10 h-10" />
+        
           </div>
         )}
         
