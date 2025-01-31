@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { LoginPage } from "@/pages/LoginPage";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { ProvidersPage } from "@/pages/ProviderPage";
-
+import { Products } from "@/pages/products/products";
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
   
@@ -19,6 +19,7 @@ export function AppRouter() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
+        <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
       </Routes>
     </AuthProvider>
   );
