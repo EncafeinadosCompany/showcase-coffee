@@ -27,10 +27,10 @@ const Sidebar = () => {
     // { icon: <Folder />, label: 'Compras', path: '/shopping' },
   ];
 
-  const bottomItems = [
-    { icon: <HelpCircle />, label: 'Ayuda', path: '/help' },
-    { icon: <Settings />, label: 'Configuración', path: '/settings' },
-  ];
+  // const bottomItems = [
+  //   { icon: <HelpCircle />, label: 'Ayuda', path: '/help' },
+  //   { icon: <Settings />, label: 'Configuración', path: '/settings' },
+  // ];
 
   return (
     <div className={`
@@ -125,7 +125,7 @@ const Sidebar = () => {
         mt-auto
       ">
         <ul className="space-y-2">
-          {bottomItems.map((item) => (
+          {/* {bottomItems.map((item) => (
             <li key={item.label}>
               <a
                 href={item.path}
@@ -159,7 +159,7 @@ const Sidebar = () => {
                 )}
               </a>
             </li>
-          ))}
+          ))} */}
 
           {/* Botón de Logout */}
           <li>
