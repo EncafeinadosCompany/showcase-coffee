@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 export const LoginPage = () => {
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector((state) => state.auth);
-  const { login } = useAuth(); // Usamos el contexto para gestionar la autenticación
+  const { login } = useAuth();
 
   const [form, setForm] = useState({ email: "", password: "" });
 
