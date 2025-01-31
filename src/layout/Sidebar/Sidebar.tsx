@@ -25,6 +25,7 @@ const Sidebar = () => {
     { icon: <Users />, label: 'Proveedores', path: '/providers' },
     { icon: <BarChart2 />, label: 'Tienda', path: '/stores' },
     { icon: <Folder />, label: 'Compras', path: '/shopping' },
+    { icon: <Settings />, label: 'Productos', path: '/products' }
   ];
 
   const bottomItems = [
