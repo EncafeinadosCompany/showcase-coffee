@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAppSelector } from "../hooks/useAppSelector";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { loginUser } from "../features/auth/authSlice";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext1";
 
 export const LoginPage = () => {
   const dispatch = useAppDispatch();
