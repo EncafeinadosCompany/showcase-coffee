@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { LoginPage } from "@/pages/LoginPage";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { ProvidersPage } from "@/pages/ProviderPage";
-
+import { Products } from "@/pages/products/products";
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
 
