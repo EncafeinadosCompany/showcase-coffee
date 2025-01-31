@@ -56,7 +56,7 @@ export default function Stores() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const store: Omit<Store, "id"> = {
+    const store: Omit<any, "id"> = {
       ...newStore,
       logo: selectedFile ? URL.createObjectURL(selectedFile) : null,
     };
