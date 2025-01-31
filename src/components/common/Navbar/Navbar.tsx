@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Menu, X, Home, Users, Briefcase, Mail } from 'lucide-react';
+import React, { useState } from "react";
+import { Menu, X, Home, Users, Briefcase, Mail } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,10 +9,10 @@ const Navbar = () => {
   };
 
   const navItems = [
-    { icon: <Home />, label: 'Inicio', href: '#' },
-    { icon: <Users />, label: 'Nosotros', href: '#nosotros' },
-    { icon: <Briefcase />, label: 'Servicios', href: '#servicios' },
-    { icon: <Mail />, label: 'Contacto', href: '#contacto' }
+    { icon: <Home />, label: "Inicio", href: "#" },
+    { icon: <Users />, label: "Nosotros", href: "#nosotros" },
+    { icon: <Briefcase />, label: "Servicios", href: "#servicios" },
+    { icon: <Mail />, label: "Contacto", href: "#contacto" },
   ];
 
   return (
@@ -20,7 +20,11 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-3">
-            <img src="../src/assets/images/logos/dark-logo.svg" alt="Logo" className="w-50 h-8" />
+            <img
+              src="../src/assets/images/logos/dark-logo.svg"
+              alt="Logo"
+              className="w-50 h-8"
+            />
           </div>
 
           {/* Menú para pantallas grandes */}
@@ -39,19 +43,23 @@ const Navbar = () => {
                   transition-colors
                 "
               >
-                <div className="
+                <div
+                  className="
                   text-gray-500 
                   mr-2
                   group-hover:text-blue-600 
                   transition-colors
-                ">
+                "
+                >
                   {item.icon}
                 </div>
-                <span className="
+                <span
+                  className="
                   text-gray-700 
                   group-hover:text-blue-600 
                   transition-colors
-                ">
+                "
+                >
                   {item.label}
                 </span>
               </a>
@@ -60,8 +68,8 @@ const Navbar = () => {
 
           {/* Botón de menú móvil */}
           <div className="md:hidden">
-            <button 
-              onClick={toggleMenu} 
+            <button
+              onClick={toggleMenu}
               className="
                 p-2 
                 rounded-full 
@@ -94,19 +102,23 @@ const Navbar = () => {
                     transition-colors
                   "
                 >
-                  <div className="
+                  <div
+                    className="
                     text-gray-500 
                     mr-3
                     group-hover:text-blue-600 
                     transition-colors
-                  ">
+                  "
+                  >
                     {item.icon}
                   </div>
-                  <span className="
+                  <span
+                    className="
                     text-gray-700 
                     group-hover:text-blue-600 
                     transition-colors
-                  ">
+                  "
+                  >
                     {item.label}
                   </span>
                 </a>
