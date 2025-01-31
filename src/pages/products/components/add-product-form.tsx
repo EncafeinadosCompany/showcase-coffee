@@ -16,7 +16,7 @@ export default function AddProductForm({ brands, attributes, onAddProduct, onAdd
   const [productAttributes, setProductAttributes] = useState<Array<{ name: string; value: string }>>([])
   const [newAttribute, setNewAttribute] = useState("")
   const [newAttributeValue, setNewAttributeValue] = useState("")
-
+  const [newCustomAttribute, setNewCustomAttribute] = useState("")
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onAddProduct({
@@ -27,15 +27,20 @@ export default function AddProductForm({ brands, attributes, onAddProduct, onAdd
     setName("")
     setBrandId("")
     setProductAttributes([])
+    setNewAttribute("")
+    setNewCustomAttribute("")
+    setNewAttributeValue("")
   }
 
   const handleAddAttribute = () => {
-    if (newAttribute && newAttributeValue) {
-      setProductAttributes([...productAttributes, { name: newAttribute, value: newAttributeValue }])
+    const attributeName = newAttribute === "new" ? newCustomAttribute : newAttribute
+    if (attributeName && newAttributeValue) {
+      setProductAttributes([...productAttributes, { name: attributeName, value: newAttributeValue }])
       setNewAttribute("")
+      setNewCustomAttribute("")
       setNewAttributeValue("")
-      if (!attributes.includes(newAttribute)) {
-        onAddAttribute(newAttribute)
+      if (!attributes.includes(attributeName)) {
+        onAddAttribute(attributeName)
       }
     }
   }
@@ -66,16 +71,16 @@ export default function AddProductForm({ brands, attributes, onAddProduct, onAdd
         </Select>
       </div>
       <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-2">Atributos</h3>
+        <h3 className="text-sm font-medium text-cafe-dark mb-2">Atributos</h3>
         {productAttributes.map((attr, index) => (
           <div key={index} className="flex gap-2 mb-2">
-            <Input value={attr.name} readOnly />
-            <Input value={attr.value} readOnly />
+            <Input value={attr.name} readOnly className="bg-white border-cafe-medium" />
+            <Input value={attr.value} readOnly className="bg-white border-cafe-medium" />
           </div>
         ))}
         <div className="flex gap-2 mb-2">
           <Select value={newAttribute} onValueChange={setNewAttribute}>
-            <SelectTrigger>
+            <SelectTrigger className="bg-white border-cafe-medium">
               <SelectValue placeholder="Seleccionar atributo" />
             </SelectTrigger>
             <SelectContent>
@@ -87,15 +92,25 @@ export default function AddProductForm({ brands, attributes, onAddProduct, onAdd
               <SelectItem value="new">Agregar nuevo atributo</SelectItem>
             </SelectContent>
           </Select>
-          {newAttribute === "new" && (
+          {newAttribute === "new" ? (
             <Input
               placeholder="Nuevo atributo"
-              value={newAttribute}
-              onChange={(e) => setNewAttribute(e.target.value)}
+              value={newCustomAttribute}
+              onChange={(e) => setNewCustomAttribute(e.target.value)}
+              className="bg-white border-cafe-medium"
             />
-          )}
-          <Input placeholder="Valor" value={newAttributeValue} onChange={(e) => setNewAttributeValue(e.target.value)} />
-          <Button type="button" onClick={handleAddAttribute}>
+          ) : null}
+          <Input
+            placeholder="Valor"
+            value={newAttributeValue}
+            onChange={(e) => setNewAttributeValue(e.target.value)}
+            className="bg-white border-cafe-medium"
+          />
+          <Button
+            type="button"
+            onClick={handleAddAttribute}
+            className="bg-cafe-light text-cafe-dark hover:bg-cafe-medium hover:text-cafe-cream"
+          >
             Agregar
           </Button>
         </div>
