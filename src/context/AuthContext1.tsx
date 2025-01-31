@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("token", token);
     setIsAuthenticated(true);
     setTimeout(() => {
-      navigate("/providers");
+      navigate("/home");
     }, 0);
   };
 

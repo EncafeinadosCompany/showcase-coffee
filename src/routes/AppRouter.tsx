@@ -42,7 +42,9 @@ export function AppRouter() {
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
           <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
           <Route path='/stores' element={<PrivateRoute><Stores /></PrivateRoute>} />
+          
         </Route>
+        
 
       </Routes>
     </AuthProvider>
