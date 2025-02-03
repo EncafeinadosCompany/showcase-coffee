@@ -1,31 +1,40 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
+import { Coffee, CoffeeIcon as CoffeeBean, MouseIcon as Mug, Tag } from "lucide-react"
+// import {fetchAttributes} from "@/features/products/attributes/attributeSlice"
+import {fetchProducts} from "@/features/products/products/productSlice"
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import { productType } from "@/types/products/product";
-import { brandType } from "@/types/products/brand"
-interface ProductListProps {
-
-  products : productType[]
-}
+import { Badge } from "@/components/ui/badge"
 
 
-
-
-export default function ProductList({products}: ProductListProps) {
+export default function ProductList() {
   const [search, setSearch] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [brandFilter, setBrandFilter] = useState("")
   const itemsPerPage = 5
+  const {products} = useAppSelector((state) => state.products);
+  const dispatch = useAppDispatch();
   const {brands} = useAppSelector((state) => state.brands);
 
-  const filteredProducts = products.filter(
-    (product) =>
-      product.name?.toLowerCase().includes(search.toLowerCase()) 
-    // &&
-      // (brandFilter === "" || product.brandId.toString() === brandFilter),
+
+    useEffect(() => {
+      dispatch(fetchProducts());
+    }, [dispatch]);
+
+
+    useEffect(() => {
+      console.log("Productos cargados:", products);
+    }, [products]);
+
+  const filteredProducts = products.filter((product) => 
+    product.name.toLowerCase().includes(search.toLowerCase()) 
+    &&
+    (brandFilter === "" || brandFilter ==="0" || product.brand?.id.toString() === brandFilter),
+    console.log(brandFilter)
   )
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage)
@@ -33,16 +42,21 @@ export default function ProductList({products}: ProductListProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-4">
-        <Input
+      <div className="flex gap-6">
+      <div className="flex relative items-center"> 
+      <Input
           placeholder="Buscar productos..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm bg-white border-cafe-medium"
+          className="max-w-sm bg-white border-cafe-medium pl-10"
+          
         />
+        <Coffee className="absolute left-3 top-1/2 transform -translate-y-1/2 text-coffee-600" size={18} />
+      </div>
+       
         <Select value={brandFilter} onValueChange={setBrandFilter}>
           <SelectTrigger className="w-[180px] bg-white border-cafe-medium">
-            <SelectValue placeholder="Filtrar por marca" />
+            <SelectValue  defaultValue={"0"} placeholder="Filtrar por marca" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="0">Todas las marcas</SelectItem>
@@ -56,23 +70,39 @@ export default function ProductList({products}: ProductListProps) {
       </div>
 
       <Table>
-        <TableHeader>
-          <TableRow className="bg-cafe-medium text-cafe-cream">
-            <TableHead className="text-cafe-light">Nombre</TableHead>
-            <TableHead className="text-cafe-light">Marca</TableHead>
-            <TableHead className="text-cafe-light">Atributos</TableHead>
-          </TableRow>
-        </TableHeader>
+      <TableHeader>
+            <TableRow className="bg-coffee-700 text-orange-100">
+              <TableHead className="font-semibold">
+                <div className="flex items-center space-x-2">
+                  <Mug size={18} />
+                  <span>Nombre</span>
+                </div>
+              </TableHead>
+              <TableHead className="font-semibold">
+                <div className="flex items-center space-x-2">
+                  <Tag size={18} />
+                  <span>Marca</span>
+                </div>
+              </TableHead>
+              <TableHead className="font-semibold">
+                <div className="flex items-center space-x-2">
+                  <CoffeeBean size={18} />
+                  <span>Atributos</span>
+                </div>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
         <TableBody>
           {paginatedProducts.map((product) => (
             <TableRow key={product.id} className="bg-white hover:bg-cafe-cream">
               <TableCell>{product.name}</TableCell>
-              {/* <TableCell>{brands.find((b) => b.id === product.id_brand)?.name}</TableCell> */}
+              <TableCell>{brands.find((b) => b.id === product.brand?.id)?.name}</TableCell>
               <TableCell>
                 {product.attributes?.map((attr, index) => (
-                  <span key={index} className="mr-2 text-cafe-medium">
-                    {attr.name}: {attr.value}
-                  </span>
+                  <span key={index} className="text-cafe-medium gap-2 flex mb-4">
+                     {attr.description} :
+                     <Badge> {attr.attributes_products?.valor || "N/A"}</Badge>
+                </span>
                 ))}
               </TableCell>
             </TableRow>

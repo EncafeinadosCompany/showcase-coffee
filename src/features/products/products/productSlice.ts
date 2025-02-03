@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getIdProduct, getProduct, createProduct } from "./productService";
 import { productType } from "@/types/products/product";
+import { getProductsType } from "@/types/products/getProducts";
 
 interface ProductState {
   products: productType[];
@@ -21,7 +22,7 @@ export const fetchProducts = createAsyncThunk(
       return await getProduct();
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Error al obtener proveedores"
+        error.response?.data?.message || "Error al obtener los prodcutos"
       );
     }
   }
@@ -34,7 +35,7 @@ export const addProducts = createAsyncThunk(
       return await createProduct(products);
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Error al agregar proveedor"
+        error.response?.data?.message || "Error al agregar el producto"
       );
     }
   }
@@ -85,7 +86,9 @@ const productSlice = createSlice({
       .addCase(getID.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
-      });
+      })
+      
+      
   },
 });
 

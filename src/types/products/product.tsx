@@ -1,14 +1,14 @@
 export interface productType
 {
-     product: {
-     id?: number
-     name?: string
-     id_brand?: number
-    }
-     attributes?: Array<{ description: string; value: string }>
+     
+     id: number,
+     name: string,
+     id_brand?: number,
+     status: boolean,
+	 brand?: {
+			name: string,
+			description: string,
+			id: number},
+     attributes?: Array<{ id?:number, description:string; valor?: string, attributes_products?:{ valor:string} }>
     
-    // brands?: Array<{
-    //   id: number
-    //   name: string
-    // }>
 }

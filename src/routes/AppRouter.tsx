@@ -30,7 +30,7 @@ export function AppRouter() {
 
         {/* Public Routes */}
         <Route path="/" element={<LoginPage />} />
-
+        <Route path='/products' element={<Products />} />
         {/* Private Routes */}
 
         <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
@@ -41,7 +41,7 @@ export function AppRouter() {
           <Route path="/shopping" element={<PrivateRoute><Shopping /></PrivateRoute>} />
 
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
-          <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
+          {/* <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} /> */}
           <Route path='/stores' element={<PrivateRoute><Stores /></PrivateRoute>} />
           <Route path='/variants' element={<PrivateRoute><VariantsPage /></PrivateRoute>} />
         </Route>

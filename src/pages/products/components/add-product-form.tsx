@@ -8,23 +8,22 @@ import {fetchAttributes, addAttribute} from "@/features/products/attributes/attr
 import {addProducts} from "@/features/products/products/productSlice"
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
+import { useToast } from "@/components/hooks/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 
-interface AddProductFormProps {
-  attributes: string[]
-  onAddProduct: (product: { name: string; brandId: number; attributes: Array<{ name: string; value: string }> }) => void
-}
 
-export default function AddProductForm({onAddProduct, onAddAttribute }: AddProductFormProps) {
+export default function AddProductForm() {
   const [name, setName] = useState("")
   const [brandId, setBrandId] = useState("")
-  const [productAttributes, setProductAttributes] = useState<Array<{ description: string; value: string }>>([])
+  const [productAttributes, setProductAttributes] = useState<Array<{ description: string; valor: string }>>([])
   const [newAttribute, setNewAttribute] = useState("")
   const [newAttributeValue, setNewAttributeValue] = useState("")
   const [newCustomAttribute, setNewCustomAttribute] = useState("")
   const dispatch = useAppDispatch();
   const {brands} = useAppSelector((state) => state.brands);
   const {attributes} = useAppSelector((state) => state.attributes);
-  // const {addProduct} = useAppSelector((state) => state.products);
+  const { toast } = useToast()
+  const {error} = useAppSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(fetchBrands());
@@ -33,14 +32,34 @@ export default function AddProductForm({onAddProduct, onAddAttribute }: AddProdu
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     dispatch(addProducts(
-      {
-      product: {
-        name,
-        id_brand: Number.parseInt(brandId),
-      },
-      attributes: productAttributes
+      { 
+       name,
+      id_brand: Number.parseInt(brandId),
+      attributes: productAttributes,
+      status: true
     }
   ))
+
+  
+  if(error){
+  
+    toast({
+      title: "Error al agregar el producto",
+      description: error,
+      variant:"destructive"
+    })
+  }else{
+    toast({
+      title: `El productp ${name} ha sido agregado`,
+      description: "Puedes verlo en la lista de productos",
+      variant: "success",
+      action: (
+        <ToastAction altText="Goto schedule to undo">Ok</ToastAction>
+      ),
+    })
+  }
+
+  console.log(productAttributes)
 
   
     setName("")
@@ -54,12 +73,12 @@ export default function AddProductForm({onAddProduct, onAddAttribute }: AddProdu
   const handleAddAttribute = () => {
     const attributeName = newAttribute === "new" ? newCustomAttribute : newAttribute
     if (attributeName && newAttributeValue) {
-      setProductAttributes([...productAttributes, { description: attributeName, value: newAttributeValue }])
+      setProductAttributes([...productAttributes, { description: attributeName, valor: newAttributeValue }])
       setNewAttribute("")
       setNewCustomAttribute("")
       setNewAttributeValue("")
       if (!attributes.some(attr => attr.description === attributeName)) {
-        dispatch(addAttribute({description: attributeName}))
+        dispatch(addAttribute({description:newCustomAttribute}))
       }
     }
   }
@@ -94,7 +113,7 @@ export default function AddProductForm({onAddProduct, onAddAttribute }: AddProdu
         {productAttributes.map((attr, index) => (
           <div key={index} className="flex gap-2 mb-2">
             <Input value={attr.description} readOnly className="bg-white border-cafe-medium" />
-            <Input value={attr.value} readOnly className="bg-white border-cafe-medium" />
+            <Input value={attr.valor} readOnly className="bg-white border-cafe-medium" />
           </div>
         ))}
         <div className="flex gap-2 mb-2">
