@@ -7,15 +7,15 @@ export const getProviders = async (): Promise<Provider[]> => {
 };
 
 export const createProvider = async (provider: Omit<Provider, "id">): Promise<Provider> => {
-  const response = await axiosInstance.post("/provider", provider);
+  const response = await axiosInstance.post("/providers", provider);
   return response.data;
 };
 
 export const updateProvider = async (id: string, provider: Partial<Provider>): Promise<Provider> => {
-  const response = await axiosInstance.put(`/provider/${id}`, provider);
+  const response = await axiosInstance.put(`/providers/${id}`, provider);
   return response.data;
 };
 
 export const deleteProvider = async (id: string): Promise<void> => {
-  await axiosInstance.delete(`/provider/${id}`);
+  await axiosInstance.delete(`/providers/${id}`);
 };
