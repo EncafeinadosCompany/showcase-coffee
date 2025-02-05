@@ -79,7 +79,7 @@ export default function RightCard({products , cartProducts, setcartProducts}:{
                     <AccordionTrigger>{producto.name}</AccordionTrigger>
                     <AccordionContent>
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-                        {producto.variants?.map((variante) => (
+                        {producto.product?.map((variante) => (
                           <Card
                             key={variante.id}
                             className="bg-white shadow-md hover:shadow-lg transition-shadow duration-200"
