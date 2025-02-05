@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import { productType } from "@/types/products/product";
-import { variantType } from "@/types/products/variant";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { ShoppingVariant } from "@/types/shopping/ShoppingVariant";
 import { Coffee, Minus, Plus, Trash2 } from "lucide-react";
 
 export default function CartShopping({ cartProducts, setcartProducts, products }:{
