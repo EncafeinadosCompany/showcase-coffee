@@ -1,5 +1,5 @@
 export interface variantType {
-id: string | number ,
+id: string | number | null ,
 grammage: string,
 stock: number,
 roasting_date: Date | string,

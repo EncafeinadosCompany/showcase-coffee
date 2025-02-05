@@ -30,8 +30,6 @@ export function AppRouter() {
 
         {/* Public Routes */}
         <Route path="/" element={<LoginPage />} />
-        <Route path='/products' element={<Products />} />
-        <Route path="/shopping" element={<Shopping />} />
         {/* Private Routes */}
 
         <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
@@ -39,10 +37,10 @@ export function AppRouter() {
           <Route path="/home" element={<PrivateRoute><HomePage /></PrivateRoute>} />
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
           <Route path="/liquiduidations" element={<PrivateRoute><Liquidations /></PrivateRoute>} />
-          {/* <Route path="/shopping" element={<PrivateRoute><Shopping /></PrivateRoute>} /> */}
+          <Route path="/shopping" element={<PrivateRoute><Shopping /></PrivateRoute>} />
 
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
-          {/* <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} /> */}
+          <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
           <Route path='/stores' element={<PrivateRoute><Stores /></PrivateRoute>} />
           <Route path='/variants' element={<PrivateRoute><VariantsPage /></PrivateRoute>} />
         </Route>
