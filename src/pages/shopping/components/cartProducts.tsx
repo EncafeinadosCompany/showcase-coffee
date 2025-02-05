@@ -32,15 +32,17 @@ export default function CartShopping({ cartProducts, setcartProducts, products }
     const handleStockChange = (varianteId: string | number, newStock: number) => {
         setcartProducts((prev) => {
             const nuevoCarrito = structuredClone(prev);
-            return nuevoCarrito.map((p) => {
-                if (Number(p.id) === Number(varianteId)) {
-                    return {
-                        ...p,
-                        stock: Math.max(0, newStock),
-                    };
-                }
-                return p;
-            });
+            return nuevoCarrito
+                .map((p) => {
+                    if (Number(p.id) === Number(varianteId)) {
+                        return {
+                            ...p,
+                            stock: Math.max(0, newStock),
+                        };
+                    }
+                    return p;
+                })
+                .filter((p) => p.stock > 0); // Elimina los productos con stock 0
         });
     };
 
@@ -61,7 +63,7 @@ export default function CartShopping({ cartProducts, setcartProducts, products }
                                         {products.find((e) => variant.id_product === e.id)?.name || "undefined"}
                                     </span>
                                     <span className="text-sm text-gray-600">
-                                        {variant.grammage}g
+                                        {variant.grammage}
                                     </span>
                                 </div>
                                 <p className="text-amber-800 font-semibold">
@@ -83,7 +85,7 @@ export default function CartShopping({ cartProducts, setcartProducts, products }
                                 </Button>
 
                                 <input
-                                    type="number"
+                                    type="text"
                                     className="w-16 text-center font-medium text-gray-700"
                                     value={variant.stock}
                                     onChange={(e) =>
