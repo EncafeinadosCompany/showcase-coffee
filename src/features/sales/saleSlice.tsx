@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getSale, createSale, getSaleById, getSaleVariantById } from "./saleService";
+import { getSale, createSale, getSaleById, getShoppingVariant } from "./saleService";
 import { Sales } from "../../types/sales/saleModel";
 
 interface SaleState {
   sales: Sales[];
   sale: Sales | null;
-  saleVariant: any | null;
+  saleVariants: any[];
   isLoading: boolean;
   error: string | null;
 }
@@ -13,7 +13,7 @@ interface SaleState {
 const initialState: SaleState = {
   sales: [],
   sale: null,
-  saleVariant: null,
+  saleVariants: [],
   isLoading: false,
   error: null,
 };
@@ -21,32 +21,38 @@ const initialState: SaleState = {
 export const fetchSales = createAsyncThunk("sales/fetchAll", async (_, { rejectWithValue }) => {
   try {
     return await getSale();
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Error al obtener las ventas");
+  } catch (error: unknown) {
+    return rejectWithValue(error instanceof Error ? error.message : "Error al obtener las ventas");
   }
 });
 
-export const fetchSaleById = createAsyncThunk("sales/fetchById", async (id: string, { rejectWithValue }) => {
-  try {
-    return await getSaleById(id);
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Error al obtener la venta por ID");
+export const fetchSaleById = createAsyncThunk(
+  "sales/fetchById",
+  async (id: string | number, { rejectWithValue }) => {
+    try {
+      return await getSaleById(id);
+    } catch (error: unknown) {
+      return rejectWithValue(error instanceof Error ? error.message : "Error al obtener la venta por ID");
+    }
   }
-});
+);
 
-export const fetchSaleVariantById = createAsyncThunk("sales/fetchVariantById", async (id: string, { rejectWithValue }) => {
-  try {
-    return await getSaleVariantById(id);
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Error al obtener la variante de venta por ID");
+export const fetchSaleVariants = createAsyncThunk(
+  "sales/fetchVariants",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getShoppingVariant();
+    } catch (error: unknown) {
+      return rejectWithValue(error instanceof Error ? error.message : "Error al obtener los productos");
+    }
   }
-});
+);
 
 export const addSale = createAsyncThunk("sales/add", async (sales: Omit<Sales, "id">, { rejectWithValue }) => {
   try {
     return await createSale(sales);
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Error al agregar la venta");
+  } catch (error: unknown) {
+    return rejectWithValue(error instanceof Error ? error.message : "Error al agregar la venta");
   }
 });
 
@@ -80,15 +86,15 @@ const SaleSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-      .addCase(fetchSaleVariantById.pending, (state) => {
+      .addCase(fetchSaleVariants.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchSaleVariantById.fulfilled, (state, action) => {
+      .addCase(fetchSaleVariants.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.saleVariant = action.payload;
+        state.saleVariants = action.payload;
       })
-      .addCase(fetchSaleVariantById.rejected, (state, action) => {
+      .addCase(fetchSaleVariants.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

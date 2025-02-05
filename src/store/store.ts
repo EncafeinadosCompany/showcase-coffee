@@ -6,7 +6,7 @@ import variantReducer from "../features/products/variants/vatiantSlice";
 import brandReducer from "../features/products/brands/brandSlice";
 import attributeReducer from "../features/products/attributes/attributeSlice";
 import storeReducer from "../features/stores/storeSlice";
-
+import saleReducer from "../features/sales/saleSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,7 +16,8 @@ export const store = configureStore({
     variants: variantReducer,
     brands: brandReducer,
     attributes: attributeReducer,
-    stores: storeReducer
+    stores: storeReducer,
+    sales: saleReducer
   },
 });
 
