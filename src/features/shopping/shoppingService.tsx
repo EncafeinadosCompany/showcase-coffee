@@ -7,7 +7,7 @@ export const getShopping = async () => {
 };
 
 export const getShoppingVariant = async () => {
-  const response = await axiosInstance.get("/shopping/variant/all");
+  const response = await axiosInstance.get("/shopping/shopping-variants");
   return response.data;
 };
 
@@ -17,7 +17,7 @@ export const getShoppingById = async (id: any) => {
 };
 
 export const getShoppingVariantById = async (id: any) => {
-  const response = await axiosInstance.get(`/shopping/variant/${id}`);
+  const response = await axiosInstance.get(`/shopping/shopping-variants/${id}`);
   return response.data;
 };
 

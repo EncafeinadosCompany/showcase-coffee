@@ -1,13 +1,17 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { LoginPage } from "@/pages/LoginPage";
+
 import { AuthProvider, useAuth } from "@/context/AuthContext1";
-import { ProvidersPage } from "@/pages/ProviderPage";
 import { Liquidations } from "@/pages/payments/liquidation";
+import { ProvidersPage } from "@/pages/ProviderPage";
 import { Products } from "@/pages/products/products";
+import { VariantsPage } from "@/pages/variantsPage";
+import { LoginPage } from "@/pages/LoginPage";
+import { HomePage } from "@/pages/home/home";
 
 import Stores from "@/pages/store/StoreManagementPage";
 import Shopping from "@/pages/shopping/shopping";
-
+import Layout from '../layout/content/content';
+import Sales from "@/pages/sales/sales";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -18,10 +22,6 @@ const PrivateRoute = ({ children }: { children: JSX.Element }) => {
 
   return isAuthenticated ? children : <Navigate to="/" />;
 };
-
-import Layout from '../layout/content/content';
-import { HomePage } from "@/pages/home/home";
-import { VariantsPage } from "@/pages/variantsPage";
 
 export function AppRouter() {
   return (
@@ -38,6 +38,7 @@ export function AppRouter() {
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
           <Route path="/liquiduidations" element={<PrivateRoute><Liquidations /></PrivateRoute>} />
           <Route path="/shopping" element={<PrivateRoute><Shopping /></PrivateRoute>} />
+          <Route path="/sales" element={<PrivateRoute><Sales/></PrivateRoute>} />
 
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
           <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
