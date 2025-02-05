@@ -12,41 +12,39 @@ import { Input } from "@/components/ui/input";
 import { Coffee } from "lucide-react";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import {addVariant} from "@/features/products/variants/vatiantSlice";
 import { fetchProducts } from "@/features/products/products/productSlice";
 import { useToast } from "@/components/hooks/use-toast"
-import { ToastAction } from "@/components/ui/toast"
+import { ShoppingVariant } from "@/types/shopping/ShoppingVariant";
 
-
-export default function NuevaVarianteDialog({
-  productoId,
+export default function FormShopping({
+  variant_id, cartProducts, setcartProducts
 }: {
-  productoId: number;
+  variant_id: number
+  cartProducts: ShoppingVariant[];
+  setcartProducts: React.Dispatch<React.SetStateAction<ShoppingVariant[]>>;
 }) {
-  const [gramaje, setGramaje] = useState("");
-  const [fechaTostion, setFechaTostion] = useState("");
+  const [roasting_date, setRoasting_date] = useState("");
   const [cantidad, setCantidad] = useState("");
-  const [precioCompra, setPrecioCompra] = useState("");
+  const [shopping_price, setShopping_price] = useState("");
   const [porcentajeVenta, setPorcentajeVenta] = useState("");
-  const [precioVenta, setPrecioVenta] = useState("");
-  const {error } = useAppSelector((state) => state.variants);
+  const [sale_price, setSale_price] = useState("");
   const dispatch = useAppDispatch();
   const { toast } = useToast()
 
   useEffect(() => {
-    if (precioCompra && porcentajeVenta) {
-      const precio = Number.parseFloat(precioCompra);
+    if (shopping_price && porcentajeVenta) {
+      const precio = Number.parseFloat(shopping_price);
       const porcentaje = Number.parseFloat(porcentajeVenta);
       const nuevoPrecioVenta = precio * (1 + porcentaje / 100);
-      setPrecioVenta(nuevoPrecioVenta.toFixed(2));
+      setSale_price(nuevoPrecioVenta.toFixed(2));
     }
-  }, [precioCompra, porcentajeVenta]);
+  }, [shopping_price, porcentajeVenta]);
 
   const handleSubmit = (e: React.FormEvent) => {
 
     e.preventDefault();
     const fechaActual = new Date();
-    const fechaTostionDate = new Date(fechaTostion);
+    const fechaTostionDate = new Date(roasting_date);
     const diferenciaMeses =
       (fechaActual.getFullYear() - fechaTostionDate.getFullYear()) * 12 +
       (fechaActual.getMonth() - fechaTostionDate.getMonth());
@@ -56,48 +54,50 @@ export default function NuevaVarianteDialog({
       return;
     }
 
-    const nuevaVariante: variantType = {
-      id:null,
-      grammage: gramaje,
-      stock: 0,
-      id_product: productoId,
-      images: [{ url: "example.svg" }],
-    };
 
-    if(error){
+    setcartProducts((prev) => {
+        const nuevoCarrito = structuredClone(prev); 
   
-      toast({
-        title: "Error al agregar la variante",
-        description: error,
-        variant:"destructive"
-      })
-    }else{
-      dispatch(addVariant(nuevaVariante));
+        const productoEnCarrito = nuevoCarrito.find(
+          (p) => Number(p.id_variant_products) === Number(variant_id)
+        );
+  
+        if (productoEnCarrito) {
+          return nuevoCarrito.map((p) =>
+            Number(p.id_variant_products) === Number(variant_id)
+              ? { ...p, quantity: (p.quantity || 0) + 1 } 
+              : p
+          );
+        } else {
+          return [...nuevoCarrito, { 
+            id: null,
+            id_shopping: 0, 
+            id_variant_products: variant_id, 
+            roasting_date: roasting_date, 
+            shopping_price: Number(shopping_price), 
+            sale_price: Number(sale_price), 
+            status: true, 
+            quantity: Number(cantidad) 
+          }]; 
+        }
+      });
 
-      toast({
-        title: `El ${gramaje}g ha sido agregado`,
-        description: "Puedes verlo en la lista de productos",
-        variant: "success",
-        action: (
-          <ToastAction altText="Goto schedule to undo">Ok</ToastAction>
-        ),
-      })
-    }
-    setGramaje("");
-    setFechaTostion("");
+      console.log(cartProducts);
+
+    setRoasting_date("");
     setCantidad("");
-    setPrecioCompra("");
+    setShopping_price("");
     setPorcentajeVenta("");
-    setPrecioVenta("");
+    setSale_price("");
     dispatch(fetchProducts());
-    console.log(productoId);
+    
   };
-
+  console.log(variant_id);
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="mt-4 bg-[#6F4E37] hover:bg-[#5A3E2B] text-white">
-          <Coffee className="mr-2 h-4 w-4" /> Agregar Variante
+        <Button className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors duration-200">
+          Agregar
         </Button>
       </DialogTrigger>
       <DialogContent aria-describedby="dialog-description">
@@ -109,22 +109,8 @@ export default function NuevaVarianteDialog({
           variante de producto.
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
+          
           <div>
-            <label
-              htmlFor="gramaje"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Gramaje
-            </label>
-            <Input
-              id="gramaje"
-              type="number"
-              value={gramaje}
-              onChange={(e) => setGramaje(e.target.value)}
-              required
-            />
-          </div>
-          {/* <div>
             <label
               htmlFor="fechaTostion"
               className="block text-sm font-medium text-gray-700"
@@ -132,14 +118,14 @@ export default function NuevaVarianteDialog({
               Fecha de Tostión
             </label>
             <Input
-              id="fechaTostion"
+              id="roasting_date"
               type="date"
-              value={fechaTostion}
-              onChange={(e) => setFechaTostion(e.target.value)}
+              value={roasting_date}
+              onChange={(e) => setRoasting_date(e.target.value)}
               required
             />
-          </div> */}
-          {/* <div>
+          </div> 
+          <div>
             <label
               htmlFor="cantidad"
               className="block text-sm font-medium text-gray-700"
@@ -153,20 +139,20 @@ export default function NuevaVarianteDialog({
               onChange={(e) => setCantidad(e.target.value)}
               required
             />
-          </div> */}
-          {/* <div>
+          </div>
+           <div>
             <label
-              htmlFor="precioCompra"
+              htmlFor="shopping_price"
               className="block text-sm font-medium text-gray-700"
             >
               Precio de Compra
             </label>
             <Input
-              id="precioCompra"
+              id="shopping_price"
               type="number"
               step="0.01"
-              value={precioCompra}
-              onChange={(e) => setPrecioCompra(e.target.value)}
+              value={shopping_price}
+              onChange={(e) => setShopping_price(e.target.value)}
               required
             />
           </div>
@@ -188,23 +174,22 @@ export default function NuevaVarianteDialog({
           </div>
           <div>
             <label
-              htmlFor="precioVenta"
+              htmlFor="sale_price"
               className="block text-sm font-medium text-gray-700"
             >
               Precio de Venta
             </label>
             <Input
-              id="precioVenta"
+              id="sale_price"
               type="number"
               step="0.01"
-              value={precioVenta}
+              value={sale_price}
               readOnly
             />
-          </div> */}
+          </div>
           <Button
             type="submit"
-            className="bg-[#6F4E37] hover:bg-[#5A3E2B] text-white"
-          >
+            className="bg-[#6F4E37] hover:bg-[#5A3E2B] text-white w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors duration-200">
             Agregar
           </Button>
         </form>

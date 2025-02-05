@@ -10,8 +10,9 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import NuevaVarianteDialog from "./components/newVariants";
-import { variantType } from "@/types/products/variant";
 import CartShopping from "./components/cartProducts";
+import FormShopping from "./components/formShopping";
+import { ShoppingVariant } from "@/types/shopping/ShoppingVariant";
 
 export default function Shopping() {
 
@@ -19,16 +20,9 @@ export default function Shopping() {
   const { products } = useAppSelector((state) => state.products);
 
   const [searchTerm, setSearch] = useState("");
-  const [cartProducts, setcartProducts] = useState<variantType[]>([]);
-  const [currentProduct, setcurrentProduct] = useState({
-    id: 0,
-    name: "",
-    quantity: 0,
-    roastingDate: "",
-    shoppingPrice: 0,
-    salePrice: 0,
-    porcentage: 0,
-  });
+  const [cartProducts, setcartProducts] = useState<ShoppingVariant[]>([]);
+  const [currentProduct, setcurrentProduct] = useState({id: 0, name: ""});
+
 
   useEffect(() => {
     dispatch(fetchVariants());
@@ -57,25 +51,8 @@ export default function Shopping() {
     }
   };
 
-  const agregarProducto = (variante: variantType) => {
-    setcartProducts((prev) => {
-      const nuevoCarrito = structuredClone(prev); 
+ 
 
-      const productoEnCarrito = nuevoCarrito.find(
-        (p) => Number(p.id) === Number(variante.id)
-      );
-
-      if (productoEnCarrito) {
-        return nuevoCarrito.map((p) =>
-          Number(p.id) === Number(variante.id)
-            ? { ...p, stock: (p.stock || 0) + 1 } 
-            : p
-        );
-      } else {
-        return [...nuevoCarrito, { ...variante, stock: 1 }]; 
-      }
-    });
-  };
 
   const productosFiltrados = products.filter((p) =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -83,7 +60,7 @@ export default function Shopping() {
 
   // ESTO SERVIRA MÁS ADELANTE, NO BORRAR!!
 
-  // const totalCompra = cartProducts.reduce((sum, producto) => sum + producto.shoppingPrice * producto.quantity, 0);
+  const totalCompra = cartProducts.reduce((sum, producto) => sum + producto.shopping_price * producto.quantity, 0);
 
   return (
     <div>
@@ -140,30 +117,31 @@ export default function Shopping() {
                               </div>
 
                               <div className="mt-3 space-y-2">
-                                <div className="text-xs text-gray-600">
+                                {/* <div className="text-xs text-gray-600">
                                   Fecha de tostión:
                                   <span className="ml-1 font-medium">
                                     {new Date(
                                       variante.roasting_date
                                     ).toLocaleDateString()}
                                   </span>
-                                </div>
+                                </div> */}
 
-                                <div className="flex justify-between items-center">
+                                {/* <div className="flex justify-between items-center">
                                   <span className="text-lg font-bold text-amber-800">
                                     ${variante.sale_price}
                                   </span>
                                   <span className="text-xs text-gray-500">
                                     Stock: {variante.stock}
                                   </span>
-                                </div>
+                                </div> */}
 
-                                <button
+                                {/* <button
                                   onClick={() => agregarProducto(variante)}
                                   className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors duration-200"
                                 >
                                   Agregar
-                                </button>
+                                </button> */}
+                                <FormShopping variant_id={Number(variante.id)} cartProducts={cartProducts} setcartProducts={setcartProducts}></FormShopping>
                               </div>
                             </CardContent>
                           </Card>
@@ -200,7 +178,7 @@ export default function Shopping() {
             <button className="w-full mt-2  bg-[#36270b] hover:bg-[#3a2d11] text-white py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200"> Generar consignación</button>
             <button className="w-full mt-2  bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200  "> Cancelar consignación</button>
             </div>
-            {/* <div>Total: ${totalCompra.toFixed(2)}</div> */}
+            <div>Total: ${totalCompra.toFixed(2)}</div>
           </CardFooter>
         </Card>
       </div>
