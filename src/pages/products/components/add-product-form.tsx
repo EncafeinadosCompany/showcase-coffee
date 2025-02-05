@@ -1,29 +1,67 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { brandType } from "@/types/products/brand"
+import {fetchBrands} from "@/features/products/brands/brandSlice";
+import {fetchAttributes, addAttribute} from "@/features/products/attributes/attributeSlice"
+import {addProducts} from "@/features/products/products/productSlice"
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { useToast } from "@/components/hooks/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 
-interface AddProductFormProps {
-  brands: Array<{ id: number; name: string }>
-  attributes: string[]
-  onAddProduct: (product: { name: string; brandId: number; attributes: Array<{ name: string; value: string }> }) => void
-  onAddAttribute: (attribute: string) => void
-}
 
-export default function AddProductForm({ brands, attributes, onAddProduct, onAddAttribute }: AddProductFormProps) {
+export default function AddProductForm() {
   const [name, setName] = useState("")
   const [brandId, setBrandId] = useState("")
-  const [productAttributes, setProductAttributes] = useState<Array<{ name: string; value: string }>>([])
+  const [productAttributes, setProductAttributes] = useState<Array<{ description: string; valor: string }>>([])
   const [newAttribute, setNewAttribute] = useState("")
   const [newAttributeValue, setNewAttributeValue] = useState("")
   const [newCustomAttribute, setNewCustomAttribute] = useState("")
+  const dispatch = useAppDispatch();
+  const {brands} = useAppSelector((state) => state.brands);
+  const {attributes} = useAppSelector((state) => state.attributes);
+  const { toast } = useToast()
+  const {error} = useAppSelector((state) => state.products);
+
+  useEffect(() => {
+    dispatch(fetchBrands());
+    dispatch(fetchAttributes());
+  },[dispatch])
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onAddProduct({
-      name,
-      brandId: Number.parseInt(brandId),
+    dispatch(addProducts(
+      { 
+       name,
+      id_brand: Number.parseInt(brandId),
       attributes: productAttributes,
+      status: true
+    }
+  ))
+
+  
+  if(error){
+  
+    toast({
+      title: "Error al agregar el producto",
+      description: error,
+      variant:"destructive"
     })
+  }else{
+    toast({
+      title: `El productp ${name} ha sido agregado`,
+      description: "Puedes verlo en la lista de productos",
+      variant: "success",
+      action: (
+        <ToastAction altText="Goto schedule to undo">Ok</ToastAction>
+      ),
+    })
+  }
+
+  console.log(productAttributes)
+
+  
     setName("")
     setBrandId("")
     setProductAttributes([])
@@ -35,12 +73,12 @@ export default function AddProductForm({ brands, attributes, onAddProduct, onAdd
   const handleAddAttribute = () => {
     const attributeName = newAttribute === "new" ? newCustomAttribute : newAttribute
     if (attributeName && newAttributeValue) {
-      setProductAttributes([...productAttributes, { name: attributeName, value: newAttributeValue }])
+      setProductAttributes([...productAttributes, { description: attributeName, valor: newAttributeValue }])
       setNewAttribute("")
       setNewCustomAttribute("")
       setNewAttributeValue("")
-      if (!attributes.includes(attributeName)) {
-        onAddAttribute(attributeName)
+      if (!attributes.some(attr => attr.description === attributeName)) {
+        dispatch(addAttribute({description:newCustomAttribute}))
       }
     }
   }
@@ -74,8 +112,8 @@ export default function AddProductForm({ brands, attributes, onAddProduct, onAdd
         <h3 className="text-sm font-medium text-cafe-dark mb-2">Atributos</h3>
         {productAttributes.map((attr, index) => (
           <div key={index} className="flex gap-2 mb-2">
-            <Input value={attr.name} readOnly className="bg-white border-cafe-medium" />
-            <Input value={attr.value} readOnly className="bg-white border-cafe-medium" />
+            <Input value={attr.description} readOnly className="bg-white border-cafe-medium" />
+            <Input value={attr.valor} readOnly className="bg-white border-cafe-medium" />
           </div>
         ))}
         <div className="flex gap-2 mb-2">
@@ -85,8 +123,8 @@ export default function AddProductForm({ brands, attributes, onAddProduct, onAdd
             </SelectTrigger>
             <SelectContent>
               {attributes.map((attr) => (
-                <SelectItem key={attr} value={attr}>
-                  {attr}
+                <SelectItem key={attr.id} value={attr.description}>
+                  {attr.description}
                 </SelectItem>
               ))}
               <SelectItem value="new">Agregar nuevo atributo</SelectItem>

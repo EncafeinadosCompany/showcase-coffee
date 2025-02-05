@@ -1,4 +1,4 @@
 export interface attributeType {
-    id?: string | number,
-    description?: string,
+    id: string | number,
+    description: string
 }

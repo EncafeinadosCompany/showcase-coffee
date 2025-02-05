@@ -2,6 +2,7 @@ import { axiosInstance } from "../../../API/axiosInstance";
 
 import { productType } from "@/types/products/product";
 
+
 export const getIdProduct = async (id: string) => {
   const response = await axiosInstance.get(`/products/${id}`);
   return response.data;

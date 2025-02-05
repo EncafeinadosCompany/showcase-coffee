@@ -24,8 +24,11 @@ const Sidebar = () => {
     { icon: <Home />, label: 'Inicio', path: '/home' },
     { icon: <Users />, label: 'Proveedores', path: '/providers' },
     { icon: <BarChart2 />, label: 'Tienda', path: '/stores' },
+
+
     { icon: <ShoppingBasket />, label: 'Compras', path: '/shopping' },
     { icon: <BadgeDollarSign />, label: 'Ventas', path: '/sales' },
+
   ];
 
   const bottomItems = [

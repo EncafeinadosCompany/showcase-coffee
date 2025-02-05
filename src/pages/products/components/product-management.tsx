@@ -9,16 +9,17 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { productType } from "@/types/products/product";
 import { fetchProducts } from "@/features/products/products/productSlice";
+import {fetchBrands, addBrand} from "@/features/products/brands/brandSlice";
+import { brandType } from "@/types/products/brand"
 
 
 
 
-
-interface Brand {
-  id: number
-  name: string
-  description: string
-}
+// interface Brand {
+//   id: number
+//   name: string
+//   description: string
+// }
 
 interface Attribute {
   name: string
@@ -33,24 +34,30 @@ interface Attribute {
 // }
 
 export default function ProductManagement() {
-  const [brands, setBrands] = useState<Brand[]>([])
+  // const [brands, setBrands] = useState<Brand[]>([])
   // const [products, setProducts] = useState<Product[]>([])
   const [attributes, setAttributes] = useState<string[]>([])
 
 
   const dispatch = useAppDispatch();
   const { products, isLoading, error } = useAppSelector((state) => state.products);
+  const {brands} = useAppSelector((state) => state.brands);
 
   useEffect(() => {
     dispatch(fetchProducts());
+    dispatch(fetchBrands());
   }, [dispatch]);
+
+
+
+
 
   useEffect(() => {
     // Simular carga de datos iniciales
-    setBrands([
-      { id: 1, name: "Café del Sur", description: "Café de origen colombiano" },
-      { id: 2, name: "Dulces Delicias", description: "Repostería artesanal" },
-    ])
+    // setBrands([
+    //   { id: 1, name: "Café del Sur", description: "Café de origen colombiano" },
+    //   { id: 2, name: "Dulces Delicias", description: "Repostería artesanal" },
+    // ])
     // setProducts([
     //   { id: 1, name: "Espresso", brandId: 1, attributes: [{ name: "Tamaño", value: "Pequeño" }] },
     //   { id: 2, name: "Croissant", brandId: 2, attributes: [{ name: "Tipo", value: "Clásico" }] },
@@ -58,9 +65,10 @@ export default function ProductManagement() {
     setAttributes(["Tamaño", "Tipo", "Sabor"])
   }, [])
 
-  const addBrand = (brand: Omit<Brand, "id">) => {
-    const newBrand = { ...brand, id: brands.length + 1 }
-    setBrands([...brands, newBrand])
+  const addBrand_funtion = (newBrand: Omit<brandType, "id">) => {
+    // const newBrand = { ...brand, id: brands.length + 1 }
+    // setBrands([...brands, newBrand])
+    addBrand(newBrand)
   }
 
   const addProduct = (product: Omit<productType, "id">) => {
@@ -85,7 +93,7 @@ export default function ProductManagement() {
         <ProductList products={products} brands={brands} />
       </TabsContent>
       <TabsContent value="add-brand">
-        <AddBrandForm onAddBrand={addBrand} />
+        <AddBrandForm />
       </TabsContent>
       <TabsContent value="add-product">
         <AddProductForm

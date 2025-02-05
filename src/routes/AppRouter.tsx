@@ -30,7 +30,6 @@ export function AppRouter() {
 
         {/* Public Routes */}
         <Route path="/" element={<LoginPage />} />
-
         {/* Private Routes */}
 
         <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
