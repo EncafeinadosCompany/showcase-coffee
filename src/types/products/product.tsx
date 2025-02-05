@@ -9,15 +9,12 @@ export interface productType
 			name: string,
 			description: string,
 			id: number},
-     attributes?: Array<{ id?:number, description:string; valor?: string, attributes_products?:{ valor:string} }>
+     attributes?: Array<{ id?:number, description:string; value?: string, attributes_products?:{ value:string} }>
      variants?: 
           Array<
           {id: string | number,
           grammage: string,
           stock: number,
-          roasting_date: Date | string,
-          shopping_price: number,
-          sale_price: number,
           id_product: string | number,
           images?: Array<{url: string}>}>
     

@@ -15,7 +15,7 @@ import { ToastAction } from "@/components/ui/toast"
 export default function AddProductForm() {
   const [name, setName] = useState("")
   const [brandId, setBrandId] = useState("")
-  const [productAttributes, setProductAttributes] = useState<Array<{ description: string; valor: string }>>([])
+  const [productAttributes, setProductAttributes] = useState<Array<{ description: string; value: string }>>([])
   const [newAttribute, setNewAttribute] = useState("")
   const [newAttributeValue, setNewAttributeValue] = useState("")
   const [newCustomAttribute, setNewCustomAttribute] = useState("")
@@ -73,7 +73,7 @@ export default function AddProductForm() {
   const handleAddAttribute = () => {
     const attributeName = newAttribute === "new" ? newCustomAttribute : newAttribute
     if (attributeName && newAttributeValue) {
-      setProductAttributes([...productAttributes, { description: attributeName, valor: newAttributeValue }])
+      setProductAttributes([...productAttributes, { description: attributeName, value:newAttributeValue }])
       setNewAttribute("")
       setNewCustomAttribute("")
       setNewAttributeValue("")
@@ -113,7 +113,7 @@ export default function AddProductForm() {
         {productAttributes.map((attr, index) => (
           <div key={index} className="flex gap-2 mb-2">
             <Input value={attr.description} readOnly className="bg-white border-cafe-medium" />
-            <Input value={attr.valor} readOnly className="bg-white border-cafe-medium" />
+            <Input value={attr.value} readOnly className="bg-white border-cafe-medium" />
           </div>
         ))}
         <div className="flex gap-2 mb-2">
