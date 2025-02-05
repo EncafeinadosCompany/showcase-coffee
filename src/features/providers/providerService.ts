@@ -2,7 +2,7 @@ import { axiosInstance } from "../../API/axiosInstance";
 import { Provider } from "../../types/providers/providers";
 
 export const getProviders = async (): Promise<Provider[]> => {
-  const response = await axiosInstance.get("/provider");
+  const response = await axiosInstance.get("/providers"); // Asegúrate de que la ruta es correcta
   return response.data;
 };
 

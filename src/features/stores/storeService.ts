@@ -2,7 +2,7 @@ import { axiosInstance } from "../../API/axiosInstance";
 import {Store} from "../../types/stores/Store";
 
 export const getStores = async () => {
-  const response = await axiosInstance.get("/store");
+  const response = await axiosInstance.get("/stores");
   return response.data;
 };
 

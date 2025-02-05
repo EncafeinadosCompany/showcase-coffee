@@ -1,3 +1,10 @@
+export interface BankAccount {
+  id?: number;
+  bank_account: string;
+  type_account: string;
+  bank: string;
+}
+
 export interface Provider {
   id: number;
   name: string;
@@ -5,8 +12,6 @@ export interface Provider {
   email: string;
   phone: string;
   address: string;
-  bank_account: string;
-  type_account: string;
-  bank: string;
+  bankAccounts: BankAccount[];
   status: boolean;
 }

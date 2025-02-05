@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getProviders, createProvider, updateProvider } from "./providerService";
 import { Provider } from "../../types/providers/providers";
+
 interface ProviderState {
   providers: Provider[];
   isLoading: boolean;
@@ -13,7 +14,6 @@ const initialState: ProviderState = {
   error: null,
 };
 
-// Thunks para las operaciones CRUD
 export const fetchProviders = createAsyncThunk("providers/fetchAll", async (_, { rejectWithValue }) => {
   try {
     return await getProviders();
@@ -44,8 +44,6 @@ export const editProvider = createAsyncThunk(
   }
 );
 
-
-// Slice de Redux
 const providerSlice = createSlice({
   name: "providers",
   initialState,
@@ -71,7 +69,7 @@ const providerSlice = createSlice({
         state.providers = state.providers.map((provider) =>
           provider.id === action.payload.id ? action.payload : provider
         );
-      })
+      });
   },
 });
 
