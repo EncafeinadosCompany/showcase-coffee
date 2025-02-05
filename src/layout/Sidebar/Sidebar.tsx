@@ -1,4 +1,4 @@
-import { Home, ChevronLeft, ChevronRight, Users, Settings, BarChart2, Folder, HelpCircle, LogOut } from 'lucide-react';
+import { Home, ChevronLeft, BadgeDollarSign, ChevronRight, Users, Settings, BarChart2, HelpCircle, LogOut, ShoppingBasket } from 'lucide-react';
 import { useState } from 'react';
 
 import { useNavigate } from "react-router-dom";
@@ -24,8 +24,11 @@ const Sidebar = () => {
     { icon: <Home />, label: 'Inicio', path: '/home' },
     { icon: <Users />, label: 'Proveedores', path: '/providers' },
     { icon: <BarChart2 />, label: 'Tienda', path: '/stores' },
-    { icon: <Folder />, label: 'Compras', path: '/shopping' },
-    { icon: <Settings />, label: 'Productos', path: '/products' }
+
+
+    { icon: <ShoppingBasket />, label: 'Compras', path: '/shopping' },
+    { icon: <BadgeDollarSign />, label: 'Ventas', path: '/sales' },
+
   ];
 
   const bottomItems = [
@@ -49,7 +52,7 @@ const Sidebar = () => {
       border-gray-100
     `}>
       {/* Encabezado con Logo y Botón de Colapso */}
-      <div className="flex items-center justify-between p-5 border-b border-gray-100">
+      <div className="flex items-center justify-between p-5 border-b border-gray-100 ">
         {!isCollapsed && (
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-3">

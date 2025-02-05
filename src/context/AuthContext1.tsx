@@ -1,37 +1,44 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { loginUser, logoutUser } from "../features/auth/authSlice";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { useAppSelector } from "../hooks/useAppSelector";
+import { RootState } from "@/store/store";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (token: string) => void;
+  login: (email: string, password: string) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    !!localStorage.getItem("token")
-  );
+
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector((state: RootState) => state.auth.isAuthenticated); 
 
-  useEffect(() => {
-    if (isAuthenticated === false && !localStorage.getItem("token")) {
-      navigate("/");
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await dispatch(loginUser({ email, password })).unwrap();
+      
+      if (response.success) {
+        navigate("/home");
+      } else {
+        console.error("Error en el login: ", response.message);
+      }
+    } catch (error) {
+      console.error("Error en el login:", error);
     }
-  }, [isAuthenticated, navigate]);  
-
-  const login = (token: string) => {
-    localStorage.setItem("token", token);
-    setIsAuthenticated(true);
-    setTimeout(() => {
-      navigate("/home");
-    }, 0);
-  };
+  };  
 
   const logout = () => {
     localStorage.removeItem("token");
-    setIsAuthenticated(false);
+
+    dispatch(logoutUser());
+    navigate("/");
   };
 
   return (

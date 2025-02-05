@@ -7,15 +7,15 @@ export const getStores = async () => {
 };
 
 export const createStore = async (store: Omit<Store, "id">) => {
-  const response = await axiosInstance.post("/store", store);
+  const response = await axiosInstance.post("/stores", store);
   return response.data;
 };
 
 export const updateStore = async (id: string, store: Partial<Store>) => {
-  const response = await axiosInstance.put(`/store/${id}`, store);
+  const response = await axiosInstance.put(`/stores/${id}`, store);
   return response.data;
 };
 
 export const deleteStore = async (id: string) => {
-  await axiosInstance.delete(`/store/${id}`);
+  await axiosInstance.delete(`/stores/${id}`);
 };
