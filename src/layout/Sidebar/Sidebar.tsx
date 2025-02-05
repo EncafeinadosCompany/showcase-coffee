@@ -1,4 +1,4 @@
-import { Home, ChevronLeft, BadgeDollarSign, ChevronRight, Users, Settings, BarChart2, HelpCircle, LogOut, ShoppingBasket } from 'lucide-react';
+import { Home, ChevronLeft, BadgeDollarSign, ChevronRight, Users, Settings, BarChart2, HelpCircle, LogOut, ShoppingBasket, Coffee } from 'lucide-react';
 import { useState } from 'react';
 
 import { useNavigate } from "react-router-dom";
@@ -25,9 +25,11 @@ const Sidebar = () => {
     { icon: <Users />, label: 'Proveedores', path: '/providers' },
     { icon: <BarChart2 />, label: 'Tienda', path: '/stores' },
 
-
+    { icon: <Coffee />, label: 'Productos', path: '/products' },
     { icon: <ShoppingBasket />, label: 'Compras', path: '/shopping' },
     { icon: <BadgeDollarSign />, label: 'Ventas', path: '/sales' },
+
+    
 
   ];
 

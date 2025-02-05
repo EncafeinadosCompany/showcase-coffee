@@ -9,7 +9,7 @@ export interface productType
 			name: string,
 			description: string,
 			id: number},
-     attributes?: Array<{ id?:number, description:string; valor?: string, attributes_products?:{ valor:string} }>
+     attributes?: Array<{ id?:number, description:string; value?: string, attributes_products?:{ value:string} }>
      variants?: 
           Array<
           {id: string | number,

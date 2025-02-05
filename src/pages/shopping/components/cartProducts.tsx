@@ -39,7 +39,7 @@ export default function CartShopping({ cartProducts, setcartProducts, products }
 
 return (
     <CardContent>
-    <ScrollArea className="h-[calc(100vh-500px)]">
+   
       <div className="space-y-3 p-2">
         {cartProducts.map((variant) => (
           <div
@@ -107,7 +107,7 @@ return (
           </div>
         ))}
       </div>
-    </ScrollArea>
+
   </CardContent>
 )
 }

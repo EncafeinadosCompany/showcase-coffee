@@ -87,11 +87,8 @@ export default function Shopping() {
 
   return (
     <div>
-      <h1 className="text-4xl font-libre-baskerville text-[#4A3728] p-4 mb-8">
-        Consignaciones
-      </h1>
       <div className="grid gap-8 md:grid-cols-2">
-        <Card className="bg-white shadow-lg h-[500px] overflow-hidden">
+        <Card className="bg-white shadow-lg h-[730px] overflow-hidden">
           <CardHeader>
           <div className="flex items-center gap-2">
           <Coffee className="h-6 w-6 text-amber-700" />
@@ -114,7 +111,7 @@ export default function Shopping() {
                 <Search className="h-4 w-4" />
               </Button>
             </div>
-            <ScrollArea className="h-[calc(100vh-500px)] p-5">
+            <ScrollArea className="h-[calc(100vh-150px)] p-5">
               <Accordion type="single" collapsible className="w-full">
                 {productosFiltrados.map((producto) => (
                   <AccordionItem
@@ -180,7 +177,7 @@ export default function Shopping() {
             </ScrollArea>
           </CardContent>
         </Card>
-        <Card className="bg-white shadow-lg h-[500px] overflow-hidden">
+        <Card className="bg-white shadow-lg h-[730px] overflow-hidden">
         <CardHeader>
           <CardTitle className="relative font-libre-baskerville text-2xl text-[#755841] pb-2">
         <span className="block text-sm uppercase tracking-wider text-amber-600 mb-1 font-sans opacity-80">
@@ -192,8 +189,17 @@ export default function Shopping() {
         </span>
       </CardTitle>
           </CardHeader>
-              <CartShopping cartProducts={cartProducts} setcartProducts={setcartProducts} products={products}></CartShopping>
-          <CardFooter>
+          <ScrollArea className="h-[calc(100vh-400px)]">
+            <CartShopping cartProducts={cartProducts} setcartProducts={setcartProducts} products={products}></CartShopping>
+             
+            </ScrollArea>
+            <CardFooter>
+           
+            <div className="w-auto mx-auto">
+            <h1>Aqui ira el select del proveedor</h1>
+            <button className="w-full mt-2  bg-[#36270b] hover:bg-[#3a2d11] text-white py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200"> Generar consignación</button>
+            <button className="w-full mt-2  bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200  "> Cancelar consignación</button>
+            </div>
             {/* <div>Total: ${totalCompra.toFixed(2)}</div> */}
           </CardFooter>
         </Card>

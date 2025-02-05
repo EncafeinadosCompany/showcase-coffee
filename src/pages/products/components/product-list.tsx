@@ -101,7 +101,7 @@ export default function ProductList() {
                 {product.attributes?.map((attr, index) => (
                   <span key={index} className="text-cafe-medium gap-2 flex mb-4">
                      {attr.description} :
-                     <Badge> {attr.attributes_products?.valor || "N/A"}</Badge>
+                     <Badge> {attr.attributes_products?.value || "N/A"}</Badge>
                 </span>
                 ))}
               </TableCell>
