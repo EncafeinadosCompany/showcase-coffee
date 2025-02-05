@@ -14,6 +14,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Provider, BankAccount } from "@/types/providers/providers";
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext, PaginationLink } from "@/components/ui/pagination";
+import { associateProvider } from "@/features/providers/providerSlice";
+
 
 const BANK_OPTIONS = [
   "Banco de Bogotá",
@@ -38,6 +40,7 @@ export const ProvidersPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProviders, setFilteredProviders] = useState(providers);
   const [showDialog, setShowDialog] = useState(false);
+  const employee = useAppSelector((state) => state.auth.employee);
   const [form, setForm] = useState<Omit<Provider, "id">>({
     name: "",
     nit: "",
@@ -106,13 +109,24 @@ export const ProvidersPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!form.name || !form.nit || !form.email || !form.phone) {
+      alert("Todos los campos son obligatorios.");
+      return;
+    }
+  
     try {
       if (editingId !== null) {
         await dispatch(editProvider({ id: editingId.toString(), provider: form }));
         setEditingId(null);
       } else {
-        await dispatch(addProvider(form));
+        const newProvider = await dispatch(addProvider(form)).unwrap();
+  
+        if (employee?.id_store && newProvider?.id) {
+          await dispatch(associateProvider({ storeId: employee.id_store, providerId: newProvider.id }));
+        }
       }
+  
       setForm({
         name: "",
         nit: "",
@@ -122,12 +136,14 @@ export const ProvidersPage = () => {
         bankAccounts: [],
         status: true,
       });
+  
       setShowDialog(false);
     } catch (error) {
       console.error("Error saving provider:", error);
     }
   };
-
+  
+  
   return (
     <div className="p-8 space-y-6">
       <h1 className="text-3xl font-bold mb-6">Gestión de Proveedores</h1>

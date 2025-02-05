@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getProviders, createProvider, updateProvider } from "./providerService";
+import { getProviders, createProvider, updateProvider, associateProviderToStore, getProvidersByStore } from "./providerService";
 import { Provider } from "../../types/providers/providers";
 
 interface ProviderState {
@@ -22,6 +22,16 @@ export const fetchProviders = createAsyncThunk("providers/fetchAll", async (_, {
   }
 });
 
+export const fetchProvidersByStore = createAsyncThunk(
+  "providers/fetchByStore",
+  async (storeId: number, { rejectWithValue }) => {
+    try {
+      return await getProvidersByStore(storeId);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error al obtener proveedores de la tienda");
+    }
+  }
+);
 export const addProvider = createAsyncThunk(
   "providers/add",
   async (provider: Omit<Provider, "id">, { rejectWithValue }) => {
@@ -29,6 +39,17 @@ export const addProvider = createAsyncThunk(
       return await createProvider(provider);
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Error al agregar proveedor");
+    }
+  }
+);
+
+export const associateProvider = createAsyncThunk(
+  "providers/associate",
+  async ({ storeId, providerId }: { storeId: number; providerId: number }, { rejectWithValue }) => {
+    try {
+      await associateProviderToStore(storeId, providerId);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error al asociar proveedor a la tienda");
     }
   }
 );
@@ -62,8 +83,23 @@ const providerSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
+      .addCase(fetchProvidersByStore.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchProvidersByStore.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.providers = action.payload;
+      })
+      .addCase(fetchProvidersByStore.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
       .addCase(addProvider.fulfilled, (state, action) => {
         state.providers.push(action.payload);
+      })
+      .addCase(associateProvider.rejected, (state, action) => {
+        state.error = action.payload as string;
       })
       .addCase(editProvider.fulfilled, (state, action) => {
         state.providers = state.providers.map((provider) =>
