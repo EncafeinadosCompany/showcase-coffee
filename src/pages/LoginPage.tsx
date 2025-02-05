@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import { useAppDispatch } from "@/hooks/useAppDispatch";
-import { loginUser } from "@/features/auth/authSlice";
 import { useAuth } from "@/context/AuthContext1";
 import { Coffee } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,7 +10,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const LoginPage = () => {
-  const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector((state) => state.auth);
   const { login } = useAuth();
 
@@ -22,19 +19,19 @@ export const LoginPage = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    try {
-      const result = await dispatch(loginUser(form)).unwrap();
-      console.log("Resultado del login:", result);
-      if (result && result.token) {
-        login(result.token);
-      }
-    } catch (err) {
-      console.error("Error en el login:", err);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // 🚨 Previene el doble envío
+  
+    const { email, password } = form; // ✅ Obtiene los valores correctos
+  
+    if (!email || !password) {
+      console.error("Email y password son obligatorios");
+      return;
     }
-  };
+  
+    login(email, password);
+  };  
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-pink-100 to-amber-100">

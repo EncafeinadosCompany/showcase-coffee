@@ -1,4 +1,4 @@
-import { Home, ChevronLeft, ChevronRight, Users, Settings, BarChart2, Folder, HelpCircle, LogOut } from 'lucide-react';
+import { Home, ChevronLeft, BadgeDollarSign, ChevronRight, Users, Settings, BarChart2, HelpCircle, LogOut, ShoppingBasket } from 'lucide-react';
 import { useState } from 'react';
 
 import { useNavigate } from "react-router-dom";
@@ -24,13 +24,14 @@ const Sidebar = () => {
     { icon: <Home />, label: 'Inicio', path: '/home' },
     { icon: <Users />, label: 'Proveedores', path: '/providers' },
     { icon: <BarChart2 />, label: 'Tienda', path: '/stores' },
-    // { icon: <Folder />, label: 'Compras', path: '/shopping' },
+    { icon: <ShoppingBasket />, label: 'Compras', path: '/shopping' },
+    { icon: <BadgeDollarSign />, label: 'Ventas', path: '/sales' },
   ];
 
-  // const bottomItems = [
-  //   { icon: <HelpCircle />, label: 'Ayuda', path: '/help' },
-  //   { icon: <Settings />, label: 'Configuración', path: '/settings' },
-  // ];
+  const bottomItems = [
+    { icon: <HelpCircle />, label: 'Ayuda', path: '/help' },
+    { icon: <Settings />, label: 'Configuración', path: '/settings' },
+  ];
 
   return (
     <div className={`
@@ -125,7 +126,7 @@ const Sidebar = () => {
         mt-auto
       ">
         <ul className="space-y-2">
-          {/* {bottomItems.map((item) => (
+          {bottomItems.map((item) => (
             <li key={item.label}>
               <a
                 href={item.path}
@@ -159,7 +160,7 @@ const Sidebar = () => {
                 )}
               </a>
             </li>
-          ))} */}
+          ))}
 
           {/* Botón de Logout */}
           <li>

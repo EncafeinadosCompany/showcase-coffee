@@ -6,9 +6,6 @@ interface LoginData {
 }
 
 export const loginService = async (data: LoginData) => {
-  const response = await axiosInstance.post("/auth/", data);
-  if (response.data.token) {
-    localStorage.setItem("token", response.data.token);
-  }
+  const response = await axiosInstance.post("/auth", data);
   return response.data;
 };

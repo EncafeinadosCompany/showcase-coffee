@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 const Layout = () => {
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gradient-to-r from-pink-100 to-amber-100">
 
 
       <div className="hidden md:block">
@@ -12,7 +12,7 @@ const Layout = () => {
       </div>
 
       <div className="flex-1 flex flex-col">
-        <main className="flex-grow overflow-y-auto p-6 lg:p-8 bg-gradient-to-r from-pink-100 to-amber-100 ">
+        <main className="flex-grow overflow-y-auto p-6 lg:p-8">
           <Outlet />
         </main>
       </div>
