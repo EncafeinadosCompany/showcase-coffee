@@ -34,7 +34,6 @@ const Sidebar = () => {
   ];
 
   const bottomItems = [
-    { icon: <HelpCircle />, label: 'Ayuda', path: '/help' },
     { icon: <Settings />, label: 'Configuración', path: '/settings' },
   ];
 
