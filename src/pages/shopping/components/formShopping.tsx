@@ -46,8 +46,8 @@ export default function FormShopping({
       (fechaActual.getFullYear() - fechaTostionDate.getFullYear()) * 12 +
       (fechaActual.getMonth() - fechaTostionDate.getMonth());
     console.log(diferenciaMeses);
-    if (diferenciaMeses > 3) {
-      toast({variant:"destructive",title:"Error",description:"La fecha de tostión no puede ser mayor a 3 meses"});
+    if (diferenciaMeses > 1) {
+      toast({variant:"destructive",title:"Error",description:"La fecha de tostión no puede ser mayor a 1 mes"});
       return;
     }
 

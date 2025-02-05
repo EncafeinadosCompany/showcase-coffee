@@ -37,7 +37,7 @@ export default function LeftCard(
             </div>
             <div>
                 <h1 className="text-xl">Total: ${totalCompra.toFixed(2)}</h1>
-                </div>
+            </div>
           </CardFooter>
         </Card>
     )
