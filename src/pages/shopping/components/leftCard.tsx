@@ -1,11 +1,11 @@
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { productType } from "@/types/products/product";
-import { ShoppingVariant } from "@/types/shopping/ShoppingVariant";
+import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CartShopping from "./cartProducts";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { useToast } from "@/components/hooks/use-toast";
-import { createShopping } from "@/features/shopping/shoppingService"; // Ajusta la ruta según tu estructura
+import { createShopping } from "@/features/transactions/shoppingService"; // Ajusta la ruta según tu estructura
 
 export default function LeftCard({
   products,

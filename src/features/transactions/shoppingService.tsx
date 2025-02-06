@@ -6,7 +6,7 @@ export const getShopping = async () => {
 };
 
 export const getShoppingVariant = async () => {
-  const response = await axiosInstance.get("/shopping/shopping-variants");
+  const response = await axiosInstance.get("/transactions/shopping-variants");
   return response.data;
 };
 

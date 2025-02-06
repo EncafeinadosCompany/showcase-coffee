@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { fetchProducts } from "@/features/products/products/productSlice";
 import { useToast } from "@/components/hooks/use-toast"
-import { ShoppingVariant } from "@/types/shopping/ShoppingVariant";
+import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
 
 export default function FormShopping({
   variant_id, cartProducts, setcartProducts

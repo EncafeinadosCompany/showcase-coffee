@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getProviders, createProvider, updateProvider, associateProviderToStore, getProvidersByStore } from "./providerService";
-import { Provider } from "../../types/providers/providers";
+import { Provider } from "../../types/companies/provider";
 
 interface ProviderState {
   providers: Provider[];

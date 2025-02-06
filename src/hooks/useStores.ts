@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { loadStores, addNewStore, deleteStoreById } from "../features/stores/storeSlice";
+import { loadStores, addNewStore, deleteStoreById } from "../features/companies/storeSlice";
 
 export const useStores = () => {
   const dispatch = useDispatch();
