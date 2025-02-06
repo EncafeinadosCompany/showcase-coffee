@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { brandType } from "@/types/products/brand"
 import {fetchBrands} from "@/features/products/brands/brandSlice";
 import {fetchAttributes, addAttribute} from "@/features/products/attributes/attributeSlice"
 import {addProducts} from "@/features/products/products/productSlice"
@@ -10,7 +9,7 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { useToast } from "@/components/hooks/use-toast"
 import { ToastAction } from "@/components/ui/toast"
-
+import { Toast } from 'primereact/toast';
 
 export default function AddProductForm() {
   const [name, setName] = useState("")
@@ -29,6 +28,7 @@ export default function AddProductForm() {
     dispatch(fetchBrands());
     dispatch(fetchAttributes());
   },[dispatch])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     dispatch(addProducts(
@@ -40,9 +40,7 @@ export default function AddProductForm() {
     }
   ))
 
-  
-  if(error){
-  
+  if(error){ 
     toast({
       title: "Error al agregar el producto",
       description: error,
@@ -55,13 +53,12 @@ export default function AddProductForm() {
       variant: "success",
       action: (
         <ToastAction altText="Goto schedule to undo">Ok</ToastAction>
-      ),
+      )
     })
   }
 
-  console.log(productAttributes)
 
-  
+ 
     setName("")
     setBrandId("")
     setProductAttributes([])
