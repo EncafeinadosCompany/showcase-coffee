@@ -10,7 +10,7 @@ export interface productType
 			description: string,
 			id: number},
      attributes?: Array<{ id?:number, description:string; value?: string, attributes_products?:{ value:string} }>
-     variants?: 
+     product?: 
           Array<
           {id: string | number,
           grammage: string,
