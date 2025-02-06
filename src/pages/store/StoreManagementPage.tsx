@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
-import { fetchStores, addStore, editStore, removeStore } from "../../features/stores/storeSlice";
-import { Store } from "@/types/stores/Store";
+import { fetchStores, addStore, editStore, removeStore } from "../../features/companies/storeSlice";
 import { Plus, MoreHorizontal, Search, Edit, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Store } from "@/types/companies/store";
 
 export default function Stores() {
   const dispatch = useDispatch<AppDispatch>();

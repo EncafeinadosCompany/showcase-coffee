@@ -1,13 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getProviders, createProvider, updateProvider, associateProviderToStore, getProvidersByStore } from "./providerService";
-import { Provider } from "../../types/providers/providers";
+import { Provider } from "../../types/companies/provider";
 
 interface ProviderState {
   providers: Provider[];
   isLoading: boolean;
   error: string | null;
 }
-
 const initialState: ProviderState = {
   providers: [],
   isLoading: false,
@@ -32,6 +31,7 @@ export const fetchProvidersByStore = createAsyncThunk(
     }
   }
 );
+
 export const addProvider = createAsyncThunk(
   "providers/add",
   async (provider: Omit<Provider, "id">, { rejectWithValue }) => {

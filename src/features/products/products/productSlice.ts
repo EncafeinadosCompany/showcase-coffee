@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getIdProduct, getProduct, createProduct } from "./productService";
 import { productType } from "@/types/products/product";
-import { getProductsType } from "@/types/products/getProducts";
 
 interface ProductState {
   products: productType[];

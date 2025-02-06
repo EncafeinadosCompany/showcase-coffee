@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {  getStores, createStore, updateStore, deleteStore } from "./storeService";
-import {Store} from "../../types/stores/Store";
+import {Store} from "../../types/companies/store";
 
 interface StoreState {
   stores: Store[];

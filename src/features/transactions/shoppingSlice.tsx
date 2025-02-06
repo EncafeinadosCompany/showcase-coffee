@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getShopping, getShoppingVariant, getShoppingById, getShoppingVariantById, createShopping } from "./shoppingService";
-import { Shopping } from "../../types/shopping/shoppingModel";
+import { Shopping, ShoppingVariant2 } from "../../types/transactions/shoppingModel";
 
 interface ShoppingState {
   shopping: Shopping[];
@@ -50,7 +50,7 @@ export const fetchShoppingVariantById = createAsyncThunk("shopping/fetchVariantB
   }
 });
 
-export const addShopping = createAsyncThunk("shopping/add", async (shopping: Omit<Shopping, "id">, { rejectWithValue }) => {
+export const addShopping = createAsyncThunk("shopping/add", async (shopping: Omit<ShoppingVariant2, "id">, { rejectWithValue }) => {
   try {
     return await createShopping(shopping);
   } catch (error: any) {
