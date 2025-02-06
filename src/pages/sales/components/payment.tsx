@@ -82,7 +82,7 @@ export default function Payment({ total, onCompleteSale, onCancelSale }: Payment
             <CardFooter className="flex flex-col gap-2">
 
             <Button 
-                    className="w-full bg-amber-600 hover:bg-amber-700"
+                    className="w-full bg-green-800 hover:bg-green-800"
                     onClick={handleCompleteSale}
                     disabled={
                         paymentMethod === "efectivo" && 
@@ -91,13 +91,15 @@ export default function Payment({ total, onCompleteSale, onCancelSale }: Payment
                 >
                     Completar Venta
                 </Button>
-                
+
                 <AlertDialog>
+                    
                     <AlertDialogTrigger asChild>
                         <Button variant="destructive" className="w-full">
                             Cancelar Venta
                         </Button>
                     </AlertDialogTrigger>
+
                     <AlertDialogContent>
                         <AlertDialogHeader>
                             <AlertDialogTitle className="flex items-center gap-2">
@@ -110,7 +112,7 @@ export default function Payment({ total, onCompleteSale, onCancelSale }: Payment
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Volver</AlertDialogCancel>
-                            <AlertDialogAction onClick={onCancelSale} className="bg-red-500 hover:bg-red-600">
+                            <AlertDialogAction onClick={onCancelSale} className="bg-red-500 hover:bg-red-500">
                                 Sí, cancelar venta
                             </AlertDialogAction>
                         </AlertDialogFooter>
