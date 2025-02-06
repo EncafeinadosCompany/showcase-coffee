@@ -1,11 +1,11 @@
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { productType } from "@/types/products/product";
-import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
+import { ShoppingDetail, ShoppingData } from "@/types/transactions/shoppingModel";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CartShopping from "./cartProducts";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { useToast } from "@/components/hooks/use-toast";
-import { createShopping } from "@/features/transactions/shoppingService"; // Ajusta la ruta según tu estructura
+import { createShopping } from "@/features/transactions/shoppingService";
 
 export default function LeftCard({
   products,
@@ -14,8 +14,8 @@ export default function LeftCard({
   totalCompra,
 }: {
   products: productType[];
-  cartProducts: ShoppingVariant[];
-  setcartProducts: React.Dispatch<React.SetStateAction<ShoppingVariant[]>>;
+  cartProducts: ShoppingDetail[];
+  setcartProducts: React.Dispatch<React.SetStateAction<ShoppingDetail[]>>;
   totalCompra: number;
 }) {
   const { toast } = useToast();
@@ -33,7 +33,7 @@ export default function LeftCard({
       });
       return;
     }
-  
+
     if (cartProducts.length === 0) {
       toast({
         variant: "destructive",
@@ -42,13 +42,14 @@ export default function LeftCard({
       });
       return;
     }
-  
+
     // Crear el objeto de compra
-    const shoppingData = {
+    const shoppingData: ShoppingData = {
       shopping: {
         id_store: id_store, // Usar el id_store
         id_employee: 2, // Cambiar a "id_employee"
         date_entry: new Date().toISOString(), // Fecha actual en formato ISO
+        status: true,
       },
       details: cartProducts.map((product) => ({
         id_variant_products: product.id_variant_products,
@@ -58,10 +59,10 @@ export default function LeftCard({
         sale_price: product.sale_price,
       })),
     };
-  
+
     // Mostrar los datos enviados en la consola
     console.log("Datos enviados:", JSON.stringify(shoppingData, null, 2));
-  
+
     try {
       // Enviar la compra al backend
       await createShopping(shoppingData);
@@ -69,7 +70,7 @@ export default function LeftCard({
         title: "Éxito",
         description: "La consignación se ha creado correctamente.",
       });
-  
+
       // Limpiar el carrito después de crear la compra
       setcartProducts([]);
     } catch (error: any) {
@@ -81,6 +82,7 @@ export default function LeftCard({
       });
     }
   };
+
   return (
     <Card className="bg-white shadow-lg h-[730px] overflow-hidden">
       <CardHeader>
