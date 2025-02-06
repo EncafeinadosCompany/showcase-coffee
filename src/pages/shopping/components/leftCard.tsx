@@ -1,44 +1,124 @@
-import { Card, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { productType } from "@/types/products/product";
 import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CartShopping from "./cartProducts";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { useToast } from "@/components/hooks/use-toast";
+import { createShopping } from "@/features/transactions/shoppingService"; // Ajusta la ruta según tu estructura
 
-export default function LeftCard(
-    {products, cartProducts, setcartProducts, totalCompra}:{
-        products: productType[];
-        cartProducts: ShoppingVariant[];
-        setcartProducts: React.Dispatch<React.SetStateAction<ShoppingVariant[]>>;
-        totalCompra: number;
+export default function LeftCard({
+  products,
+  cartProducts,
+  setcartProducts,
+  totalCompra,
+}: {
+  products: productType[];
+  cartProducts: ShoppingVariant[];
+  setcartProducts: React.Dispatch<React.SetStateAction<ShoppingVariant[]>>;
+  totalCompra: number;
+}) {
+  const { toast } = useToast();
+
+  // Obtener el empleado y el ID de la tienda desde Redux
+  const employee = useAppSelector((state) => state.auth.employee);
+  const id_store = employee ? employee.id_store : null;
+
+  const handleGenerateConsignment = async () => {
+    if (!id_store) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "No se ha asignado una tienda.",
+      });
+      return;
     }
-) {
-
-    return (
-        <Card className="bg-white shadow-lg h-[730px] overflow-hidden">
-        <CardHeader>
-          <CardTitle className="relative font-libre-baskerville text-2xl text-[#755841] pb-2">
-        <span className="block text-sm uppercase tracking-wider text-amber-600 mb-1 font-sans opacity-80">
-          Consignación
-        </span>
-        <span className="relative inline-block">
-          Productos a consignar
-          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-amber-200"></span>
-        </span>
-      </CardTitle>
-        </CardHeader>
-            <ScrollArea className="h-[calc(100vh-400px)]">
-                <CartShopping cartProducts={cartProducts} setcartProducts={setcartProducts} products={products}></CartShopping> 
-            </ScrollArea>
-        <CardFooter>
-            <div className="w-auto mx-auto">
-            <h1>Aqui ira el select del proveedor</h1>
-            <button className="w-full mt-2  bg-[#36270b] hover:bg-[#3a2d11] text-white py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200"> Generar consignación</button>
-            <button className="w-full mt-2  bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200  "> Cancelar consignación</button>
-            </div>
-            <div>
-                <h1 className="text-xl">Total: ${totalCompra.toFixed(2)}</h1>
-            </div>
-          </CardFooter>
-        </Card>
-    )
+  
+    if (cartProducts.length === 0) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "No hay productos en la consignación.",
+      });
+      return;
+    }
+  
+    // Crear el objeto de compra
+    const shoppingData = {
+      shopping: {
+        id_store: id_store, // Usar el id_store
+        id_employee: 2, // Cambiar a "id_employee"
+        date_entry: new Date().toISOString(), // Fecha actual en formato ISO
+      },
+      details: cartProducts.map((product) => ({
+        id_variant_products: product.id_variant_products,
+        roasting_date: new Date(product.roasting_date).toISOString(), // Convertir a ISO
+        quantity: product.quantity,
+        shopping_price: product.shopping_price,
+        sale_price: product.sale_price,
+      })),
+    };
+  
+    // Mostrar los datos enviados en la consola
+    console.log("Datos enviados:", JSON.stringify(shoppingData, null, 2));
+  
+    try {
+      // Enviar la compra al backend
+      await createShopping(shoppingData);
+      toast({
+        title: "Éxito",
+        description: "La consignación se ha creado correctamente.",
+      });
+  
+      // Limpiar el carrito después de crear la compra
+      setcartProducts([]);
+    } catch (error: any) {
+      console.error("Error al crear la consignación:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.response?.data?.message || "No se pudo crear la consignación.",
+      });
+    }
+  };
+  return (
+    <Card className="bg-white shadow-lg h-[730px] overflow-hidden">
+      <CardHeader>
+        <CardTitle className="relative font-libre-baskerville text-2xl text-[#755841] pb-2">
+          <span className="block text-sm uppercase tracking-wider text-amber-600 mb-1 font-sans opacity-80">
+            Consignación
+          </span>
+          <span className="relative inline-block">
+            Productos a consignar
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-amber-200"></span>
+          </span>
+        </CardTitle>
+      </CardHeader>
+      <ScrollArea className="h-[calc(100vh-400px)]">
+        <CartShopping
+          cartProducts={cartProducts}
+          setcartProducts={setcartProducts}
+          products={products}
+        />
+      </ScrollArea>
+      <CardFooter>
+        <div className="w-auto mx-auto">
+          <h1>Aqui ira el select del proveedor</h1>
+          {/* Botón para generar la consignación */}
+          <button
+            onClick={handleGenerateConsignment}
+            className="w-full mt-2 bg-[#36270b] hover:bg-[#3a2d11] text-white py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200"
+          >
+            Generar consignación
+          </button>
+          <button className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200">
+            Cancelar consignación
+          </button>
+        </div>
+        <div>
+          <h1 className="text-xl">Total: ${totalCompra.toFixed(2)}</h1>
+        </div>
+      </CardFooter>
+    </Card>
+  );
 }
