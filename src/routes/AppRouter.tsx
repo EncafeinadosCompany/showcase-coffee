@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import  NotFound  from "@/pages/404/404";
 import { AuthProvider, useAuth } from "@/context/AuthContext1";
 import { Liquidations } from "@/pages/payments/liquidation";
-import { ProvidersPage } from "@/pages/ProviderPage";
+import { ProvidersPage } from "@/pages/providers/ProviderPage";
 import { Products } from "@/pages/products/products";
 import { VariantsPage } from "@/pages/variantsPage";
 import { LoginPage } from "@/pages/LoginPage";
