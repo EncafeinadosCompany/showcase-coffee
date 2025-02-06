@@ -7,7 +7,6 @@ interface ProviderState {
   isLoading: boolean;
   error: string | null;
 }
-
 const initialState: ProviderState = {
   providers: [],
   isLoading: false,
@@ -32,6 +31,7 @@ export const fetchProvidersByStore = createAsyncThunk(
     }
   }
 );
+
 export const addProvider = createAsyncThunk(
   "providers/add",
   async (provider: Omit<Provider, "id">, { rejectWithValue }) => {
