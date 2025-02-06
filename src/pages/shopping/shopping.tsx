@@ -3,7 +3,7 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { fetchVariants } from "@/features/products/variants/vatiantSlice";
 import { fetchProducts} from "@/features/products/products/productSlice";
-import { ShoppingVariant } from "@/types/shopping/ShoppingVariant";
+import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
 import RightCard from "./components/rightCard";
 import LeftCard from "./components/leftCard";
 

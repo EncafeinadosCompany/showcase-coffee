@@ -3,9 +3,10 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import {
   fetchProviders,
+  fetchProvidersByStore,
   addProvider,
   editProvider,
-} from "@/features/providers/providerSlice";
+} from "@/features/companies/providerSlice";
 import { Plus, Search, Trash2, Landmark, List, Grid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,7 +36,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Provider, BankAccount } from "@/types/providers/providers";
+import { Provider, BankAccount } from "@/types/companies/provider";
 import {
   Pagination,
   PaginationContent,
@@ -44,7 +45,7 @@ import {
   PaginationNext,
   PaginationLink,
 } from "@/components/ui/pagination";
-import { associateProvider } from "@/features/providers/providerSlice";
+import { associateProvider } from "@/features/companies/providerSlice";
 
 const BANK_OPTIONS = [
   "Banco de Bogotá",
@@ -69,6 +70,13 @@ export const ProvidersPage = () => {
   const [filteredProviders, setFilteredProviders] = useState(providers);
   const [showDialog, setShowDialog] = useState(false);
   const employee = useAppSelector((state) => state.auth.employee);
+  const storeId = employee?.id_store;
+
+  console.log("Store ID:", storeId); // Verifica el storeId
+  console.log("Proveedores:", providers); // Verifica los proveedores
+  console.log("Cargando:", isLoading); // Verifica el estado de carga
+  console.log("Error:", error); // Verifica el error
+
   const [form, setForm] = useState<Omit<Provider, "id">>({
     name: "",
     nit: "",
@@ -84,20 +92,25 @@ export const ProvidersPage = () => {
   const itemsPerPage = 6; // Máximo de cards por página
 
   useEffect(() => {
-    dispatch(fetchProviders());
-  }, [dispatch]);
-
-  useEffect(() => {
-    setFilteredProviders(
-      providers.filter(
-        (provider) =>
-          provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          provider.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          provider.phone.includes(searchTerm) ||
-          provider.nit.includes(searchTerm)
-      )
-    );
-  }, [providers, searchTerm]);
+    if (storeId) {
+      dispatch(fetchProvidersByStore(storeId)).then((res) => {
+        console.log("Respuesta de fetchProvidersByStore:", res);
+      });
+    }
+  }, [storeId, dispatch]);
+  
+ useEffect(() => {
+  console.log("Proveedores cargados:", providers);
+  setFilteredProviders(
+    providers.filter(
+      (provider) =>
+        provider?.name?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
+        provider?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        provider?.phone?.includes(searchTerm) ||
+        provider?.nit?.includes(searchTerm)
+    )
+  );
+}, [providers, searchTerm]);
 
   // Paginación
   const indexOfLastItem = currentPage * itemsPerPage;
