@@ -75,17 +75,17 @@ const NotFound = () => {
         </div>
 
         {/* Enhanced buttons */}
-        <div className="flex flex-col sm:flex-row gap-6 mt-8 z-10">
+        <div className="flex flex-col sm:flex-row gap-6 mt-8 z-10 ">
           <button
             onClick={handleBack}
-            className="flex items-center gap-3 px-8 py-4 bg-amber-700 text-white rounded-full hover:bg-amber-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+            className="flex items-center gap-3 px-8 py-4 bg-amber-700 text-white rounded-full hover:bg-amber-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg "
           >
             <ArrowLeft size={24} />
             <span className="font-medium">Volver atrás</span>
           </button>
           <a
-            href="/"
-            className="flex items-center gap-3 px-8 py-4 bg-brown-700 text-white rounded-full hover:bg-brown-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+            href="/home"
+            className="flex items-center gap-3 px-8 py-4 bg-amber-700 text-white rounded-full hover:bg-brown-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
           >
             <Home size={24} />
             <span className="font-medium">Ir al inicio</span>

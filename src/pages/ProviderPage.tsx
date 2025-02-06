@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import { fetchProviders, addProvider, editProvider, associateProvider } from "@/features/companies/providerSlice";
+import {
+  fetchProviders,
+  fetchProvidersByStore,
+  addProvider,
+  editProvider,
+} from "@/features/providers/providerSlice";
 import { Plus, Search, Trash2, Landmark, List, Grid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,6 +70,13 @@ export const ProvidersPage = () => {
   const [filteredProviders, setFilteredProviders] = useState(providers);
   const [showDialog, setShowDialog] = useState(false);
   const employee = useAppSelector((state) => state.auth.employee);
+  const storeId = employee?.id_store;
+
+  console.log("Store ID:", storeId); // Verifica el storeId
+  console.log("Proveedores:", providers); // Verifica los proveedores
+  console.log("Cargando:", isLoading); // Verifica el estado de carga
+  console.log("Error:", error); // Verifica el error
+
   const [form, setForm] = useState<Omit<Provider, "id">>({
     name: "",
     nit: "",
@@ -80,17 +92,22 @@ export const ProvidersPage = () => {
   const itemsPerPage = 6; // Máximo de cards por página
 
   useEffect(() => {
-    dispatch(fetchProviders());
-  }, [dispatch]);
-
+    if (storeId) {
+      dispatch(fetchProvidersByStore(storeId)).then((res) => {
+        console.log("Respuesta de fetchProvidersByStore:", res);
+      });
+    }
+  }, [storeId, dispatch]);
+  
   useEffect(() => {
+    console.log("Proveedores cargados:", providers);
     setFilteredProviders(
       providers.filter(
         (provider) =>
-          provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          provider.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          provider.phone.includes(searchTerm) ||
-          provider.nit.includes(searchTerm)
+          provider?.name?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
+          provider?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          provider?.phone?.includes(searchTerm) ||
+          provider?.nit?.includes(searchTerm)
       )
     );
   }, [providers, searchTerm]);
