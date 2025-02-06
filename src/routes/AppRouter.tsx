@@ -36,7 +36,7 @@ export function AppRouter() {
 
           <Route path="/home" element={<PrivateRoute><HomePage /></PrivateRoute>} />
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
-          <Route path="/liquiduidations" element={<PrivateRoute><Liquidations /></PrivateRoute>} />
+          <Route path="/liquidations" element={<PrivateRoute><Liquidations /></PrivateRoute>} />
           <Route path="/shopping" element={<PrivateRoute><Shopping /></PrivateRoute>} />
           <Route path="/sales" element={<PrivateRoute><Sales/></PrivateRoute>} />
 
