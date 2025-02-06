@@ -7,21 +7,21 @@ export const getShopping = async () => {
 };
 
 export const getShoppingVariant = async () => {
-  const response = await axiosInstance.get("/shopping/shopping-variants");
+  const response = await axiosInstance.get("/transactions/shopping-variants");
   return response.data;
 };
 
 export const getShoppingById = async (id: any) => {
-  const response = await axiosInstance.get(`/shopping/${id}`);
+  const response = await axiosInstance.get(`/transactions/shopping/${id}`);
   return response.data;
 };
 
 export const getShoppingVariantById = async (id: any) => {
-  const response = await axiosInstance.get(`/shopping/shopping-variants/${id}`);
+  const response = await axiosInstance.get(`/transactions/shopping/shopping-variants/${id}`);
   return response.data;
 };
 
 export const createShopping = async (shopping: Omit<Shopping, "id">) => {
-  const response = await axiosInstance.post("/shopping", shopping);
+  const response = await axiosInstance.post("/transactions/shopping", shopping);
   return response.data;
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import { fetchProviders, addProvider, editProvider } from "@/features/providers/providerSlice";
+import { fetchProviders, addProvider, editProvider } from "@/features/companies/providers/providerSlice";
 import { Plus, Search, Trash2, Landmark, List, Grid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,9 +12,9 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Provider, BankAccount } from "@/types/providers/providers";
+import { Provider, BankAccount } from "@/types/companies/provider";
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext, PaginationLink } from "@/components/ui/pagination";
-import { associateProvider } from "@/features/providers/providerSlice";
+import { associateProvider } from "@/features/companies/providers/providerSlice";
 
 
 const BANK_OPTIONS = [

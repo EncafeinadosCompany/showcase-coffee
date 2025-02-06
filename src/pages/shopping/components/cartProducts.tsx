@@ -4,7 +4,7 @@ import { CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { productType } from "@/types/products/product";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import { ShoppingVariant } from "@/types/shopping/ShoppingVariant";
+import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
 import { Coffee, Minus, Plus, Trash2 } from "lucide-react";
 
 export default function CartShopping({ 

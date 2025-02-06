@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
-import { fetchStores, addStore, editStore, removeStore } from "../../features/stores/storeSlice";
-import { Store } from "@/types/stores/Store";
+import { fetchStores, addStore, editStore, removeStore } from "../../features/companies/stores/storeSlice";
+import { Store } from "@/types/companies/stores";
 import { Plus, MoreHorizontal, Search, Edit, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

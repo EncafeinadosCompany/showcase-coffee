@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getSale, createSale, getSaleById, getShoppingVariant } from "./saleService";
-import { Sales } from "../../types/sales/saleModel";
+import { Sales } from "../../types/transactions/saleModel";
 
 interface SaleState {
   sales: Sales[];

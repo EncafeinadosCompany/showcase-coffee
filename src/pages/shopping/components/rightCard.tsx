@@ -8,7 +8,7 @@ import { Coffee, Search } from "lucide-react";
 
 import FormShopping from "./formShopping";
 import NuevaVarianteDialog from "./newVariants";
-import { ShoppingVariant } from "@/types/shopping/ShoppingVariant";
+import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
 import { productType } from "@/types/products/product";
 import { useState } from "react";
 

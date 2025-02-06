@@ -1,6 +1,6 @@
 import { Card, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import { productType } from "@/types/products/product";
-import { ShoppingVariant } from "@/types/shopping/ShoppingVariant";
+import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CartShopping from "./cartProducts";
 

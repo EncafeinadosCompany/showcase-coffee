@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getShopping, getShoppingVariant, getShoppingById, getShoppingVariantById, createShopping } from "./shoppingService";
-import { Shopping } from "../../types/shopping/shoppingModel";
+import { Shopping } from "../../types/transactions/shoppingModel";
 
 interface ShoppingState {
   shopping: Shopping[];

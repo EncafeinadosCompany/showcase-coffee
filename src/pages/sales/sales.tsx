@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
-import { fetchSaleVariants } from "@/features/sales/saleSlice";
+import { fetchSaleVariants } from "@/features/transactions/sales/saleSlice";
 import { useAppSelector } from "@/hooks/useAppSelector";
 
 import Products from "./saleProducts";
