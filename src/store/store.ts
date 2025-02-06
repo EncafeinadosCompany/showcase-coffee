@@ -4,8 +4,8 @@ import authReducer from "../features/auth/authSlice";
 
 import employeeReducer from "../features/users/employees/employeeSlice";
 
-import providerReducer from "../features/companies/providers/providerSlice";
-import storeReducer from "../features/companies/stores/storeSlice";
+import providerReducer from "../features/companies/providerSlice";
+import storeReducer from "../features/companies/storeSlice";
 
 import productReducer from "../features/products/products/productSlice";
 import variantReducer from "../features/products/variants/vatiantSlice";
