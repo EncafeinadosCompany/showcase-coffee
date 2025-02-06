@@ -22,7 +22,7 @@ export const getShoppingVariantById = async (id: string) => {
 };
 
 export const createShopping = async (shoppingData: ShoppingData) => {
-  const response = await axiosInstance.post("/shopping", shoppingData, {
+  const response = await axiosInstance.post("/transactions/shopping", shoppingData, {
     headers: {
       "Content-Type": "application/json", // Asegúrate de que el contenido sea JSON
     },
