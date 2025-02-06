@@ -1,5 +1,5 @@
-import { axiosInstance } from "../../../API/axiosInstance";
-import {Store} from "../../../types/companies/store";
+import { axiosInstance } from "../../API/axiosInstance";
+import {Store} from "../../types/companies/store";
 
 export const getStores = async () => {
   const response = await axiosInstance.get("/stores");

@@ -1,5 +1,5 @@
-import { axiosInstance } from "../../../API/axiosInstance";
-import { Provider } from "../../../types/companies/provider";
+import { axiosInstance } from "../../API/axiosInstance";
+import { Provider } from "../../types/companies/provider";
 
 export const getProviders = async (): Promise<Provider[]> => {
   const response = await axiosInstance.get("/providers"); 
