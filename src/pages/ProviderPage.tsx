@@ -36,7 +36,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Provider, BankAccount } from "@/types/providers/providers";
+import { Provider, BankAccount } from "@/types/companies/provider";
 import {
   Pagination,
   PaginationContent,
@@ -45,7 +45,7 @@ import {
   PaginationNext,
   PaginationLink,
 } from "@/components/ui/pagination";
-import { associateProvider } from "@/features/providers/providerSlice";
+import {  } from "@/features/companies/providerService";
 
 const BANK_OPTIONS = [
   "Banco de Bogotá",

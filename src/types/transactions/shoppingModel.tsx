@@ -5,6 +5,6 @@ export interface Shopping {
     id_store:number;
     id_employees:number;
     date_entry: Date;
-    status:Boolean;
+    status:boolean;
     detail:Array<ShoppingVariant>;
   }
