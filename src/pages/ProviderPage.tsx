@@ -6,7 +6,7 @@ import {
   fetchProvidersByStore,
   addProvider,
   editProvider,
-} from "@/features/providers/providerSlice";
+} from "@/features/companies/providerSlice";
 import { Plus, Search, Trash2, Landmark, List, Grid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,7 +45,7 @@ import {
   PaginationNext,
   PaginationLink,
 } from "@/components/ui/pagination";
-import {  } from "@/features/companies/providerService";
+import { associateProvider } from "@/features/companies/providerSlice";
 
 const BANK_OPTIONS = [
   "Banco de Bogotá",
@@ -99,18 +99,18 @@ export const ProvidersPage = () => {
     }
   }, [storeId, dispatch]);
   
-  useEffect(() => {
-    console.log("Proveedores cargados:", providers);
-    setFilteredProviders(
-      providers.filter(
-        (provider) =>
-          provider?.name?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
-          provider?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          provider?.phone?.includes(searchTerm) ||
-          provider?.nit?.includes(searchTerm)
-      )
-    );
-  }, [providers, searchTerm]);
+ useEffect(() => {
+  console.log("Proveedores cargados:", providers);
+  setFilteredProviders(
+    providers.filter(
+      (provider) =>
+        provider?.name?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
+        provider?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        provider?.phone?.includes(searchTerm) ||
+        provider?.nit?.includes(searchTerm)
+    )
+  );
+}, [providers, searchTerm]);
 
   // Paginación
   const indexOfLastItem = currentPage * itemsPerPage;
