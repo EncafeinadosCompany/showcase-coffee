@@ -15,6 +15,9 @@ import attributeReducer from "../features/products/attributes/attributeSlice";
 import shoppingReducer from "../features/transactions/shoppingSlice";
 import saleReducer from "../features/transactions/saleSlice";
 
+import depositReducer from "../features/payments/deposits/depositSlice";
+import liquidationReducer from "../features/payments/liquidations/liquidationSlice";
+
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -29,7 +32,10 @@ export const store = configureStore({
     attributes: attributeReducer,
 
     shopping: shoppingReducer,
-    sales: saleReducer
+    sales: saleReducer,
+
+    deposits: depositReducer,
+    liquidations: liquidationReducer,
   },
 });
 

@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getIdAttribute, getAttributes, createAttribute, updateAttribute, deleteAttribute } from "./attributeService";
 import { attributeType } from "@/types/products/attribute";
 
+
+
 interface AttributeState {
   attributes: attributeType[];
   selectedAttribute?: attributeType | null;
