@@ -84,7 +84,7 @@ export default function LeftCard({
   };
 
   return (
-    <Card className="bg-white shadow-lg h-[730px] overflow-hidden">
+    <Card className="bg-white shadow-lg h-[600px] overflow-hidden ">
       <CardHeader>
         <CardTitle className="relative font-libre-baskerville text-2xl text-[#755841] pb-2">
           <span className="block text-sm uppercase tracking-wider text-amber-600 mb-1 font-sans opacity-80">
