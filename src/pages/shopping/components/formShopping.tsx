@@ -160,7 +160,7 @@ export default function FormShopping({
             <Input
               id="shopping_price"
               type="number"
-              step="0.01"
+              step="1000"
               value={shopping_price}
               onChange={(e) => setShopping_price(e.target.value)}
               required
@@ -176,7 +176,7 @@ export default function FormShopping({
             <Input
               id="porcentajeVenta"
               type="number"
-              step="0.1"
+              step="10"
               value={porcentajeVenta}
               onChange={(e) => setPorcentajeVenta(e.target.value)}
               required

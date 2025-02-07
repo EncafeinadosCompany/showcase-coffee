@@ -51,7 +51,7 @@ export default function RightCard({
   };
 
   return (
-    <Card className="bg-white shadow-lg h-[600px] overflow-hidden">
+    <Card className="bg-white shadow-lg h-[calc(100vh-80px)] overflow-hidden">
       <CardHeader>
         <div className="flex items-center gap-2">
           <Coffee className="h-6 w-6 text-amber-700" />

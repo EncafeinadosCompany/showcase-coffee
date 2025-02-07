@@ -6,6 +6,7 @@ import CartShopping from "./cartProducts";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { useToast } from "@/components/hooks/use-toast";
 import { createShopping } from "@/features/transactions/shoppingService";
+import SelectEmployee from "./selectEmployee";
 
 export default function LeftCard({
   products,
@@ -84,7 +85,7 @@ export default function LeftCard({
   };
 
   return (
-    <Card className="bg-white shadow-lg h-[600px] overflow-hidden ">
+    <Card className="bg-white shadow-lg h-[calc(100vh-80px)] overflow-hidden ">
       <CardHeader>
         <CardTitle className="relative font-libre-baskerville text-2xl text-[#755841] pb-2">
           <span className="block text-sm uppercase tracking-wider text-amber-600 mb-1 font-sans opacity-80">
@@ -103,9 +104,9 @@ export default function LeftCard({
           products={products}
         />
       </ScrollArea>
-      <CardFooter>
-        <div className="w-auto mx-auto">
-          <h1>Aqui ira el select del proveedor</h1>
+      <CardFooter className="gap-20 border-t mt-auto "> 
+        <div className="w-[60%] flex flex-col gap-2">
+          <SelectEmployee/>
           {/* Botón para generar la consignación */}
           <button
             onClick={handleGenerateConsignment}
@@ -117,8 +118,9 @@ export default function LeftCard({
             Cancelar consignación
           </button>
         </div>
-        <div>
-          <h1 className="text-xl">Total: ${totalCompra.toFixed(2)}</h1>
+        <div className="w-[40%] justify-end flex flex-col gap-2">
+            <span className="text-lg font-semibold text-[#4A3728]">Total a consignar:</span>
+            <span className="text-2xl font-bold text-[#755841]">${totalCompra.toFixed(2)}</span>
         </div>
       </CardFooter>
     </Card>
