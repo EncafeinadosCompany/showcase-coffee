@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Coffee, Minus, Plus, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { useEffect } from "react";
 
 interface CartProduct {
     variant: any;
@@ -9,42 +11,70 @@ interface CartProduct {
     id_product: number;
     grammage: string;
     sale_price: number;
-    stock: number;
+    quantity: number;
     name: string;
 }
 
 interface CartProps {
-    products: any[];
     cartProducts: CartProduct[];
     setCartProducts: React.Dispatch<React.SetStateAction<CartProduct[]>>;
+    setTotal: React.Dispatch<React.SetStateAction<number>>; // Nuevo prop
 }
 
-export default function Cart({ cartProducts, setCartProducts }: CartProps) {
+export default function Cart({ cartProducts, setCartProducts, setTotal }: CartProps) {
 
-    console.log(cartProducts);
+    useEffect(() => {
+        setTotal(calculateTotal());
+    }, [cartProducts, setTotal]);
 
-    const changeVariant = (variantId: string | number, quantity: number) => {
-        setCartProducts((prev) => {
-            return prev.map((p) => {
-                if (Number(p.id) === Number(variantId)) {
-                    return {
-                        ...p,
-                        stock: Math.max(0, (p.stock ?? 0) + quantity),
-                    };
-                }
-                return p;
-            });
-        });
+
+    const changeVariant = (variantId: number, quantity: number) => {
+        setCartProducts((prev) =>
+            prev.map((p) =>
+                Number(p.variant.id) === Number(variantId)
+                    ? { ...p, quantity: Math.min(p.variant.stock, Math.max(0, (p.quantity ?? 0) + quantity)) }
+                    : p
+            ).filter(p => p.quantity > 0)
+        );
     };
 
-    const deleteVariant = (variantId: string | number) => {
-        setCartProducts((prev) => prev.filter((p) => Number(p.id) !== Number(variantId)));
+    const deleteVariant = (variantId: number) => {
+        setCartProducts((prev) => prev.filter((p) => Number(p.variant.id) !== Number(variantId)));
+    };
+
+    const handleQuantityChange = (
+        variantId: number,
+        value: string,
+        setCartProducts: React.Dispatch<React.SetStateAction<CartProduct[]>>
+    ) => {
+        const newQuantity = value ? Number(value) : 1;
+        if (!isNaN(newQuantity)) {
+            setCartProducts((prev) =>
+                prev.map((p) =>
+                    p.variant.id === variantId
+                        ? { ...p, quantity: Math.min(p.variant.stock, Math.max(1, newQuantity)) }
+                        : p
+                )
+            );
+        }
+    };
+
+    const handleBlur = (
+        variantId: number,
+        value: string,
+        setCartProducts: React.Dispatch<React.SetStateAction<CartProduct[]>>
+    ) => {
+        if (!value) {
+            setCartProducts((prev) =>
+                prev.map((p) =>
+                    p.variant.id === variantId ? { ...p, quantity: 1 } : p
+                )
+            );
+        }
     };
 
     const calculateTotal = () => {
-        return cartProducts.reduce((total, variant) => {
-            return total + (variant.sale_price * (variant.stock ?? 0));
-        }, 0);
+        return cartProducts.reduce((total, variant) => total + (variant.sale_price * (variant.quantity ?? 0)), 0);
     };
 
     const CartItem = ({ variant }: { variant: CartProduct }) => (
@@ -67,21 +97,27 @@ export default function Cart({ cartProducts, setCartProducts }: CartProps) {
                         size="icon"
                         variant="outline"
                         className="h-8 w-8 border-amber-200 hover:bg-amber-100 hover:border-amber-300"
-                        onClick={() => variant.id && changeVariant(variant.id, -1)}
-                        disabled={!variant.stock}
+                        onClick={() => variant.variant.id && changeVariant(variant.variant.id, -1)}
+                        disabled={!variant.quantity}
                     >
                         <Minus className="h-3 w-3 text-amber-700" />
                     </Button>
 
-                    <span className="w-8 text-center font-medium text-gray-700">
-                        {variant.stock || 0}
-                    </span>
+                    <Input
+                        type="number"
+                        value={variant.quantity}
+                        min={1}
+                        max={variant.variant.stock}
+                        className="w-12 h-8 text-center p-1 border-amber-200 focus:border-amber-300"
+                        onChange={(e) => handleQuantityChange(variant.variant.id, e.target.value, setCartProducts)}
+                        onBlur={(e) => handleBlur(variant.variant.id, e.target.value, setCartProducts)}
+                    />
 
                     <Button
                         size="icon"
                         variant="outline"
                         className="h-8 w-8 border-amber-200 hover:bg-amber-100 hover:border-amber-300"
-                        onClick={() => variant.id && changeVariant(variant.id, 1)}
+                        onClick={() => variant.variant.id && changeVariant(variant.variant.id, 1)}
                     >
                         <Plus className="h-3 w-3 text-amber-700" />
                     </Button>
@@ -90,7 +126,7 @@ export default function Cart({ cartProducts, setCartProducts }: CartProps) {
                         size="icon"
                         variant="outline"
                         className="h-8 w-8 border-red-200 hover:bg-red-50 hover:border-red-300"
-                        onClick={() => variant.id && deleteVariant(variant.id)}
+                        onClick={() => variant.variant.id && deleteVariant(variant.variant.id)}
                     >
                         <Trash2 className="h-3 w-3 text-red-500" />
                     </Button>
@@ -130,7 +166,7 @@ export default function Cart({ cartProducts, setCartProducts }: CartProps) {
                     <div className="flex w-full justify-between items-center">
                         <span className="text-lg font-semibold text-[#4A3728]">Total:</span>
                         <span className="text-2xl font-bold text-[#755841]">
-                            ${calculateTotal().toFixed(2)}
+                            {calculateTotal().toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
                         </span>
                     </div>
                 </CardFooter>

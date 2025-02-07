@@ -1,33 +1,58 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
-import { fetchSaleVariants } from "@/features/transactions/saleSlice";
+import { fetchSaleVariants, addSale } from "@/features/transactions/saleSlice";
 import { useAppSelector } from "@/hooks/useAppSelector";
 
 import Products from "./components/products";
 import Cart from "./components/cart";
 import Payment from "./components/payment";
+import type { Sales, SalesPayload } from "@/types/transactions/saleModel";
 
 export default function Sales() {
     const dispatch = useAppDispatch();
     const { saleVariants } = useAppSelector((state) => state.sales);
 
-    console.log(saleVariants);
     const [cartProducts, setCartProducts] = useState<any[]>([]);
+    const [total, setTotal] = useState(0); // Nuevo estado para el total
 
     useEffect(() => {
         dispatch(fetchSaleVariants());
     }, [dispatch]);
 
-    const handleCompleteSale = (paymentMethod: string, receivedAmount: number) => {
-        // Aquí manejas la lógica de completar la venta
-        console.log('Venta completada:', { paymentMethod, receivedAmount, products: cartProducts });
-        // Limpia el carrito después de completar la venta
-        setCartProducts([]);
+    const handleCompleteSale = (paymentMethod: string) => {
+        if (cartProducts.length === 0) {
+            console.error("No hay productos en el carrito.");
+            return;
+        }
+
+        const saleData: SalesPayload = {
+            sale: {
+                date: new Date().toISOString(),
+                type_payment: paymentMethod,
+            },
+            details: cartProducts.map(product => ({
+                id_variant_products: product.variant.id,
+                quantity: product.quantity,
+            }))
+        };
+
+        try {
+            dispatch(addSale(saleData));
+            
+            console.log("Venta registrada con éxito:", saleData);
+
+            setCartProducts([]);
+            setTotal(0); 
+
+            dispatch(fetchSaleVariants());
+        } catch (error) {
+            console.error("Error al registrar la venta:", error);
+        }
     };
 
     const handleCancelSale = () => {
-        // Aquí manejas la lógica de cancelar la venta
         setCartProducts([]);
+        setTotal(0);  
     };
 
     return (
@@ -36,22 +61,17 @@ export default function Sales() {
                 Ventas
             </h6>
             <div className="flex gap-4">
-                {/* Productos - más ancho para mejor visualización */}
+
                 <section className="w-[35%]">
                     <Products products={saleVariants} cartProducts={cartProducts} setCartProducts={setCartProducts} />
                 </section>
 
-                {/* Carrito y Pagos - comparten el espacio restante */}
                 <section className="w-[40%]">
-                    <Cart products={saleVariants} cartProducts={cartProducts} setCartProducts={setCartProducts} />
+                    <Cart cartProducts={cartProducts} setCartProducts={setCartProducts} setTotal={setTotal} />
                 </section>
 
                 <section className="w-[25%]">
-                    <Payment
-                        total={cartProducts.reduce((total, product) => total + (product.sale_price * (product.stock ?? 0)), 0)}
-                        onCompleteSale={handleCompleteSale}
-                        onCancelSale={handleCancelSale}
-                    />
+                    <Payment total={total} onCompleteSale={handleCompleteSale} onCancelSale={handleCancelSale} />
                 </section>
             </div>
         </div>
