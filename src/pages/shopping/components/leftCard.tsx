@@ -72,6 +72,7 @@ export default function LeftCard({
 
       // Limpiar el carrito después de crear la compra
       setcartProducts([]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Error al crear la consignación:", error);
       toast.error(error.response?.data?.message || "No se pudo crear la consignación.");
