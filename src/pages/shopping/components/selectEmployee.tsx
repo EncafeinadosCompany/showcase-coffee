@@ -1,7 +1,5 @@
-import * as React from "react"
-
-
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -9,75 +7,85 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { useEffect } from "react";
+import { fetchEmployees } from "@/features/users/employees/employeeSlice";
 
-type Status = {
-  value: string
-  label: string
-}
+const useEmployees = () => {
+  const dispatch = useAppDispatch();
+  const { employees, isLoading, error } = useAppSelector(
+    (state) => state.employees
+  );
 
-const statuses: Status[] = [
-  {
-    value: "backlog",
-    label: "Backlog",
-  },
-  {
-    value: "todo",
-    label: "Todo",
-  },
-  {
-    value: "in progress",
-    label: "In Progress",
-  },
-  {
-    value: "done",
-    label: "Done",
-  },
-  {
-    value: "canceled",
-    label: "Canceled",
-  },
-]
+  useEffect(() => {
+    dispatch(fetchEmployees());
+  }, [dispatch]);
 
-export default function SelectEmployee() {
-  const [open, setOpen] = React.useState(false)
-  const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
-    null
-  )
+  // Filtrar los empleados que sean del tipo "provider"
+  const filteredEmployees = employees.filter((employee) => employee.type === "provider");
+
+  return { employees: filteredEmployees, isLoading, error };
+};
+
+type SelectEmployeeProps = {
+  onSelect: (employeeId: number) => void;
+};
+
+export default function SelectEmployee({ onSelect }: SelectEmployeeProps) {
+  const [open, setOpen] = React.useState(false);
+  const [selectedEmployee, setSelectedEmployee] = React.useState<{
+    id: number;
+    name: string;
+  } | null>(null);
+
+  const { employees, isLoading, error } = useEmployees();
 
   return (
     <div className="flex items-center space-x-4 mt-6">
-      <p className="text-sm text-muted-foreground">Proveedores</p>
+      <p className="text-sm text-muted-foreground">Empleados</p>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" className="w-[80%] justify-start">
-            {selectedStatus ? <>{selectedStatus.label}</> : <>Disponibles</>}
+            {selectedEmployee ? (
+              <>{selectedEmployee.name}</>
+            ) : (
+              <>Seleccione un empleado</>
+            )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" side="right" align="start">
           <Command>
-            <CommandInput placeholder="Change status..." />
+            <CommandInput placeholder="Buscar empleado..." />
             <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandEmpty>
+                {error
+                  ? "Error al cargar los empleados."
+                  : isLoading
+                  ? "Cargando..."
+                  : "No se encontraron empleados."}
+              </CommandEmpty>
               <CommandGroup>
-                {statuses.map((status) => (
+                {employees.map((employee) => (
                   <CommandItem
-                    key={status.value}
-                    value={status.value}
-                    onSelect={(value) => {
-                      setSelectedStatus(
-                        statuses.find((priority) => priority.value === value) ||
-                          null
-                      )
-                      setOpen(false)
+                    key={employee.id}
+                    value={employee.name}
+                    onSelect={() => {
+                      setSelectedEmployee({
+                        id: employee.id,
+                        name: `${employee.name} ${employee.last_name}`,
+                      });
+                      onSelect(employee.id);  // Llamar a la función onSelect aquí
+                      setOpen(false);
                     }}
                   >
-                    {status.label}
+                    {`${employee.name} ${employee.last_name}`}
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -86,5 +94,5 @@ export default function SelectEmployee() {
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }

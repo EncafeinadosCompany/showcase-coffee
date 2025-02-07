@@ -7,6 +7,8 @@ import { useAppSelector } from "@/hooks/useAppSelector";
 import { useToast } from "@/components/hooks/use-toast";
 import { createShopping } from "@/features/transactions/shoppingService";
 import SelectEmployee from "./selectEmployee";
+import { ChevronLeft } from "lucide-react";
+import { useState } from "react";
 
 export default function LeftCard({
   products,
@@ -25,12 +27,24 @@ export default function LeftCard({
   const employee = useAppSelector((state) => state.auth.employee);
   const id_store = employee ? employee.id_store : null;
 
+  // Estado para almacenar el ID del empleado seleccionado
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(null);
+
   const handleGenerateConsignment = async () => {
     if (!id_store) {
       toast({
         variant: "destructive",
         title: "Error",
         description: "No se ha asignado una tienda.",
+      });
+      return;
+    }
+
+    if (!selectedEmployeeId) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "No se ha seleccionado un empleado.",
       });
       return;
     }
@@ -48,7 +62,7 @@ export default function LeftCard({
     const shoppingData: ShoppingData = {
       shopping: {
         id_store: id_store, // Usar el id_store
-        id_employee: 2, // Cambiar a "id_employee"
+        id_employee: selectedEmployeeId, // Usar el ID del empleado seleccionado
         date_entry: new Date().toISOString(), // Fecha actual en formato ISO
         status: true,
       },
@@ -106,20 +120,22 @@ export default function LeftCard({
       </ScrollArea>
       <CardFooter className="gap-20 border-t mt-auto "> 
         <div className="w-[60%] flex flex-col gap-2">
-          <SelectEmployee/>
+          {/* Pasar la función onSelect a SelectEmployee */}
+          <SelectEmployee onSelect={(employeeId: number) => setSelectedEmployeeId(employeeId)} />
           {/* Botón para generar la consignación */}
           <button
             onClick={handleGenerateConsignment}
-            className="w-full mt-2 bg-[#36270b] hover:bg-[#3a2d11] text-white py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200"
+            className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white  py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200"
           >
             Generar consignación
           </button>
-          <button className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200">
+          <button className="flex w-full items-center  gap-6 mt-2 py-2 px-4  bg-white  hover:bg-slate-200 text-black border-[2px]  rounded-2xl text-sm font-medium transition-colors duration-200">
+            <ChevronLeft/>
             Cancelar consignación
           </button>
         </div>
-        <div className="w-[40%] justify-end flex flex-col gap-2">
-            <span className="text-lg font-semibold text-[#4A3728]">Total a consignar:</span>
+        <div className="w-[35%] flex flex-col gap-2 justify-center text-center">
+            <span className="text-lg font-semibold text-[#4A3728] mb-3 ">Total a consignar:</span>
             <span className="text-2xl font-bold text-[#755841]">${totalCompra.toFixed(2)}</span>
         </div>
       </CardFooter>
