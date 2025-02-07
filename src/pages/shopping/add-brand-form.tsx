@@ -23,16 +23,6 @@ export default function AddBrandForm() {
       toast.error(error || "El nombre de la marca es requerido")
       return
     }
-
-    toast(`¡La marca ${name} a sido agregada correctamente!`,{
-      icon: '☕',
-      duration: 4000,
-      removeDelay: 1000,
-      style: {
-        background: '#bc6c25',
-        color: '#fefae0',
-      }
-    })
     dispatch(addBrand({name, description}))
     setName("")
     setDescription("")

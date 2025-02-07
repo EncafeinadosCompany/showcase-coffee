@@ -30,14 +30,9 @@ export default function AddProductForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    dispatch(addProducts(
-      { 
-       name,
-      id_brand: Number.parseInt(brandId),
-      attributes: productAttributes,
-      status: true
-    }
-  ))
+
+
+  
 
   if(error){ 
     toast.error('Error al agregar el producto', {
@@ -45,6 +40,13 @@ export default function AddProductForm() {
       removeDelay: 1000
     })
   }else{
+    if(productAttributes.length === 0){
+      toast.error('El producto debe tener almenos un attributo', {
+        duration: 4000,
+        removeDelay: 1000
+      })
+      return
+    }
 
     toast('¡El producto a sido agregado correctamente!',{
       icon: '☕',
@@ -55,6 +57,15 @@ export default function AddProductForm() {
         color: '#fefae0',
       }
     })
+
+    dispatch(addProducts(
+      { 
+       name,
+      id_brand: Number.parseInt(brandId),
+      attributes: productAttributes,
+      status: true
+    }
+  ))
   }
 
 
@@ -71,10 +82,28 @@ export default function AddProductForm() {
     const attributeName = newAttribute === "new" ? newCustomAttribute : newAttribute
     if (attributeName && newAttributeValue) {
       setProductAttributes([...productAttributes, { description: attributeName, value:newAttributeValue }])
+      toast(`¡El atributo ${attributeName} a sido agregado correctamente!`,{
+        icon: '☕',
+        duration: 4000,
+        removeDelay: 1000,
+        style: {
+          background: '#bc6c25',
+          color: '#fefae0',
+        }
+      })
       setNewAttribute("")
       setNewCustomAttribute("")
       setNewAttributeValue("")
       if (!attributes.some(attr => attr.description === attributeName)) {
+        toast(`¡El atributo ${attributeName} a sido creado!`,{
+          icon: '☕',
+          duration: 4000,
+          removeDelay: 1000,
+          style: {
+            background: '#bc6c25',
+            color: '#fefae0',
+          }
+        })
         dispatch(addAttribute({description:newCustomAttribute}))
       }
     }
