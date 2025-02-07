@@ -7,6 +7,7 @@ import { useAppSelector } from "@/hooks/useAppSelector";
 import { useToast } from "@/components/hooks/use-toast";
 import { createShopping } from "@/features/transactions/shoppingService";
 import SelectEmployee from "./selectEmployee";
+import { useState } from "react";
 
 export default function LeftCard({
   products,
@@ -25,12 +26,24 @@ export default function LeftCard({
   const employee = useAppSelector((state) => state.auth.employee);
   const id_store = employee ? employee.id_store : null;
 
+  // Estado para almacenar el ID del empleado seleccionado
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(null);
+
   const handleGenerateConsignment = async () => {
     if (!id_store) {
       toast({
         variant: "destructive",
         title: "Error",
         description: "No se ha asignado una tienda.",
+      });
+      return;
+    }
+
+    if (!selectedEmployeeId) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "No se ha seleccionado un empleado.",
       });
       return;
     }
@@ -48,7 +61,7 @@ export default function LeftCard({
     const shoppingData: ShoppingData = {
       shopping: {
         id_store: id_store, // Usar el id_store
-        id_employee: 2, // Cambiar a "id_employee"
+        id_employee: selectedEmployeeId, // Usar el ID del empleado seleccionado
         date_entry: new Date().toISOString(), // Fecha actual en formato ISO
         status: true,
       },
@@ -106,7 +119,8 @@ export default function LeftCard({
       </ScrollArea>
       <CardFooter className="gap-20 border-t mt-auto "> 
         <div className="w-[60%] flex flex-col gap-2">
-          <SelectEmployee/>
+          {/* Pasar la función onSelect a SelectEmployee */}
+          <SelectEmployee onSelect={(employeeId: number) => setSelectedEmployeeId(employeeId)} />
           {/* Botón para generar la consignación */}
           <button
             onClick={handleGenerateConsignment}
