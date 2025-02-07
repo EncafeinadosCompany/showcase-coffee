@@ -37,7 +37,6 @@ export default function CartShopping({
   };
 
   const handleInputChange = (variantId: string | number, value: string) => {
-    // Permitir edición temporal, incluyendo campo vacío
     setInputValues(prev => ({
       ...prev,
       [variantId]: value
@@ -48,10 +47,8 @@ export default function CartShopping({
     const currentValue = inputValues[variantId] || '0';
     const numValue = parseInt(currentValue, 10) || 0;
     
-    // Al perder el foco, actualizar el valor y eliminar si es 0
     updateQuantity(variantId, numValue);
     
-    // Limpiar el valor temporal si el producto fue eliminado
     if (numValue === 0) {
       setInputValues(prev => {
         const newValues = { ...prev };
@@ -93,7 +90,6 @@ export default function CartShopping({
     setcartProducts((prev) => 
       prev.filter((p) => Number(p.id_variant_products) !== Number(variantId))
     );
-    // Limpiar el valor temporal al eliminar
     setInputValues(prev => {
       const newValues = { ...prev };
       delete newValues[variantId];
