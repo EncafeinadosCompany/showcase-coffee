@@ -68,7 +68,7 @@ const Liquidation = () => {
     }, []);
 
     return (
-        <div className="p-8 max-w-7xl mx-auto">
+        <div className="p-8 max-w-7xl mx-auto ">
             <h1 className="text-2xl font-semibold mb-8">Liquidaciones</h1>
             
             <div className="grid grid-cols-2 gap-8">
