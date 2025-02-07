@@ -7,6 +7,7 @@ import { fetchProducts } from "@/features/products/products/productSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import ProductCard from "./ProductCard"; // Importamos el nuevo componente
+import { fetchBrands } from "@/features/products/brands/brandSlice";
 
 export default function ProductList() {
   const [search, setSearch] = useState("");
@@ -19,12 +20,13 @@ export default function ProductList() {
 
   useEffect(() => {
     dispatch(fetchProducts());
+    dispatch(fetchBrands());
   }, [dispatch]);
 
   const filteredProducts = products.filter(
     (product) =>
       product.name.toLowerCase().includes(search.toLowerCase()) &&
-      (brandFilter === "" || brandFilter === "0" || product.brand?.id.toString() === brandFilter)
+      (brandFilter === "" || brandFilter === "0" || product.brand?.id?.toString() === brandFilter)
   );
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
@@ -32,7 +34,7 @@ export default function ProductList() {
 
   return (
     <div className="space-y-6 p-6">
-      <h1 className="text-2xl font-bold text-coffee-700">View all products</h1>
+      <h1 className="text-2xl font-bold text-coffee-700">Ver todos los productos</h1>
       <div className="flex gap-4">
         <div className="flex relative items-center flex-1 max-w-md">
           <Input
@@ -45,10 +47,10 @@ export default function ProductList() {
         </div>
         <Select value={brandFilter} onValueChange={setBrandFilter}>
           <SelectTrigger className="w-[180px] bg-white">
-            <SelectValue defaultValue="0" placeholder="Filter by brand" />
+            <SelectValue defaultValue="0" placeholder="Filtrar por Marcas" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="0">All brands</SelectItem>
+            <SelectItem value="0">Todas las Marcas</SelectItem>
             {brands?.map((brand) => (
               <SelectItem key={brand.id} value={brand.id.toString()}>
                 {brand.name}

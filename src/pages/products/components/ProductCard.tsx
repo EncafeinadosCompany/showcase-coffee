@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
 import { Heart, List } from "lucide-react";
-import VariantModal from "./VariantModal"; // Importamos el nuevo componente
+import VariantModal from "./VariantModal"; 
 import { productType } from "@/types/products/product";
 
 const ProductCard = ({ product }: { product: productType }) => {
@@ -41,14 +41,10 @@ const ProductCard = ({ product }: { product: productType }) => {
               </div>
             </HoverCardContent>
           </HoverCard>
-
-          {/* Botón Ver Variantes que abre el Modal */}
           <Button  onClick={() => setIsModalOpen(true)} className=" mx-auto h-2 py-4 px-3 bg-[#db8935] text-white text-xs hover:bg-[#eec6a5] flex items-center gap-2  rounded-xl transition-all w-full">
             <List className="h-4 w-4 text-white" />
             Ver Variantes
           </Button>
-
-          {/* Modal de variantes */}
           <VariantModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variants={product.product ?? []} />
         </div>
       </CardContent>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState} from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -7,11 +7,11 @@ import {fetchAttributes, addAttribute} from "@/features/products/attributes/attr
 import {addProducts} from "@/features/products/products/productSlice"
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import { useToast } from "@/components/hooks/use-toast"
-import { ToastAction } from "@/components/ui/toast"
-import { Toast } from 'primereact/toast';
+import { toast } from "react-hot-toast";
+
 
 export default function AddProductForm() {
+
   const [name, setName] = useState("")
   const [brandId, setBrandId] = useState("")
   const [productAttributes, setProductAttributes] = useState<Array<{ description: string; value: string }>>([])
@@ -21,7 +21,6 @@ export default function AddProductForm() {
   const dispatch = useAppDispatch();
   const {brands} = useAppSelector((state) => state.brands);
   const {attributes} = useAppSelector((state) => state.attributes);
-  const { toast } = useToast()
   const {error} = useAppSelector((state) => state.products);
 
   useEffect(() => {
@@ -41,19 +40,20 @@ export default function AddProductForm() {
   ))
 
   if(error){ 
-    toast({
-      title: "Error al agregar el producto",
-      description: error,
-      variant:"destructive"
+    toast.error('Error al agregar el producto', {
+      duration: 4000,
+      removeDelay: 1000
     })
   }else{
-    toast({
-      title: `El productp ${name} ha sido agregado`,
-      description: "Puedes verlo en la lista de productos",
-      variant: "success",
-      action: (
-        <ToastAction altText="Goto schedule to undo">Ok</ToastAction>
-      )
+
+    toast('¡El producto a sido agregado correctamente!',{
+      icon: '☕',
+      duration: 4000,
+      removeDelay: 1000,
+      style: {
+        background: '#bc6c25',
+        color: '#fefae0',
+      }
     })
   }
 
@@ -81,7 +81,7 @@ export default function AddProductForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 ">
       <div>
         <label htmlFor="productName" className="block text-sm font-medium text-gray-700">
           Nombre del Producto
@@ -141,6 +141,8 @@ export default function AddProductForm() {
             onChange={(e) => setNewAttributeValue(e.target.value)}
             className="bg-white border-cafe-medium"
           />
+          <div className="card flex justify-content-center">
+          <div className="flex flex-wrap gap-2">
           <Button
             type="button"
             onClick={handleAddAttribute}
@@ -148,9 +150,12 @@ export default function AddProductForm() {
           >
             Agregar
           </Button>
+            </div>
+          </div>
         </div>
       </div>
-      <Button type="submit">Agregar Producto</Button>
+      <Button
+      type="submit">Agregar Producto</Button>
     </form>
   )
 }

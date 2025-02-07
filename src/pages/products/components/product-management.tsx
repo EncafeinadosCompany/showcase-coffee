@@ -5,11 +5,9 @@ import AddBrandForm from "./add-brand-form"
 import AddProductForm from "./add-product-form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-
-
 export default function ProductManagement() {
 
-
+ 
   return (
     <Tabs defaultValue="products" className="w-full">
       <TabsList>
