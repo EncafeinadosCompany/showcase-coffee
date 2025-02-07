@@ -28,7 +28,7 @@ const Sidebar = () => {
     { icon: <Coffee />, label: 'Productos', path: '/products' },
     { icon: <ShoppingBasket />, label: 'Compras', path: '/shopping' },
     { icon: <BadgeDollarSign />, label: 'Ventas', path: '/sales' },
-    { icon: <ScrollText />, label: 'Liquidaciones', path: '/liquidation' },
+    { icon: <ScrollText />, label: 'Liquidaciones', path: '/liquidations' },
 
     
 
