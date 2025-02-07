@@ -1,5 +1,5 @@
 import { axiosInstance } from "../../API/axiosInstance";
-import { Sales } from "../../types/transactions/saleModel";
+import { Sales, SalesPayload } from "../../types/transactions/saleModel";
 
 export const getSale = async (): Promise<Sales[]> => {
   const response = await axiosInstance.get<Sales[]>("/sales");
@@ -15,7 +15,7 @@ export const getSaleById = async (id: string | number): Promise<Sales | null> =>
   }
 };
 
-export const createSale = async (sales: Omit<Sales, "id">): Promise<Sales> => {
+export const createSale = async (sales: SalesPayload): Promise<Sales> => {
   const response = await axiosInstance.post<Sales>("/transactions/sales", sales);
   return response.data;
 };

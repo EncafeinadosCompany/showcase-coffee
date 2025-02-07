@@ -5,14 +5,8 @@ import { Coffee, Search } from "lucide-react";
 import { useState } from "react";
 
 type ProductType = {
-    id: number;
-    id_shopping: number;
-    id_variant_products: number;
-    roasting_date: string;
-    quantity: number;
     sale_price: number;
-    shopping_price: number;
-    status: boolean;
+    quantity: number;
     variant: {
         id: number;
         grammage: string;
@@ -34,14 +28,14 @@ export default function Products({
 }) {
     const [searchTerm, setSearch] = useState("");
 
-    const agregarProducto = (producto: ProductType) => {
+    const addProduct = (producto: ProductType) => {
         setCartProducts((prev) => {
             const nuevoCarrito = structuredClone(prev);
-            const productoEnCarrito = nuevoCarrito.find((p) => Number(p.id) === Number(producto.id));
+            const productoEnCarrito = nuevoCarrito.find((p) => Number(p.variant.id) === Number(producto.variant.id));
     
             if (productoEnCarrito) {
                 return nuevoCarrito.map((p) =>
-                    Number(p.id) === Number(producto.id)
+                    Number(p.variant.id) === Number(producto.variant.id)
                         ? { ...p, quantity: (p.quantity || 0) + 1 }
                         : p
                 );
@@ -117,9 +111,9 @@ export default function Products({
                                 <div className="flex flex-col gap-2">
                                     {groupedProducts[productName].map((product) => (
                                         <Card
-                                            key={product.id}
+                                            key={product.variant.id}
                                             className="border-2 hover:border-amber-500 transition-all duration-200 w-full cursor-pointer"
-                                            onClick={() => agregarProducto(product)}
+                                            onClick={() => addProduct(product)}
                                         >
                                             <CardContent className="p-3 flex justify-between items-center">
                                                 <div className="flex items-center gap-4">
@@ -131,7 +125,7 @@ export default function Products({
                                                     </span>
                                                 </div>
                                                 <p className="text-lg font-bold text-amber-800">
-                                                    ${product.sale_price}
+                                                    {product.sale_price.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
                                                 </p>
                                             </CardContent>
                                         </Card>

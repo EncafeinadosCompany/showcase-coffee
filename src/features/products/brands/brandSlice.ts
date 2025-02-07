@@ -39,7 +39,7 @@ export const addBrand = createAsyncThunk("brands/add", async (brand: Omit<brandT
   try {
     return await createBrand(brand);
   } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Error al agregar marca");
+    return rejectWithValue(error.response?.data?.errors || "Error al agregar marca");
   }
 });
 
@@ -94,7 +94,15 @@ const brandSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-   
+
+      .addCase(addBrand.rejected, (state, action) => {
+        if (Array.isArray(action.payload)) {
+          state.error = action.payload.map((err: any) => `${err.field}: ${err.msg}`).join(" | ");
+        } else {
+          state.error = (action.payload as { errors: string })?.errors || "Error desconocido al agregar marca";
+        }
+      })
+      
       .addCase(addBrand.fulfilled, (state, action) => {
         state.brands.push(action.payload);
       })
