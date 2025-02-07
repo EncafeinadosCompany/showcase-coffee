@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getSale, createSale, getSaleById, getShoppingVariant } from "./saleService";
-import { Sales } from "../../types/transactions/saleModel";
+import { Sales, SalesPayload } from "../../types/transactions/saleModel";
 
 interface SaleState {
   sales: Sales[];
@@ -48,7 +48,7 @@ export const fetchSaleVariants = createAsyncThunk(
   }
 );
 
-export const addSale = createAsyncThunk("sales/add", async (sales: Omit<Sales, "id">, { rejectWithValue }) => {
+export const addSale = createAsyncThunk("sales/add", async (sales: SalesPayload, { rejectWithValue }) => {
   try {
     return await createSale(sales);
   } catch (error: unknown) {

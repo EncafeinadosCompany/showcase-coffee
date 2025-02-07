@@ -5,25 +5,32 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { CreditCard, Banknote, AlertCircle, ChevronLeft, CircleDollarSign} from "lucide-react";
+import { CreditCard, Banknote, AlertCircle, ChevronLeft, CircleDollarSign } from "lucide-react";
 
 interface PaymentSectionProps {
     total: number;
-    onCompleteSale: (paymentMethod: string, receivedAmount: number) => void;
+    onCompleteSale: (paymentMethod: string) => void;
     onCancelSale: () => void;
 }
 
 export default function Payment({ total, onCompleteSale, onCancelSale }: PaymentSectionProps) {
     const [paymentMethod, setPaymentMethod] = useState("efectivo");
     const [receivedAmount, setReceivedAmount] = useState("");
-    const change = paymentMethod === "efectivo" ? 
+    const change = paymentMethod === "efectivo" ?
         Number(receivedAmount) - total : 0;
 
     const handleCompleteSale = () => {
         if (paymentMethod === "efectivo" && Number(receivedAmount) < total) {
-            return; // No permitir la venta si el monto recibido es menor al total
+            console.error("Monto insuficiente.");
+            return;
         }
-        onCompleteSale(paymentMethod, Number(receivedAmount));
+        onCompleteSale(paymentMethod);
+        setReceivedAmount("");
+    };
+
+    const handleCancelSale = () => {
+        onCancelSale();
+        setReceivedAmount("");
     };
 
     return (
@@ -63,7 +70,7 @@ export default function Payment({ total, onCompleteSale, onCancelSale }: Payment
                             <Label htmlFor="received">Monto Recibido</Label>
                             <Input
                                 id="received"
-                                type="number"
+                                type="currency"
                                 value={receivedAmount}
                                 onChange={(e) => setReceivedAmount(e.target.value)}
                                 className="mt-1"
@@ -73,7 +80,7 @@ export default function Payment({ total, onCompleteSale, onCancelSale }: Payment
                         <div className="flex justify-between items-center bg-amber-50 p-3 rounded-lg">
                             <span className="text-amber-800">Cambio:</span>
                             <span className="text-lg font-semibold text-amber-800">
-                                ${Math.max(0, change).toFixed(2)}
+                                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(Math.max(0, change))}
                             </span>
                         </div>
                     </div>
@@ -81,23 +88,23 @@ export default function Payment({ total, onCompleteSale, onCancelSale }: Payment
             </CardContent>
             <CardFooter className="flex flex-col gap-2">
 
-            <Button 
+                <Button
                     className="flex grap-2 w-full bg-[#db8935] hover:bg-[#966637] text-black rounded-2xl"
                     onClick={handleCompleteSale}
                     disabled={
-                        paymentMethod === "efectivo" && 
+                        paymentMethod === "efectivo" &&
                         (Number(receivedAmount) < total || !receivedAmount)
                     }
-                    >
-                    <CircleDollarSign/>
+                >
+                    <CircleDollarSign />
                     Completar Venta
-            </Button>
+                </Button>
 
                 <AlertDialog>
-                    
+
                     <AlertDialogTrigger asChild>
-                        <Button  className="flex grap-2 w-full bg-[#dbdbdb] hover:bg-[#f1f1f1] text-black rounded-2xl border-[1px]">
-                          <ChevronLeft />
+                        <Button className="flex grap-2 w-full bg-[#dbdbdb] hover:bg-[#f1f1f1] text-black rounded-2xl border-[1px]">
+                            <ChevronLeft />
                             Cancelar Venta
                         </Button>
                     </AlertDialogTrigger>
@@ -114,7 +121,7 @@ export default function Payment({ total, onCompleteSale, onCancelSale }: Payment
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Volver</AlertDialogCancel>
-                            <AlertDialogAction onClick={onCancelSale} className="bg-red-500 hover:bg-red-500">
+                            <AlertDialogAction onClick={handleCancelSale} className="bg-red-500 hover:bg-red-500">
                                 Sí, cancelar venta
                             </AlertDialogAction>
                         </AlertDialogFooter>
