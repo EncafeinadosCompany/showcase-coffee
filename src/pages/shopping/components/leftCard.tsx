@@ -7,6 +7,7 @@ import { useAppSelector } from "@/hooks/useAppSelector";
 import { useToast } from "@/components/hooks/use-toast";
 import { createShopping } from "@/features/transactions/shoppingService";
 import SelectEmployee from "./selectEmployee";
+import { ChevronLeft } from "lucide-react";
 
 export default function LeftCard({
   products,
@@ -104,22 +105,23 @@ export default function LeftCard({
           products={products}
         />
       </ScrollArea>
-      <CardFooter className="gap-20 border-t mt-auto "> 
-        <div className="w-[60%] flex flex-col gap-2">
+      <CardFooter className="gap-8 border-t mt-auto "> 
+        <div className="w-[65%] flex flex-col gap-2">
           <SelectEmployee/>
           {/* Botón para generar la consignación */}
           <button
             onClick={handleGenerateConsignment}
-            className="w-full mt-2 bg-[#36270b] hover:bg-[#3a2d11] text-white py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200"
+            className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white  py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200"
           >
             Generar consignación
           </button>
-          <button className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200">
+          <button className="flex w-full items-center  gap-6 mt-2 py-2 px-4  bg-white  hover:bg-slate-200 text-black border-[2px]  rounded-2xl text-sm font-medium transition-colors duration-200">
+            <ChevronLeft/>
             Cancelar consignación
           </button>
         </div>
-        <div className="w-[40%] justify-end flex flex-col gap-2">
-            <span className="text-lg font-semibold text-[#4A3728]">Total a consignar:</span>
+        <div className="w-[35%] flex flex-col gap-2 justify-center text-center">
+            <span className="text-lg font-semibold text-[#4A3728] mb-3 ">Total a consignar:</span>
             <span className="text-2xl font-bold text-[#755841]">${totalCompra.toFixed(2)}</span>
         </div>
       </CardFooter>

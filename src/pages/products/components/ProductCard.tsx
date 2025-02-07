@@ -21,7 +21,7 @@ const ProductCard = ({ product }: { product: productType }) => {
           {/* Botón Ver Atributos con HoverCard */}
           <HoverCard>
             <HoverCardTrigger asChild>
-              <Button  className=" mx-auto  h-2 py-4 px-3 bg-[#ffffff] border-[1px] border-black text-black text-xs hover:bg-[#eec6a5] flex items-center gap-2   rounded-xl transition-all">
+              <Button  className=" mx-auto  h-2 py-4 px-3 bg-[#ffffff] border-[1px] border-[#e9e9e9] text-black text-xs hover:bg-slate-200 flex items-center gap-2   rounded-xl transition-all">
                 <Heart className="h-4 w-4 text-[#db8935]" />
                 Ver Atributos
               </Button>

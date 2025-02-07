@@ -19,11 +19,14 @@ const VariantModal: FC<VariantModalProps> = ({ isOpen, onClose, variants }) => {
   const {products} = useAppSelector((state) => state.products);
 
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    if (isOpen) {
+      dispatch(fetchProducts());
+    }
+  }, [dispatch, isOpen]);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-    <DialogContent className="p-6 max-w-lg bg-[#faf6f1]">
+    <DialogContent className="p-6 max-w-lg bg-[#faf6f1] h-[calc(100vh-120px)]">
       <DialogHeader>
         <DialogTitle className="flex items-center gap-2 text-2xl font-bold text-[#582f0e]">
           <Coffee className="h-6 w-6" />
@@ -32,22 +35,20 @@ const VariantModal: FC<VariantModalProps> = ({ isOpen, onClose, variants }) => {
         <p className="text-[#8b7355] mt-2">Selecciona el tamaño de café que prefieras</p>
       </DialogHeader>
 
-      <Accordion type="single" collapsible className="mt-4">
+      <Accordion type="single" collapsible className="mt-4 overflow-y-auto ">
         {variants?.length > 0 ? (
-          variants.map((variant, index) => (
+          variants.map((variant) => (
             <AccordionItem
-              key={index}
-              value={`variant-${index}`}
-              className="border-[#dbc1ac] px-2"
-            >
+              value={variant.grammage}
+              className="border-[#dbc1ac] px-2">
               <AccordionTrigger className="hover:text-[#713f12]">
                 <div className="flex items-center gap-3">
                   <Package className="h-5 w-5 text-[#713f12]" />
                   <span className="font-medium">{variant.grammage} </span>
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="px-4">
-                <div className="space-y-3 py-2">
+              <AccordionContent className="px-4 h-[calc(70vh-90px)]">
+                <div className="space-y-3 py-0">
                   <div className="flex items-center gap-2">
                     <Scale className="h-4 w-4 text-[#8b7355]" />
                     <span className="text-[#713f12]">{products.find((p)=> p.id === variant.id_product)?.name}:</span>
@@ -60,7 +61,7 @@ const VariantModal: FC<VariantModalProps> = ({ isOpen, onClose, variants }) => {
                     <Package className="h-4 w-4 text-[#8b7355]" />
                     <span className="text-[#713f12]">Stock:</span>
                     <Badge variant="outline" className="bg-[#582f0e] text-white border-none">
-                      {variant.stock} units
+                      {variant.stock} Und
                     </Badge>
                   </div>
                 </div>
