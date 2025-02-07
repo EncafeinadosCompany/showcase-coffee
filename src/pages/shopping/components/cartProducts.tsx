@@ -4,7 +4,7 @@ import { CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { productType } from "@/types/products/product";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
+import { ShoppingDetail } from "@/types/transactions/shoppingModel";
 import { Coffee, Minus, Plus, Trash2 } from "lucide-react";
 
 export default function CartShopping({ 
@@ -13,8 +13,8 @@ export default function CartShopping({
   products 
 }: {
   products: productType[];
-  cartProducts: ShoppingVariant[];
-  setcartProducts: React.Dispatch<React.SetStateAction<ShoppingVariant[]>>;
+  cartProducts: ShoppingDetail[];
+  setcartProducts: React.Dispatch<React.SetStateAction<ShoppingDetail[]>>;
 }) {
   const { variants } = useAppSelector((state) => state.variants);
   const [inputValues, setInputValues] = useState<Record<string | number, string>>({});

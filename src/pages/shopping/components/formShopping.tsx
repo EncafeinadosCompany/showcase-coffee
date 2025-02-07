@@ -12,14 +12,14 @@ import { Input } from "@/components/ui/input";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { fetchProducts } from "@/features/products/products/productSlice";
 import toast from "react-hot-toast";
-import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
+import { ShoppingDetail } from "@/types/transactions/shoppingModel";
 
 export default function FormShopping({
-  variant_id, cartProducts, setcartProducts
+  variant_id, setcartProducts
 }: {
   variant_id: number
-  cartProducts: ShoppingVariant[];
-  setcartProducts: React.Dispatch<React.SetStateAction<ShoppingVariant[]>>;
+  cartProducts: ShoppingDetail[];
+  setcartProducts: React.Dispatch<React.SetStateAction<ShoppingDetail[]>>;
 }) {
   const [roasting_date, setRoasting_date] = useState("");
   const [cantidad, setCantidad] = useState("");
