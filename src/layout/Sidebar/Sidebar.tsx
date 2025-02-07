@@ -23,20 +23,18 @@ const Sidebar = () => {
   const sidebarItems = [
     { icon: <Home />, label: 'Inicio', path: '/home' },
     { icon: <Users />, label: 'Proveedores', path: '/providers' },
-    { icon: <BarChart2 />, label: 'Tienda', path: '/stores' },
+    // { icon: <BarChart2 />, label: 'Tienda', path: '/stores' },
 
     { icon: <Coffee />, label: 'Productos', path: '/products' },
     { icon: <ShoppingBasket />, label: 'Compras', path: '/shopping' },
     { icon: <BadgeDollarSign />, label: 'Ventas', path: '/sales' },
-    { icon: <ScrollText />, label: 'Liquidaciones', path: '/liquidations' },
-
-    
+    // { icon: <ScrollText />, label: 'Liquidaciones', path: '/liquidations' },
 
   ];
 
-  const bottomItems = [
-    { icon: <Settings />, label: 'Configuración', path: '/settings' },
-  ];
+  // const bottomItems = [
+  //   { icon: <Settings />, label: 'Configuración', path: '/settings' },
+  // ];
 
   return (
     <div className={`
@@ -131,7 +129,7 @@ const Sidebar = () => {
         mt-auto
       ">
         <ul className="space-y-2">
-          {bottomItems.map((item) => (
+          {/* {bottomItems.map((item) => (
             <li key={item.label}>
               <a
                 href={item.path}
@@ -165,7 +163,7 @@ const Sidebar = () => {
                 )}
               </a>
             </li>
-          ))}
+          ))} */}
 
           {/* Botón de Logout */}
           <li>

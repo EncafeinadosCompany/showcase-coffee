@@ -3,6 +3,8 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { fetchSaleVariants, addSale } from "@/features/transactions/saleSlice";
 import { useAppSelector } from "@/hooks/useAppSelector";
 
+import { toast } from "react-hot-toast";
+
 import Products from "./components/products";
 import Cart from "./components/cart";
 import Payment from "./components/payment";
@@ -13,18 +15,18 @@ export default function Sales() {
     const { saleVariants } = useAppSelector((state) => state.sales);
 
     const [cartProducts, setCartProducts] = useState<any[]>([]);
-    const [total, setTotal] = useState(0); // Nuevo estado para el total
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         dispatch(fetchSaleVariants());
     }, [dispatch]);
 
-    const handleCompleteSale = (paymentMethod: string) => {
+    const handleCompleteSale = async (paymentMethod: string) => {
         if (cartProducts.length === 0) {
-            console.error("No hay productos en el carrito.");
+            toast.error("No hay productos en el carrito.");
             return;
         }
-
+    
         const saleData: SalesPayload = {
             sale: {
                 date: new Date().toISOString(),
@@ -35,25 +37,55 @@ export default function Sales() {
                 quantity: product.quantity,
             }))
         };
-
+    
         try {
-            dispatch(addSale(saleData));
-            
-            console.log("Venta registrada con éxito:", saleData);
+            await dispatch(addSale(saleData)).unwrap(); 
 
+            toast.success("¡Venta realizada con éxito!", {
+                icon: "✅",
+                duration: 4000,
+                style: { 
+                    background: "#FFF8E1",
+                    color: "#6D4C41",
+                    border: "1px solid #4E342E",
+                    padding: "12px",
+                    borderRadius: "8px",
+                    fontWeight: "bold"
+                }
+            });            
+    
             setCartProducts([]);
-            setTotal(0); 
-
+            setTotal(0);
+    
             dispatch(fetchSaleVariants());
         } catch (error) {
+            toast.error("Error al registrar la venta.", {
+                duration: 4000,
+                style: { background: "#d32f2f", color: "#fff" },
+            });
             console.error("Error al registrar la venta:", error);
         }
     };
-
+    
     const handleCancelSale = () => {
         setCartProducts([]);
-        setTotal(0);  
+        setTotal(0);
+    
+        toast.error("Error al registrar la venta.", {
+            icon: "❌",
+            duration: 4000,
+            style: { 
+                background: "#B71C1C", // Rojo oscuro elegante
+                color: "#FFEBEE", // Blanco rosado
+                border: "1px solid #7F0000",
+                padding: "12px",
+                borderRadius: "8px",
+                fontWeight: "bold"
+            }
+        });
+        
     };
+    
 
     return (
         <div>
