@@ -44,19 +44,19 @@ const statuses: Status[] = [
   },
 ]
 
-export function ComboboxPopover() {
+export default function SelectEmployee() {
   const [open, setOpen] = React.useState(false)
   const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
     null
   )
 
   return (
-    <div className="flex items-center space-x-4">
-      <p className="text-sm text-muted-foreground">Status</p>
+    <div className="flex items-center space-x-4 mt-6">
+      <p className="text-sm text-muted-foreground">Proveedores</p>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="w-[150px] justify-start">
-            {selectedStatus ? <>{selectedStatus.label}</> : <>+ Set status</>}
+          <Button variant="outline" className="w-[80%] justify-start">
+            {selectedStatus ? <>{selectedStatus.label}</> : <>Disponibles</>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" side="right" align="start">

@@ -5,7 +5,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { CreditCard, Banknote, AlertCircle } from "lucide-react";
+import { CreditCard, Banknote, AlertCircle, ChevronLeft, CircleDollarSign} from "lucide-react";
 
 interface PaymentSectionProps {
     total: number;
@@ -82,20 +82,22 @@ export default function Payment({ total, onCompleteSale, onCancelSale }: Payment
             <CardFooter className="flex flex-col gap-2">
 
             <Button 
-                    className="w-full bg-green-800 hover:bg-green-800"
+                    className="flex grap-2 w-full bg-[#db8935] hover:bg-[#966637] text-black rounded-2xl"
                     onClick={handleCompleteSale}
                     disabled={
                         paymentMethod === "efectivo" && 
                         (Number(receivedAmount) < total || !receivedAmount)
                     }
-                >
+                    >
+                    <CircleDollarSign/>
                     Completar Venta
-                </Button>
+            </Button>
 
                 <AlertDialog>
                     
                     <AlertDialogTrigger asChild>
-                        <Button variant="destructive" className="w-full">
+                        <Button  className="flex grap-2 w-full bg-[#dbdbdb] hover:bg-[#f1f1f1] text-black rounded-2xl border-[1px]">
+                          <ChevronLeft />
                             Cancelar Venta
                         </Button>
                     </AlertDialogTrigger>

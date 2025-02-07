@@ -20,7 +20,7 @@ const badgeVariants = cva(
         espresso: "border-brown-900 bg-brown-900 text-white hover:bg-brown-800", // Café fuerte ☕
         latte: "border-amber-100 bg-amber-100 text-brown-900 hover:bg-amber-200", // Café con leche 🥛
         mocha: "border-brown-600 bg-brown-600 text-white hover:bg-brown-500", // Chocolate con café 🍫
-        caramel: "border-yellow-600 bg-yellow-500 text-brown-900 hover:bg-yellow-400", // Caramelo 🍮
+        caramel: "border-none bg-[#eddea4] text-brown-900 hover:bg-yellow-400 rounded-full  transition-all duration-300", // Caramelo 🍮
         macchiato: "border-orange-700 bg-orange-700 text-white hover:bg-orange-600", // Marrón rojizo 🎨
       },
     },

@@ -142,7 +142,7 @@ export default function CartShopping({
                     value={inputValue}
                     onChange={(e) => variant?.id && handleInputChange(c.id_variant_products.toString(), e.target.value)}
                     onBlur={() => variant?.id && handleInputBlur(c.id_variant_products.toString())}
-                    className="w-16 h-8 text-center p-1 border-amber-200 focus:border-amber-300"
+                    className="w-16 h-8 text-center p-1 border-amber-200 focus:border-amber-300  "
                     min="0"
                   />
 

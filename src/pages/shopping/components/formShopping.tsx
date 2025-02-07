@@ -6,11 +6,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
+import {ShoppingBag} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { fetchProducts } from "@/features/products/products/productSlice";
-import { useToast } from "@/components/hooks/use-toast"
+import toast from "react-hot-toast";
 import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
 
 export default function FormShopping({
@@ -26,7 +27,7 @@ export default function FormShopping({
   const [porcentajeVenta, setPorcentajeVenta] = useState("");
   const [sale_price, setSale_price] = useState("");
   const dispatch = useAppDispatch();
-  const { toast } = useToast()
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (shopping_price && porcentajeVenta) {
@@ -45,10 +46,14 @@ export default function FormShopping({
     const diferenciaMeses =
       (fechaActual.getFullYear() - fechaTostionDate.getFullYear()) * 12 +
       (fechaActual.getMonth() - fechaTostionDate.getMonth());
-    console.log(diferenciaMeses);
     if (diferenciaMeses > 1) {
-      toast({variant:"destructive",title:"Error",description:"La fecha de tostión no puede ser mayor a 1 mes"});
-      return;
+      toast.error("La fecha de tostión no puede ser mayor a un mes",{
+        id: 'totion',
+        duration: 4000,
+        removeDelay: 1000,
+        icon:'📅'
+      })
+      return
     }
 
 
@@ -79,19 +84,27 @@ export default function FormShopping({
         }
       });
 
-      console.log(cartProducts);
+    toast('Producto se ha agregado al carrito',{
+      id: 'add',
+      duration: 4000,
+      removeDelay: 1000,
+      icon: <ShoppingBag />,
+      style: {
+        background: '#bc6c25',
+        color: '#fefae0',
+      }
+    })
 
     setRoasting_date("");
     setCantidad("");
     setShopping_price("");
     setPorcentajeVenta("");
     setSale_price("");
-    dispatch(fetchProducts());
-    
+    setIsModalOpen(false);
+    dispatch(fetchProducts());  
   };
-  console.log(variant_id);
   return (
-    <Dialog>
+    <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
       <DialogTrigger asChild>
         <Button className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors duration-200">
           Agregar
@@ -147,7 +160,7 @@ export default function FormShopping({
             <Input
               id="shopping_price"
               type="number"
-              step="0.01"
+              step="1000"
               value={shopping_price}
               onChange={(e) => setShopping_price(e.target.value)}
               required
@@ -163,7 +176,7 @@ export default function FormShopping({
             <Input
               id="porcentajeVenta"
               type="number"
-              step="0.1"
+              step="10"
               value={porcentajeVenta}
               onChange={(e) => setPorcentajeVenta(e.target.value)}
               required

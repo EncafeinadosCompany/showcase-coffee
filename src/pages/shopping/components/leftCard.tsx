@@ -1,11 +1,12 @@
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { productType } from "@/types/products/product";
-import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
+import { ShoppingDetail, ShoppingData } from "@/types/transactions/shoppingModel";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CartShopping from "./cartProducts";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { useToast } from "@/components/hooks/use-toast";
-import { createShopping } from "@/features/transactions/shoppingService"; // Ajusta la ruta según tu estructura
+import { createShopping } from "@/features/transactions/shoppingService";
+import SelectEmployee from "./selectEmployee";
 
 export default function LeftCard({
   products,
@@ -14,8 +15,8 @@ export default function LeftCard({
   totalCompra,
 }: {
   products: productType[];
-  cartProducts: ShoppingVariant[];
-  setcartProducts: React.Dispatch<React.SetStateAction<ShoppingVariant[]>>;
+  cartProducts: ShoppingDetail[];
+  setcartProducts: React.Dispatch<React.SetStateAction<ShoppingDetail[]>>;
   totalCompra: number;
 }) {
   const { toast } = useToast();
@@ -33,7 +34,7 @@ export default function LeftCard({
       });
       return;
     }
-  
+
     if (cartProducts.length === 0) {
       toast({
         variant: "destructive",
@@ -42,13 +43,14 @@ export default function LeftCard({
       });
       return;
     }
-  
+
     // Crear el objeto de compra
-    const shoppingData = {
+    const shoppingData: ShoppingData = {
       shopping: {
         id_store: id_store, // Usar el id_store
         id_employee: 2, // Cambiar a "id_employee"
         date_entry: new Date().toISOString(), // Fecha actual en formato ISO
+        status: true,
       },
       details: cartProducts.map((product) => ({
         id_variant_products: product.id_variant_products,
@@ -58,10 +60,10 @@ export default function LeftCard({
         sale_price: product.sale_price,
       })),
     };
-  
+
     // Mostrar los datos enviados en la consola
     console.log("Datos enviados:", JSON.stringify(shoppingData, null, 2));
-  
+
     try {
       // Enviar la compra al backend
       await createShopping(shoppingData);
@@ -69,7 +71,7 @@ export default function LeftCard({
         title: "Éxito",
         description: "La consignación se ha creado correctamente.",
       });
-  
+
       // Limpiar el carrito después de crear la compra
       setcartProducts([]);
     } catch (error: any) {
@@ -81,8 +83,9 @@ export default function LeftCard({
       });
     }
   };
+
   return (
-    <Card className="bg-white shadow-lg h-[730px] overflow-hidden">
+    <Card className="bg-white shadow-lg h-[calc(100vh-80px)] overflow-hidden ">
       <CardHeader>
         <CardTitle className="relative font-libre-baskerville text-2xl text-[#755841] pb-2">
           <span className="block text-sm uppercase tracking-wider text-amber-600 mb-1 font-sans opacity-80">
@@ -101,9 +104,9 @@ export default function LeftCard({
           products={products}
         />
       </ScrollArea>
-      <CardFooter>
-        <div className="w-auto mx-auto">
-          <h1>Aqui ira el select del proveedor</h1>
+      <CardFooter className="gap-20 border-t mt-auto "> 
+        <div className="w-[60%] flex flex-col gap-2">
+          <SelectEmployee/>
           {/* Botón para generar la consignación */}
           <button
             onClick={handleGenerateConsignment}
@@ -115,8 +118,9 @@ export default function LeftCard({
             Cancelar consignación
           </button>
         </div>
-        <div>
-          <h1 className="text-xl">Total: ${totalCompra.toFixed(2)}</h1>
+        <div className="w-[40%] justify-end flex flex-col gap-2">
+            <span className="text-lg font-semibold text-[#4A3728]">Total a consignar:</span>
+            <span className="text-2xl font-bold text-[#755841]">${totalCompra.toFixed(2)}</span>
         </div>
       </CardFooter>
     </Card>
