@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import  NotFound  from "@/pages/404/404";
 import { AuthProvider, useAuth } from "@/context/AuthContext1";
-import  Liquidation  from "@/pages/payments/liquidation";
-import { ProvidersPage } from "@/pages/ProviderPage";
+// import { Liquidations } from "@/pages/payments/liquidation";
+import { ProvidersPage } from "@/pages/providers/ProvidersPage";
 import { Products } from "@/pages/products/products";
 import { VariantsPage } from "@/pages/variantsPage";
 import { LoginPage } from "@/pages/LoginPage";
@@ -36,7 +36,7 @@ export function AppRouter() {
 
           <Route path="/home" element={<PrivateRoute><HomePage /></PrivateRoute>} />
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
-          <Route path="/liquidation" element={<Liquidation />} />
+          {/* <Route path="/liquidation" element={<Liquidation />} /> */}
           <Route path="/shopping" element={<PrivateRoute><Shopping /></PrivateRoute>} />
           <Route path="/sales" element={<PrivateRoute><Sales/></PrivateRoute>} />
 
