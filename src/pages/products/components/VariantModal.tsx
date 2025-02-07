@@ -39,6 +39,7 @@ const VariantModal: FC<VariantModalProps> = ({ isOpen, onClose, variants }) => {
         {variants?.length > 0 ? (
           variants.map((variant) => (
             <AccordionItem
+              key={variant.grammage}
               value={variant.grammage}
               className="border-[#dbc1ac] px-2">
               <AccordionTrigger className="hover:text-[#713f12]">
