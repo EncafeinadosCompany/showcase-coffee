@@ -4,11 +4,11 @@ import { ShoppingDetail, ShoppingData } from "@/types/transactions/shoppingModel
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CartShopping from "./cartProducts";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import { useToast } from "@/components/hooks/use-toast";
 import { createShopping } from "@/features/transactions/shoppingService";
 import SelectEmployee from "./selectEmployee";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
+import {toast} from "react-hot-toast"
 
 export default function LeftCard({
   products,
@@ -21,8 +21,7 @@ export default function LeftCard({
   setcartProducts: React.Dispatch<React.SetStateAction<ShoppingDetail[]>>;
   totalCompra: number;
 }) {
-  const { toast } = useToast();
-
+ 
   // Obtener el empleado y el ID de la tienda desde Redux
   const employee = useAppSelector((state) => state.auth.employee);
   const id_store = employee ? employee.id_store : null;
@@ -32,29 +31,17 @@ export default function LeftCard({
 
   const handleGenerateConsignment = async () => {
     if (!id_store) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "No se ha asignado una tienda.",
-      });
+      toast.error("No se ha asignado una tienda.")
       return;
     }
 
     if (!selectedEmployeeId) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "No se ha seleccionado un empleado.",
-      });
+      toast.error("No se ha seleccionado un empleado.")
       return;
     }
 
     if (cartProducts.length === 0) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "No hay productos en la consignación.",
-      });
+      toast.error("No hay productos en la consignación.")
       return;
     }
 
@@ -81,20 +68,14 @@ export default function LeftCard({
     try {
       // Enviar la compra al backend
       await createShopping(shoppingData);
-      toast({
-        title: "Éxito",
-        description: "La consignación se ha creado correctamente.",
-      });
+      toast.success("La consignación se ha creado correctamente.");
 
       // Limpiar el carrito después de crear la compra
       setcartProducts([]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Error al crear la consignación:", error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.response?.data?.message || "No se pudo crear la consignación.",
-      });
+      toast.error(error.response?.data?.message || "No se pudo crear la consignación.");
     }
   };
 

@@ -6,7 +6,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
-import {ShoppingBag} from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
@@ -15,9 +15,10 @@ import toast from "react-hot-toast";
 import { ShoppingDetail } from "@/types/transactions/shoppingModel";
 
 export default function FormShopping({
-  variant_id, setcartProducts
+  variant_id,
+  setcartProducts,
 }: {
-  variant_id: number
+  variant_id: number;
   cartProducts: ShoppingDetail[];
   setcartProducts: React.Dispatch<React.SetStateAction<ShoppingDetail[]>>;
 }) {
@@ -39,61 +40,109 @@ export default function FormShopping({
   }, [shopping_price, porcentajeVenta]);
 
   const handleSubmit = (e: React.FormEvent) => {
-
     e.preventDefault();
+
+    // Validar la fecha de tostión
     const fechaActual = new Date();
     const fechaTostionDate = new Date(roasting_date);
+    if (fechaTostionDate > fechaActual) {
+      toast.error("La fecha de tostión no puede ser mayor a la fecha actual.", {
+        id: "roasting_date-error",
+        duration: 4000,
+        removeDelay: 1000,
+        icon: "📅",
+      });
+      return;
+    }
     const diferenciaMeses =
       (fechaActual.getFullYear() - fechaTostionDate.getFullYear()) * 12 +
       (fechaActual.getMonth() - fechaTostionDate.getMonth());
     if (diferenciaMeses > 1) {
-      toast.error("La fecha de tostión no puede ser mayor a un mes",{
+      toast.error("La fecha de tostión no puede ser mayor a un mes.", {
         id: 'totion',
         duration: 4000,
         removeDelay: 1000,
-        icon:'📅'
-      })
-      return
+        icon: '📅'
+      });
+      return;
     }
 
+    // Validar cantidad
+    const cantidadNum = Number(cantidad);
+    if (isNaN(cantidadNum) || cantidadNum <= 0) {
+      toast.error("La cantidad debe ser un número positivo y mínimo 1.", {
+        id: "cantidad-error",
+        duration: 4000,
+        removeDelay: 1000,
+        icon: "❌",
+      });
+      return;
+    }
+
+    // Validar precio de compra
+    const shoppingPriceNum = Number(shopping_price);
+    if (isNaN(shoppingPriceNum) || shoppingPriceNum <= 50) {
+      toast.error("El precio de compra debe ser un número positivo y mínimo 50.", {
+        id: "shopping_price-error",
+        duration: 4000,
+        removeDelay: 1000,
+        icon: "❌",
+      });
+      return;
+    }
+
+    // Validar porcentaje de ganancia
+    const porcentajeVentaNum = Number(porcentajeVenta);
+    if (isNaN(porcentajeVentaNum) || porcentajeVentaNum < 1) {
+      toast.error("El porcentaje de ganancia debe ser mínimo 1.", {
+        id: "porcentajeVenta-error",
+        duration: 4000,
+        removeDelay: 1000,
+        icon: "❌",
+      });
+      return;
+    }
 
     setcartProducts((prev) => {
-        const nuevoCarrito = structuredClone(prev); 
-  
-        const productoEnCarrito = nuevoCarrito.find(
-          (p) => Number(p.id_variant_products) === Number(variant_id)
-        );
-  
-        if (productoEnCarrito) {
-          return nuevoCarrito.map((p) =>
-            Number(p.id_variant_products) === Number(variant_id)
-              ? { ...p, quantity: (p.quantity || 0) + 1 } 
-              : p
-          );
-        } else {
-          return [...nuevoCarrito, { 
-            id: null,
-            id_shopping: 0, 
-            id_variant_products: variant_id, 
-            roasting_date: roasting_date, 
-            shopping_price: Number(shopping_price), 
-            sale_price: Number(sale_price), 
-            status: true, 
-            quantity: Number(cantidad) 
-          }]; 
-        }
-      });
+      const nuevoCarrito = structuredClone(prev);
 
-    toast('Producto se ha agregado al carrito',{
-      id: 'add',
+      const productoEnCarrito = nuevoCarrito.find(
+        (p) => Number(p.id_variant_products) === Number(variant_id)
+      );
+
+      if (productoEnCarrito) {
+        return nuevoCarrito.map((p) =>
+          Number(p.id_variant_products) === Number(variant_id)
+            ? { ...p, quantity: (p.quantity || 0) + 1 }
+            : p
+        );
+      } else {
+        return [
+          ...nuevoCarrito,
+          {
+            id: null,
+            id_shopping: 0,
+            id_variant_products: variant_id,
+            roasting_date: roasting_date,
+            shopping_price: Number(shopping_price),
+            sale_price: Number(sale_price),
+            status: true,
+            quantity: Number(cantidad),
+          },
+        ];
+      }
+    });
+
+    toast("Producto se ha agregado al carrito", {
+      id: "add",
       duration: 4000,
       removeDelay: 1000,
       icon: <ShoppingBag />,
       style: {
-        background: '#bc6c25',
-        color: '#fefae0',
-      }
-    })
+        background: "#bc6c25",
+        color: "#fefae0",
+      },
+    });
 
     setRoasting_date("");
     setCantidad("");
@@ -101,8 +150,9 @@ export default function FormShopping({
     setPorcentajeVenta("");
     setSale_price("");
     setIsModalOpen(false);
-    dispatch(fetchProducts());  
+    dispatch(fetchProducts());
   };
+
   return (
     <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
       <DialogTrigger asChild>
@@ -119,7 +169,6 @@ export default function FormShopping({
           variante de producto.
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
-          
           <div>
             <label
               htmlFor="fechaTostion"
@@ -134,7 +183,7 @@ export default function FormShopping({
               onChange={(e) => setRoasting_date(e.target.value)}
               required
             />
-          </div> 
+          </div>
           <div>
             <label
               htmlFor="cantidad"
@@ -145,12 +194,13 @@ export default function FormShopping({
             <Input
               id="cantidad"
               type="number"
+              min={1}
               value={cantidad}
               onChange={(e) => setCantidad(e.target.value)}
               required
             />
           </div>
-           <div>
+          <div>
             <label
               htmlFor="shopping_price"
               className="block text-sm font-medium text-gray-700"
@@ -171,7 +221,7 @@ export default function FormShopping({
               htmlFor="porcentajeVenta"
               className="block text-sm font-medium text-gray-700"
             >
-              Porcentaje de Venta
+              Porcentaje de Ganancia
             </label>
             <Input
               id="porcentajeVenta"
@@ -199,7 +249,8 @@ export default function FormShopping({
           </div>
           <Button
             type="submit"
-            className="bg-[#6F4E37] hover:bg-[#5A3E2B] text-white w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors duration-200">
+            className="bg-[#6F4E37] hover:bg-[#5A3E2B] text-white w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors duration-200"
+          >
             Agregar
           </Button>
         </form>
