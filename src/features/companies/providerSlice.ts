@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getProviders, createProvider, updateProvider, associateProviderToStore, getProvidersByStore } from "./providerService";
 import { Provider } from "../../types/companies/provider";
+import { toast } from "react-hot-toast";
 
 interface ProviderState {
   providers: Provider[];
@@ -38,7 +39,8 @@ export const addProvider = createAsyncThunk(
     try {
       return await createProvider(provider);
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || "Error al agregar proveedor");
+      toast.error(error.response?.data?.error || "Error adding provider");
+      return rejectWithValue(error.response?.data?.error || "Error adding provider");
     }
   }
 );

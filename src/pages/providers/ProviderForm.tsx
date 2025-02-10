@@ -1,15 +1,20 @@
-import React, { useState } from "react";
-import { useAppDispatch } from "@/hooks/useAppDispatch";
-import { Provider, BankAccount } from "@/types/companies/provider";
+import React, { useState, useCallback } from "react";
+import { Plus, Trash2, Landmark, Building2, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Card, CardContent } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Trash2, Plus, Landmark } from "lucide-react";
-
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Provider, BankAccount } from "@/types/companies/provider";
 
 const BANK_OPTIONS = [
   "Banco de Bogotá",
@@ -26,286 +31,341 @@ const BANK_OPTIONS = [
 const ACCOUNT_TYPES = ["Cuenta Corriente", "Cuenta de Ahorros"];
 
 interface ProviderFormProps {
+  editingId: number | null;
+  onSubmit: (e: React.FormEvent) => Promise<void>;
   initialData?: Omit<Provider, "id">;
-  onSubmit: (form: Omit<Provider, "id">) => void;
-  onClose: () => void;
-  isEditing: boolean;
 }
 
-export const ProviderForm: React.FC<ProviderFormProps> = ({ initialData, onSubmit, onClose, isEditing }) => {
-  const [form, setForm] = useState<Omit<Provider, "id">>(initialData || {
-    name: "",
-    nit: "",
-    email: "",
-    phone: "",
-    address: "",
-    bankAccounts: [],
-    status: true,
-  });
+const FormField = React.memo(({ 
+  label, 
+  name, 
+  icon: Icon, 
+  type = "text", 
+  value, 
+  error,
+  onChange 
+}: { 
+  label: string; 
+  name: string; 
+  icon: React.ElementType; 
+  type?: string; 
+  value: string; 
+  error?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => (
+  <div className="space-y-2">
+    <Label htmlFor={name} className="flex items-center gap-2">
+      <Icon className="h-4 w-4" />
+      {label}
+    </Label>
+    <Input
+      id={name}
+      name={name}
+      type={type}
+      value={value}
+      onChange={onChange}
+      className={`w-full ${error ? 'border-red-500' : ''}`}
+    />
+    {error && (
+      <span className="text-sm text-red-500">{error}</span>
+    )}
+  </div>
+));
+
+FormField.displayName = 'FormField';
+
+export const ProviderForm = ({ editingId, onSubmit, initialData }: ProviderFormProps) => {
+  const [formData, setFormData] = useState<Omit<Provider, "id">>(
+    initialData || {
+      name: "",
+      nit: "",
+      email: "",
+      phone: "",
+      address: "",
+      bankAccounts: [],
+      status: true,
+    }
+  );
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const newErrors: Record<string, string> = {};
-
-    // Validar nombre
-    if (!form.name.trim()) {
-      newErrors.name = "El nombre es obligatorio.";
+    
+    if (!formData.name.trim()) newErrors.name = "El nombre es requerido";
+    if (!formData.nit.trim()) newErrors.nit = "El NIT es requerido";
+    if (!formData.email.trim()) {
+      newErrors.email = "El correo es requerido";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Correo electrónico inválido";
     }
-
-    // Validar NIT
-    if (!form.nit.trim()) {
-      newErrors.nit = "El NIT es obligatorio.";
-    } else if (!/^\d+$/.test(form.nit)) {
-      newErrors.nit = "El NIT debe ser un número válido.";
-    }
-
-    // Validar correo electrónico
-    if (!form.email.trim()) {
-      newErrors.email = "El correo electrónico es obligatorio.";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      newErrors.email = "El correo electrónico no es válido.";
-    }
-
-    // Validar teléfono
-    if (!form.phone.trim()) {
-      newErrors.phone = "El teléfono es obligatorio.";
-    } else if (!/^\d+$/.test(form.phone)) {
-      newErrors.phone = "El teléfono debe ser un número válido.";
-    }
-
-    // Validar dirección
-    if (!form.address.trim()) {
-      newErrors.address = "La dirección es obligatoria.";
-    }
-
-    // Validar cuentas bancarias
-    form.bankAccounts.forEach((account, index) => {
-      if (!account.bank.trim()) {
-        newErrors[`bankAccounts[${index}].bank`] = "El banco es obligatorio.";
-      }
-      if (!account.type_account.trim()) {
-        newErrors[`bankAccounts[${index}].type_account`] = "El tipo de cuenta es obligatorio.";
-      }
-      if (!account.bank_account.trim()) {
-        newErrors[`bankAccounts[${index}].bank_account`] = "El número de cuenta es obligatorio.";
-      } else if (!/^\d+$/.test(account.bank_account)) {
-        newErrors[`bankAccounts[${index}].bank_account`] = "El número de cuenta debe ser un número válido.";
-      }
+    if (!formData.phone.trim()) newErrors.phone = "El teléfono es requerido";
+    
+    formData.bankAccounts.forEach((account, index) => {
+      if (!account.bank) newErrors[`bank-${index}`] = "Banco requerido";
+      if (!account.bank_account) newErrors[`account-${index}`] = "Número de cuenta requerido";
+      if (!account.type_account) newErrors[`type-${index}`] = "Tipo de cuenta requerido";
     });
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
-  };
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ""
+      }));
+    }
+  }, [errors]);
 
-  const handleBankAccountChange = (index: number, key: keyof BankAccount, value: string) => {
-    const updatedBankAccounts = [...form.bankAccounts];
-    updatedBankAccounts[index] = { ...updatedBankAccounts[index], [key]: value };
-    setForm({ ...form, bankAccounts: updatedBankAccounts });
-    setErrors((prevErrors) => ({ ...prevErrors, [`bankAccounts[${index}].${key}`]: "" }));
-  };
+  const handleBankAccountChange = useCallback((
+    index: number,
+    key: keyof BankAccount,
+    value: string
+  ) => {
+    setFormData(prev => {
+      const updatedBankAccounts = [...prev.bankAccounts];
+      updatedBankAccounts[index] = {
+        ...updatedBankAccounts[index],
+        [key]: value,
+      };
+      return {
+        ...prev,
+        bankAccounts: updatedBankAccounts
+      };
+    });
+    
+    if (errors[`${key}-${index}`]) {
+      setErrors(prev => ({
+        ...prev,
+        [`${key}-${index}`]: ""
+      }));
+    }
+  }, [errors]);
 
-  const validateAccountNumber = (value: string) => {
+  const validateAccountNumber = useCallback((value: string) => {
     return value.replace(/[^\d]/g, "").slice(0, 20);
-  };
+  }, []);
 
-  const removeBankAccount = (index: number) => {
-    setForm({
-      ...form,
-      bankAccounts: form.bankAccounts.filter((_, i) => i !== index),
-    });
-  };
+  const removeBankAccount = useCallback((index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      bankAccounts: prev.bankAccounts.filter((_, i) => i !== index),
+    }));
+  }, []);
 
-  const addBankAccount = () => {
-    setForm({
-      ...form,
-      bankAccounts: [...form.bankAccounts, { bank_account: "", type_account: "", bank: "" }],
-    });
-  };
+  const addBankAccount = useCallback(() => {
+    setFormData(prev => ({
+      ...prev,
+      bankAccounts: [
+        ...prev.bankAccounts,
+        { bank_account: "", type_account: "", bank: "" },
+      ],
+    }));
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmitWrapper = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    onSubmit(form);
+    if (validateForm()) {
+      await onSubmit(e);
+    }
   };
 
   return (
-    <ScrollArea className="h-[470px]">
-      <form onSubmit={handleSubmit} className="space-y-1">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Nombre</Label>
-            <Input
-              id="name"
+    <Card className="w-full max-w-4xl mx-auto shadow-lg">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-center">
+          {editingId ? "Actualizar Proveedor" : "Nuevo Proveedor"}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmitWrapper} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <FormField
+              label="Nombre"
               name="name"
-              value={form.name}
+              icon={Building2}
+              value={formData.name}
+              error={errors.name}
               onChange={handleInputChange}
-              className="w-full"
             />
-            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="nit">NIT</Label>
-            <Input
-              id="nit"
+            <FormField
+              label="NIT"
               name="nit"
-              value={form.nit}
+              icon={Building2}
+              value={formData.nit}
+              error={errors.nit}
               onChange={handleInputChange}
-              className="w-full"
             />
-            {errors.nit && <p className="text-red-500 text-sm">{errors.nit}</p>}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Correo Electrónico</Label>
-            <Input
-              id="email"
+            <FormField
+              label="Correo Electrónico"
               name="email"
+              icon={Mail}
               type="email"
-              value={form.email}
+              value={formData.email}
+              error={errors.email}
               onChange={handleInputChange}
-              className="w-full"
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="phone">Teléfono</Label>
-            <Input
-              id="phone"
+            <FormField
+              label="Teléfono"
               name="phone"
-              value={form.phone}
+              icon={Phone}
+              value={formData.phone}
+              error={errors.phone}
               onChange={handleInputChange}
-              className="w-full"
             />
-            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="address">Dirección</Label>
-          <Input
-            id="address"
+          <FormField
+            label="Dirección"
             name="address"
-            value={form.address}
+            icon={MapPin}
+            value={formData.address}
+            error={errors.address}
             onChange={handleInputChange}
-            className="w-full"
           />
-          {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
-        </div>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex items-center">
-                <Landmark className="mr-2 h-5 w-5" />
-                <span className="font-semibold">Cuentas Bancarias</span>
+          <Card className="bg-gray-50">
+            <CardContent className="pt-6">
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center">
+                  <Landmark className="mr-2 h-5 w-5" />
+                  <span className="font-semibold">Cuentas Bancarias</span>
+                </div>
+                <Button
+                  type="button"
+                  onClick={addBankAccount}
+                  variant="outline"
+                  size="sm"
+                  className="hover:bg-primary hover:text-white transition-colors"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Añadir Cuenta
+                </Button>
               </div>
-              <Button type="button" onClick={addBankAccount} variant="outline" size="sm">
-                <Plus className="h-4 w-4 mr-2" />
-                Añadir Cuenta
-              </Button>
-            </div>
 
-            <ScrollArea className="h-[70px] pr-4">
-              <div className="space-y-4">
-                {form.bankAccounts.map((account, index) => (
-                  <div key={index} className="grid grid-cols-12 gap-4 items-start">
-                    <div className="col-span-4">
-                      <Label>Banco</Label>
-                      <Select
-                        value={account.bank}
-                        onValueChange={(value) => handleBankAccountChange(index, "bank", value)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccionar banco" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {BANK_OPTIONS.map((bank) => (
-                            <SelectItem key={bank} value={bank}>
-                              {bank}
-                            </SelectItem>
-                          ))}
-                          <SelectItem value="other">Otro</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {errors[`bankAccounts[${index}].bank`] && (
-                        <p className="text-red-500 text-sm">{errors[`bankAccounts[${index}].bank`]}</p>
-                      )}
-                      {account.bank === "other" && (
-                        <Input
-                          placeholder="Ingrese el nombre del banco"
+              <ScrollArea className="h-[250px] pr-4">
+                <div className="space-y-6">
+                  {formData.bankAccounts.map((account, index) => (
+                    <div
+                      key={index}
+                      className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start p-4 bg-white rounded-lg shadow-sm"
+                    >
+                      <div className="md:col-span-4">
+                        <Label className="mb-2 block">Banco</Label>
+                        <Select
                           value={account.bank}
-                          onChange={(e) => handleBankAccountChange(index, "bank", e.target.value)}
-                          className="mt-2"
+                          onValueChange={(value) =>
+                            handleBankAccountChange(index, "bank", value)
+                          }
+                        >
+                          <SelectTrigger className={errors[`bank-${index}`] ? 'border-red-500' : ''}>
+                            <SelectValue placeholder="Seleccionar banco" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {BANK_OPTIONS.map((bank) => (
+                              <SelectItem key={bank} value={bank}>
+                                {bank}
+                              </SelectItem>
+                            ))}
+                            <SelectItem value="other">Otro</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        {errors[`bank-${index}`] && (
+                          <span className="text-sm text-red-500">{errors[`bank-${index}`]}</span>
+                        )}
+                      </div>
+                      <div className="md:col-span-3">
+                        <Label className="mb-2 block">Tipo de Cuenta</Label>
+                        <Select
+                          value={account.type_account}
+                          onValueChange={(value) =>
+                            handleBankAccountChange(
+                              index,
+                              "type_account",
+                              value
+                            )
+                          }
+                        >
+                          <SelectTrigger className={errors[`type-${index}`] ? 'border-red-500' : ''}>
+                            <SelectValue placeholder="Tipo" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {ACCOUNT_TYPES.map((type) => (
+                              <SelectItem key={type} value={type}>
+                                {type}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {errors[`type-${index}`] && (
+                          <span className="text-sm text-red-500">{errors[`type-${index}`]}</span>
+                        )}
+                      </div>
+                      <div className="md:col-span-4">
+                        <Label className="mb-2 block">Número de Cuenta</Label>
+                        <Input
+                          value={account.bank_account}
+                          onChange={(e) =>
+                            handleBankAccountChange(
+                              index,
+                              "bank_account",
+                              validateAccountNumber(e.target.value)
+                            )
+                          }
+                          placeholder="0000000000"
+                          className={`w-full ${errors[`account-${index}`] ? 'border-red-500' : ''}`}
                         />
-                      )}
+                        {errors[`account-${index}`] && (
+                          <span className="text-sm text-red-500">{errors[`account-${index}`]}</span>
+                        )}
+                      </div>
+                      <div className="md:col-span-1 flex justify-end">
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeBankAccount(index)}
+                          className="text-red-500 hover:bg-red-50 hover:text-red-700 transition-colors"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
-                    <div className="col-span-3">
-                      <Label>Tipo de Cuenta</Label>
-                      <Select
-                        value={account.type_account}
-                        onValueChange={(value) => handleBankAccountChange(index, "type_account", value)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Tipo" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {ACCOUNT_TYPES.map((type) => (
-                            <SelectItem key={type} value={type}>
-                              {type}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      {errors[`bankAccounts[${index}].type_account`] && (
-                        <p className="text-red-500 text-sm">{errors[`bankAccounts[${index}].type_account`]}</p>
-                      )}
-                    </div>
-                    <div className="col-span-4">
-                      <Label>Número de Cuenta</Label>
-                      <Input
-                        value={account.bank_account}
-                        onChange={(e) =>
-                          handleBankAccountChange(index, "bank_account", validateAccountNumber(e.target.value))
-                        }
-                        placeholder="0000000000"
-                        className="w-full"
-                      />
-                      {errors[`bankAccounts[${index}].bank_account`] && (
-                        <p className="text-red-500 text-sm">{errors[`bankAccounts[${index}].bank_account`]}</p>
-                      )}
-                    </div>
-                    <div className="col-span-1">
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeBankAccount(index)}
-                        className="text-red-500 hover:text-red-700 mt-6"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </CardContent>
-        </Card>
+                  ))}
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Switch checked={form.status} onCheckedChange={(checked) => setForm({ ...form, status: checked })} />
-            <Label>Activo</Label>
+          <div className="flex items-center justify-between pt-4">
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={formData.status}
+                onCheckedChange={(checked) =>
+                  setFormData(prev => ({ ...prev, status: checked }))
+                }
+              />
+              <Label>Activo</Label>
+            </div>
+            <Button 
+              type="submit"
+              className="bg-primary hover:bg-primary/90 text-white transition-colors"
+            >
+              {editingId ? "Actualizar Proveedor" : "Crear Proveedor"}
+            </Button>
           </div>
-          <Button type="submit">{isEditing ? "Actualizar Proveedor" : "Crear Proveedor"}</Button>
-        </div>
-      </form>
-    </ScrollArea>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
+
+export default ProviderForm;

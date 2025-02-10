@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import {
-  fetchProviders,
   fetchProvidersByStore,
   addProvider,
   editProvider,
+  associateProvider,
 } from "@/features/companies/providerSlice";
-import { Plus, Search, Trash2, Landmark, List, Grid } from "lucide-react";
+import { Plus, Search, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -25,18 +25,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Provider, BankAccount } from "@/types/companies/provider";
+import { Provider } from "@/types/companies/provider";
 import {
   Pagination,
   PaginationContent,
@@ -45,135 +36,83 @@ import {
   PaginationNext,
   PaginationLink,
 } from "@/components/ui/pagination";
-import { associateProvider } from "@/features/companies/providerSlice";
-
-const BANK_OPTIONS = [
-  "Banco de Bogotá",
-  "Banco Popular",
-  "Bancolombia",
-  "Citibank",
-  "BBVA Colombia",
-  "Banco de Occidente",
-  "Banco Caja Social",
-  "Davivienda",
-  "Scotiabank Colpatria",
-];
-
-const ACCOUNT_TYPES = ["Cuenta Corriente", "Cuenta de Ahorros"];
+import { ProviderForm } from "./ProviderForm";
 
 export const ProvidersPage = () => {
   const dispatch = useAppDispatch();
   const { providers, isLoading, error } = useAppSelector(
     (state) => state.providers
   );
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredProviders, setFilteredProviders] = useState(providers);
-  const [showDialog, setShowDialog] = useState(false);
   const employee = useAppSelector((state) => state.auth.employee);
   const storeId = employee?.id_store;
 
-  console.log("Store ID:", storeId); // Verifica el storeId
-  console.log("Proveedores:", providers); // Verifica los proveedores
-  console.log("Cargando:", isLoading); // Verifica el estado de carga
-  console.log("Error:", error); // Verifica el error
-
-  const [form, setForm] = useState<Omit<Provider, "id">>({
-    name: "",
-    nit: "",
-    email: "",
-    phone: "",
-    address: "",
-    bankAccounts: [],
-    status: true,
-  });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredProviders, setFilteredProviders] = useState(providers);
+  const [showDialog, setShowDialog] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [viewMode, setViewMode] = useState<"cards" | "list">("cards"); // Modo de visualización
-  const [currentPage, setCurrentPage] = useState(1); // Paginación
-  const itemsPerPage = 6; // Máximo de cards por página
+  const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
+  const itemsPerPage = 6;
 
   useEffect(() => {
     if (storeId) {
-      dispatch(fetchProvidersByStore(storeId)).then((res) => {
-        console.log("Respuesta de fetchProvidersByStore:", res);
-      });
+      dispatch(fetchProvidersByStore(storeId));
     }
   }, [storeId, dispatch]);
-  
- useEffect(() => {
-  console.log("Proveedores cargados:", providers);
-  setFilteredProviders(
-    providers.filter(
-      (provider) =>
-        provider?.name?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
-        provider?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        provider?.phone?.includes(searchTerm) ||
-        provider?.nit?.includes(searchTerm)
-    )
-  );
-}, [providers, searchTerm]);
 
-  // Paginación
+  useEffect(() => {
+    setFilteredProviders(
+      providers.filter(
+        (provider) =>
+          provider?.name?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
+          provider?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          provider?.phone?.includes(searchTerm) ||
+          provider?.nit?.includes(searchTerm)
+      )
+    );
+  }, [providers, searchTerm]);
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredProviders.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentItems = filteredProviders.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleBankAccountChange = (
-    index: number,
-    key: keyof BankAccount,
-    value: string
-  ) => {
-    const updatedBankAccounts = [...form.bankAccounts];
-    updatedBankAccounts[index] = {
-      ...updatedBankAccounts[index],
-      [key]: value,
-    };
-    setForm({ ...form, bankAccounts: updatedBankAccounts });
-  };
-
-  const validateAccountNumber = (value: string) => {
-    return value.replace(/[^\d]/g, "").slice(0, 20);
-  };
-
-  const removeBankAccount = (index: number) => {
-    setForm({
-      ...form,
-      bankAccounts: form.bankAccounts.filter((_, i) => i !== index),
-    });
-  };
-
-  const addBankAccount = () => {
-    setForm({
-      ...form,
-      bankAccounts: [
-        ...form.bankAccounts,
-        { bank_account: "", type_account: "", bank: "" },
-      ],
-    });
+  const validateForm = (formData: Omit<Provider, "id">) => {
+    if (!formData.name?.trim()) {
+      alert("El nombre es obligatorio.");
+      return false;
+    }
+    if (!formData.nit?.trim() || !/^\d+$/.test(formData.nit)) {
+      alert("El NIT debe ser un valor numérico.");
+      return false;
+    }
+    if (!formData.email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      alert("Ingrese un correo electrónico válido.");
+      return false;
+    }
+    if (!formData.phone?.trim() || !/^\d{7,10}$/.test(formData.phone)) {
+      alert("El teléfono debe tener entre 7 y 10 dígitos.");
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const formElement = e.target as HTMLFormElement;
+    const formData = new FormData(formElement);
+    const providerData = Object.fromEntries(formData.entries()) as unknown as Omit<Provider, "id">;
 
-    if (!form.name || !form.nit || !form.email || !form.phone) {
-      alert("Todos los campos son obligatorios.");
+    if (!validateForm(providerData)) {
       return;
     }
 
     try {
       if (editingId !== null) {
-        await dispatch(
-          editProvider({ id: editingId.toString(), provider: form })
-        );
+        await dispatch(editProvider({ id: editingId.toString(), provider: providerData }));
         setEditingId(null);
       } else {
-        const newProvider = await dispatch(addProvider(form)).unwrap();
+        const newProvider = await dispatch(addProvider(providerData)).unwrap();
 
         if (employee?.id_store && newProvider?.id) {
           await dispatch(
@@ -184,16 +123,6 @@ export const ProvidersPage = () => {
           );
         }
       }
-
-      setForm({
-        name: "",
-        nit: "",
-        email: "",
-        phone: "",
-        address: "",
-        bankAccounts: [],
-        status: true,
-      });
 
       setShowDialog(false);
     } catch (error) {
@@ -242,194 +171,11 @@ export const ProvidersPage = () => {
               </DialogTitle>
             </DialogHeader>
             <ScrollArea className="h-[470px]">
-              <form onSubmit={handleSubmit} className="space-y-1">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Nombre</Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={form.name}
-                      onChange={handleInputChange}
-                      className="w-full"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="nit">NIT</Label>
-                    <Input
-                      id="nit"
-                      name="nit"
-                      value={form.nit}
-                      onChange={handleInputChange}
-                      className="w-full"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Correo Electrónico</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={form.email}
-                      onChange={handleInputChange}
-                      className="w-full"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Teléfono</Label>
-                    <Input
-                      id="phone"
-                      name="phone"
-                      value={form.phone}
-                      onChange={handleInputChange}
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="address">Dirección</Label>
-                  <Input
-                    id="address"
-                    name="address"
-                    value={form.address}
-                    onChange={handleInputChange}
-                    className="w-full"
-                  />
-                </div>
-
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex justify-between items-center mb-4">
-                      <div className="flex items-center">
-                        <Landmark className="mr-2 h-5 w-5" />
-                        <span className="font-semibold">Cuentas Bancarias</span>
-                      </div>
-                      <Button
-                        type="button"
-                        onClick={addBankAccount}
-                        variant="outline"
-                        size="sm"
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Añadir Cuenta
-                      </Button>
-                    </div>
-
-                    <ScrollArea className="h-[70px] pr-4">
-                      <div className="space-y-4">
-                        {form.bankAccounts.map((account, index) => (
-                          <div
-                            key={index}
-                            className="grid grid-cols-12 gap-4 items-start"
-                          >
-                            <div className="col-span-4">
-                              <Label>Banco</Label>
-                              <Select
-                                value={account.bank}
-                                onValueChange={(value) =>
-                                  handleBankAccountChange(index, "bank", value)
-                                }
-                              >
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Seleccionar banco" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {BANK_OPTIONS.map((bank) => (
-                                    <SelectItem key={bank} value={bank}>
-                                      {bank}
-                                    </SelectItem>
-                                  ))}
-                                  <SelectItem value="other">Otro</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              {account.bank === "other" && (
-                                <Input
-                                  placeholder="Ingrese el nombre del banco"
-                                  value={account.bank}
-                                  onChange={(e) =>
-                                    handleBankAccountChange(
-                                      index,
-                                      "bank",
-                                      e.target.value
-                                    )
-                                  }
-                                  className="mt-2"
-                                />
-                              )}
-                            </div>
-                            <div className="col-span-3">
-                              <Label>Tipo de Cuenta</Label>
-                              <Select
-                                value={account.type_account}
-                                onValueChange={(value) =>
-                                  handleBankAccountChange(
-                                    index,
-                                    "type_account",
-                                    value
-                                  )
-                                }
-                              >
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Tipo" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {ACCOUNT_TYPES.map((type) => (
-                                    <SelectItem key={type} value={type}>
-                                      {type}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <div className="col-span-4">
-                              <Label>Número de Cuenta</Label>
-                              <Input
-                                value={account.bank_account}
-                                onChange={(e) =>
-                                  handleBankAccountChange(
-                                    index,
-                                    "bank_account",
-                                    validateAccountNumber(e.target.value)
-                                  )
-                                }
-                                placeholder="0000000000"
-                                className="w-full"
-                              />
-                            </div>
-                            <div className="col-span-1">
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => removeBankAccount(index)}
-                                className="text-red-500 hover:text-red-700 mt-6"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </ScrollArea>
-                  </CardContent>
-                </Card>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={form.status}
-                      onCheckedChange={(checked) =>
-                        setForm({ ...form, status: checked })
-                      }
-                    />
-                    <Label>Activo</Label>
-                  </div>
-                  <Button type="submit">
-                    {editingId ? "Actualizar Proveedor" : "Crear Proveedor"}
-                  </Button>
-                </div>
-              </form>
+              <ProviderForm
+                editingId={editingId}
+                onSubmit={handleSubmit}
+                initialData={selectedProvider || undefined}
+              />
             </ScrollArea>
           </DialogContent>
         </Dialog>
@@ -449,26 +195,23 @@ export const ProvidersPage = () => {
             <ScrollArea className="h-[350px]">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {currentItems.map((provider) => (
-                  <Card key={provider.id}>
+                  <Card
+                    key={provider.id}
+                    onClick={() => setSelectedProvider(provider)}
+                    className="cursor-pointer hover:shadow-lg transition-shadow"
+                  >
                     <CardHeader>
-                      <CardTitle>{provider.name}</CardTitle>
+                      <CardTitle className="text-lg font-bold">
+                        {provider.name}
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p>NIT: {provider.nit}</p>
-                      <p>Email: {provider.email}</p>
-                      <p>Teléfono: {provider.phone}</p>
-                      <p>Dirección: {provider.address}</p>
-                      <p>
-                        Estado:{" "}
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            provider.status
-                              ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-700"
-                          }`}
-                        >
-                          {provider.status ? "Activo" : "Inactivo"}
-                        </span>
+                      <p className="text-sm text-gray-600">NIT: {provider.nit}</p>
+                      <p className="text-sm text-gray-600">
+                        Email: {provider.email}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Teléfono: {provider.phone}
                       </p>
                     </CardContent>
                   </Card>
@@ -490,7 +233,11 @@ export const ProvidersPage = () => {
                   </TableHeader>
                   <TableBody>
                     {currentItems.map((provider) => (
-                      <TableRow key={provider.id}>
+                      <TableRow 
+                        key={provider.id}
+                        className="cursor-pointer hover:bg-gray-50"
+                        onClick={() => setSelectedProvider(provider)}
+                      >
                         <TableCell className="font-medium">
                           {provider.name}
                         </TableCell>
@@ -516,14 +263,11 @@ export const ProvidersPage = () => {
             </Card>
           )}
 
-          {/* Paginador */}
           <Pagination>
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   className={currentPage === 1 ? "disabled" : ""}
                 />
               </PaginationItem>
@@ -561,6 +305,47 @@ export const ProvidersPage = () => {
           </Pagination>
         </>
       )}
+
+      <Dialog open={!!selectedProvider} onOpenChange={() => setSelectedProvider(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Detalles del Proveedor</DialogTitle>
+          </DialogHeader>
+          {selectedProvider && (
+            <div className="space-y-4">
+              <p><span className="font-semibold">Nombre:</span> {selectedProvider.name}</p>
+              <p><span className="font-semibold">NIT:</span> {selectedProvider.nit}</p>
+              <p><span className="font-semibold">Email:</span> {selectedProvider.email}</p>
+              <p><span className="font-semibold">Teléfono:</span> {selectedProvider.phone}</p>
+              <p><span className="font-semibold">Dirección:</span> {selectedProvider.address}</p>
+              <p>
+                <span className="font-semibold">Estado:</span>{" "}
+                <span
+                  className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    selectedProvider.status
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {selectedProvider.status ? "Activo" : "Inactivo"}
+                </span>
+              </p>
+              {selectedProvider.bankAccounts && selectedProvider.bankAccounts.length > 0 && (
+                <div className="mt-4">
+                  <h3 className="font-semibold mb-2">Cuentas Bancarias:</h3>
+                  {selectedProvider.bankAccounts.map((account, index) => (
+                    <div key={index} className="bg-gray-50 p-3 rounded-lg mb-2">
+                      <p><span className="font-semibold">Banco:</span> {account.bank}</p>
+                      <p><span className="font-semibold">Tipo de Cuenta:</span> {account.type_account}</p>
+                      <p><span className="font-semibold">Número de Cuenta:</span> {account.bank_account}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
