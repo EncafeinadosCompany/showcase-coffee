@@ -1,5 +1,13 @@
 import React, { useState, useCallback } from "react";
-import { Plus, Trash2, Landmark, Building2, Mail, Phone, MapPin } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Landmark,
+  Building2,
+  Mail,
+  Phone,
+  MapPin,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,45 +44,49 @@ interface ProviderFormProps {
   initialData?: Omit<Provider, "id">;
 }
 
-const FormField = React.memo(({ 
-  label, 
-  name, 
-  icon: Icon, 
-  type = "text", 
-  value, 
-  error,
-  onChange 
-}: { 
-  label: string; 
-  name: string; 
-  icon: React.ElementType; 
-  type?: string; 
-  value: string; 
-  error?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <div className="space-y-2">
-    <Label htmlFor={name} className="flex items-center gap-2">
-      <Icon className="h-4 w-4" />
-      {label}
-    </Label>
-    <Input
-      id={name}
-      name={name}
-      type={type}
-      value={value}
-      onChange={onChange}
-      className={`w-full ${error ? 'border-red-500' : ''}`}
-    />
-    {error && (
-      <span className="text-sm text-red-500">{error}</span>
-    )}
-  </div>
-));
+const FormField = React.memo(
+  ({
+    label,
+    name,
+    icon: Icon,
+    type = "text",
+    value,
+    error,
+    onChange,
+  }: {
+    label: string;
+    name: string;
+    icon: React.ElementType;
+    type?: string;
+    value: string;
+    error?: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  }) => (
+    <div className="space-y-2">
+      <Label htmlFor={name} className="flex items-center gap-2">
+        <Icon className="h-4 w-4" />
+        {label}
+      </Label>
+      <Input
+        id={name}
+        name={name}
+        type={type}
+        value={value}
+        onChange={onChange}
+        className={`w-full ${error ? "border-red-500" : ""}`}
+      />
+      {error && <span className="text-sm text-red-500">{error}</span>}
+    </div>
+  )
+);
 
-FormField.displayName = 'FormField';
+FormField.displayName = "FormField";
 
-export const ProviderForm = ({ editingId, onSubmit, initialData }: ProviderFormProps) => {
+export const ProviderForm = ({
+  editingId,
+  onSubmit,
+  initialData,
+}: ProviderFormProps) => {
   const [formData, setFormData] = useState<Omit<Provider, "id">>(
     initialData || {
       name: "",
@@ -91,7 +103,7 @@ export const ProviderForm = ({ editingId, onSubmit, initialData }: ProviderFormP
 
   const validateForm = useCallback(() => {
     const newErrors: Record<string, string> = {};
-    
+
     if (!formData.name.trim()) newErrors.name = "El nombre es requerido";
     if (!formData.nit.trim()) newErrors.nit = "El NIT es requerido";
     if (!formData.email.trim()) {
@@ -100,69 +112,73 @@ export const ProviderForm = ({ editingId, onSubmit, initialData }: ProviderFormP
       newErrors.email = "Correo electrónico inválido";
     }
     if (!formData.phone.trim()) newErrors.phone = "El teléfono es requerido";
-    
+
     formData.bankAccounts.forEach((account, index) => {
       if (!account.bank) newErrors[`bank-${index}`] = "Banco requerido";
-      if (!account.bank_account) newErrors[`account-${index}`] = "Número de cuenta requerido";
-      if (!account.type_account) newErrors[`type-${index}`] = "Tipo de cuenta requerido";
+      if (!account.bank_account)
+        newErrors[`account-${index}`] = "Número de cuenta requerido";
+      if (!account.type_account)
+        newErrors[`type-${index}`] = "Tipo de cuenta requerido";
     });
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }, [formData]);
 
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    if (errors[name]) {
-      setErrors(prev => ({
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({
         ...prev,
-        [name]: ""
+        [name]: value,
       }));
-    }
-  }, [errors]);
+      if (errors[name]) {
+        setErrors((prev) => ({
+          ...prev,
+          [name]: "",
+        }));
+      }
+    },
+    [errors]
+  );
 
-  const handleBankAccountChange = useCallback((
-    index: number,
-    key: keyof BankAccount,
-    value: string
-  ) => {
-    setFormData(prev => {
-      const updatedBankAccounts = [...prev.bankAccounts];
-      updatedBankAccounts[index] = {
-        ...updatedBankAccounts[index],
-        [key]: value,
-      };
-      return {
-        ...prev,
-        bankAccounts: updatedBankAccounts
-      };
-    });
-    
-    if (errors[`${key}-${index}`]) {
-      setErrors(prev => ({
-        ...prev,
-        [`${key}-${index}`]: ""
-      }));
-    }
-  }, [errors]);
+  const handleBankAccountChange = useCallback(
+    (index: number, key: keyof BankAccount, value: string) => {
+      setFormData((prev) => {
+        const updatedBankAccounts = [...prev.bankAccounts];
+        updatedBankAccounts[index] = {
+          ...updatedBankAccounts[index],
+          [key]: value,
+        };
+        return {
+          ...prev,
+          bankAccounts: updatedBankAccounts,
+        };
+      });
+
+      if (errors[`${key}-${index}`]) {
+        setErrors((prev) => ({
+          ...prev,
+          [`${key}-${index}`]: "",
+        }));
+      }
+    },
+    [errors]
+  );
 
   const validateAccountNumber = useCallback((value: string) => {
     return value.replace(/[^\d]/g, "").slice(0, 20);
   }, []);
 
   const removeBankAccount = useCallback((index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       bankAccounts: prev.bankAccounts.filter((_, i) => i !== index),
     }));
   }, []);
 
   const addBankAccount = useCallback(() => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       bankAccounts: [
         ...prev.bankAccounts,
@@ -181,7 +197,7 @@ export const ProviderForm = ({ editingId, onSubmit, initialData }: ProviderFormP
   return (
     <Card className="w-full max-w-4xl mx-auto shadow-lg">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">
+        <CardTitle className="text-2xl font-bold text-center text-amber-600">
           {editingId ? "Actualizar Proveedor" : "Nuevo Proveedor"}
         </CardTitle>
       </CardHeader>
@@ -266,7 +282,11 @@ export const ProviderForm = ({ editingId, onSubmit, initialData }: ProviderFormP
                             handleBankAccountChange(index, "bank", value)
                           }
                         >
-                          <SelectTrigger className={errors[`bank-${index}`] ? 'border-red-500' : ''}>
+                          <SelectTrigger
+                            className={
+                              errors[`bank-${index}`] ? "border-red-500" : ""
+                            }
+                          >
                             <SelectValue placeholder="Seleccionar banco" />
                           </SelectTrigger>
                           <SelectContent>
@@ -279,7 +299,9 @@ export const ProviderForm = ({ editingId, onSubmit, initialData }: ProviderFormP
                           </SelectContent>
                         </Select>
                         {errors[`bank-${index}`] && (
-                          <span className="text-sm text-red-500">{errors[`bank-${index}`]}</span>
+                          <span className="text-sm text-red-500">
+                            {errors[`bank-${index}`]}
+                          </span>
                         )}
                       </div>
                       <div className="md:col-span-3">
@@ -294,7 +316,11 @@ export const ProviderForm = ({ editingId, onSubmit, initialData }: ProviderFormP
                             )
                           }
                         >
-                          <SelectTrigger className={errors[`type-${index}`] ? 'border-red-500' : ''}>
+                          <SelectTrigger
+                            className={
+                              errors[`type-${index}`] ? "border-red-500" : ""
+                            }
+                          >
                             <SelectValue placeholder="Tipo" />
                           </SelectTrigger>
                           <SelectContent>
@@ -306,7 +332,9 @@ export const ProviderForm = ({ editingId, onSubmit, initialData }: ProviderFormP
                           </SelectContent>
                         </Select>
                         {errors[`type-${index}`] && (
-                          <span className="text-sm text-red-500">{errors[`type-${index}`]}</span>
+                          <span className="text-sm text-red-500">
+                            {errors[`type-${index}`]}
+                          </span>
                         )}
                       </div>
                       <div className="md:col-span-4">
@@ -321,10 +349,14 @@ export const ProviderForm = ({ editingId, onSubmit, initialData }: ProviderFormP
                             )
                           }
                           placeholder="0000000000"
-                          className={`w-full ${errors[`account-${index}`] ? 'border-red-500' : ''}`}
+                          className={`w-full ${
+                            errors[`account-${index}`] ? "border-red-500" : ""
+                          }`}
                         />
                         {errors[`account-${index}`] && (
-                          <span className="text-sm text-red-500">{errors[`account-${index}`]}</span>
+                          <span className="text-sm text-red-500">
+                            {errors[`account-${index}`]}
+                          </span>
                         )}
                       </div>
                       <div className="md:col-span-1 flex justify-end">
@@ -350,12 +382,12 @@ export const ProviderForm = ({ editingId, onSubmit, initialData }: ProviderFormP
               <Switch
                 checked={formData.status}
                 onCheckedChange={(checked) =>
-                  setFormData(prev => ({ ...prev, status: checked }))
+                  setFormData((prev) => ({ ...prev, status: checked }))
                 }
               />
               <Label>Activo</Label>
             </div>
-            <Button 
+            <Button
               type="submit"
               className="bg-primary hover:bg-primary/90 text-white transition-colors"
             >

@@ -10,9 +10,8 @@ export const getProvidersByStore = async (storeId: number): Promise<Provider[]> 
   const response = await axiosInstance.get(`/companies/alliances/store/${storeId}`);
   console.log("Respuesta del backend:", response.data);
 
-  // Extraer solo los objetos `provider` de la respuesta
   const providers: Provider[] = response.data.map((item: { provider: Provider }) => item.provider);
-  console.log("Proveedores transformados:", providers); // Verifica los proveedores transformados
+  console.log("Proveedores transformados:", providers); 
   return providers;
 };
 
