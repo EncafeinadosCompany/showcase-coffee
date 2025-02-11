@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
-import { fetchSaleVariants, addSale } from "@/features/transactions/saleSlice";
 import { useAppSelector } from "@/hooks/useAppSelector";
+
+import { fetchSaleVariants, addSale } from "@/features/transactions/saleSlice";
+import type { Sales, SalesPayload } from "@/types/transactions/saleModel";
 
 import { toast } from "react-hot-toast";
 
 import Products from "./components/products";
-import Cart from "./components/cart";
 import Payment from "./components/payment";
-import type { Sales, SalesPayload } from "@/types/transactions/saleModel";
+import Cart from "./components/cart";
 
 export default function Sales() {
     const dispatch = useAppDispatch();
@@ -75,8 +76,8 @@ export default function Sales() {
             icon: "❌",
             duration: 4000,
             style: { 
-                background: "#B71C1C", // Rojo oscuro elegante
-                color: "#FFEBEE", // Blanco rosado
+                background: "#B71C1C",
+                color: "#FFEBEE",
                 border: "1px solid #7F0000",
                 padding: "12px",
                 borderRadius: "8px",

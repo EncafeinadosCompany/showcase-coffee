@@ -1,14 +1,15 @@
-import { useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import {fetchBrands} from "@/features/products/brands/brandSlice";
-import {fetchAttributes, addAttribute} from "@/features/products/attributes/attributeSlice"
-import {addProducts} from "@/features/products/products/productSlice"
+
+import { fetchAttributes, addAttribute } from "@/features/products/attributes/attributeSlice"
+import { addProducts } from "@/features/products/products/productSlice"
+import { fetchBrands } from "@/features/products/brands/brandSlice";
+
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { toast } from "react-hot-toast";
-
 
 export default function AddProductForm() {
 
@@ -19,57 +20,51 @@ export default function AddProductForm() {
   const [newAttributeValue, setNewAttributeValue] = useState("")
   const [newCustomAttribute, setNewCustomAttribute] = useState("")
   const dispatch = useAppDispatch();
-  const {brands} = useAppSelector((state) => state.brands);
-  const {attributes} = useAppSelector((state) => state.attributes);
-  const {error} = useAppSelector((state) => state.products);
+  const { brands } = useAppSelector((state) => state.brands);
+  const { attributes } = useAppSelector((state) => state.attributes);
+  const { error } = useAppSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(fetchBrands());
     dispatch(fetchAttributes());
-  },[dispatch])
+  }, [dispatch])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-
-  
-
-  if(error){ 
-    toast.error('Error al agregar el producto', {
-      duration: 4000,
-      removeDelay: 1000
-    })
-  }else{
-    if(productAttributes.length === 0){
-      toast.error('El producto debe tener almenos un attributo', {
+    if (error) {
+      toast.error('Error al agregar el producto', {
         duration: 4000,
         removeDelay: 1000
       })
-      return
-    }
-
-    toast('¡El producto a sido agregado correctamente!',{
-      icon: '☕',
-      duration: 4000,
-      removeDelay: 1000,
-      style: {
-        background: '#bc6c25',
-        color: '#fefae0',
+    } else {
+      if (productAttributes.length === 0) {
+        toast.error('El producto debe tener almenos un attributo', {
+          duration: 4000,
+          removeDelay: 1000
+        })
+        return
       }
-    })
 
-    dispatch(addProducts(
-      { 
-       name,
-      id_brand: Number.parseInt(brandId),
-      attributes: productAttributes,
-      status: true
+      toast('¡El producto a sido agregado correctamente!', {
+        icon: '☕',
+        duration: 4000,
+        removeDelay: 1000,
+        style: {
+          background: '#bc6c25',
+          color: '#fefae0',
+        }
+      })
+
+      dispatch(addProducts(
+        {
+          name,
+          id_brand: Number.parseInt(brandId),
+          attributes: productAttributes,
+          status: true
+        }
+      ))
     }
-  ))
-  }
-
-
- 
     setName("")
     setBrandId("")
     setProductAttributes([])
@@ -81,8 +76,8 @@ export default function AddProductForm() {
   const handleAddAttribute = () => {
     const attributeName = newAttribute === "new" ? newCustomAttribute : newAttribute
     if (attributeName && newAttributeValue) {
-      setProductAttributes([...productAttributes, { description: attributeName, value:newAttributeValue }])
-      toast(`¡El atributo ${attributeName} a sido agregado correctamente!`,{
+      setProductAttributes([...productAttributes, { description: attributeName, value: newAttributeValue }])
+      toast(`¡El atributo ${attributeName} a sido agregado correctamente!`, {
         icon: '☕',
         duration: 4000,
         removeDelay: 1000,
@@ -95,7 +90,7 @@ export default function AddProductForm() {
       setNewCustomAttribute("")
       setNewAttributeValue("")
       if (!attributes.some(attr => attr.description === attributeName)) {
-        toast(`¡El atributo ${attributeName} a sido creado!`,{
+        toast(`¡El atributo ${attributeName} a sido creado!`, {
           icon: '☕',
           duration: 4000,
           removeDelay: 1000,
@@ -104,7 +99,7 @@ export default function AddProductForm() {
             color: '#fefae0',
           }
         })
-        dispatch(addAttribute({description:newCustomAttribute}))
+        dispatch(addAttribute({ description: newCustomAttribute }))
       }
     }
   }
@@ -171,20 +166,20 @@ export default function AddProductForm() {
             className="bg-white border-cafe-medium"
           />
           <div className="card flex justify-content-center">
-          <div className="flex flex-wrap gap-2">
-          <Button
-            type="button"
-            onClick={handleAddAttribute}
-            className="bg-cafe-light text-cafe-dark hover:bg-cafe-medium hover:text-cafe-cream"
-          >
-            Agregar
-          </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                onClick={handleAddAttribute}
+                className="bg-cafe-light text-cafe-dark hover:bg-cafe-medium hover:text-cafe-cream"
+              >
+                Agregar
+              </Button>
             </div>
           </div>
         </div>
       </div>
       <Button
-      type="submit">Agregar Producto</Button>
+        type="submit">Agregar Producto</Button>
     </form>
   )
 }
