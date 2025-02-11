@@ -4,15 +4,15 @@ import { Outlet } from "react-router-dom";
 const Layout = () => {
 
   return (
-    <div className="flex min-h-screen bg-[#fff4d73a] ">
+    <div className="flex min-h-screen bg-gradient-to-b from-amber-50 to-white">
       <div className="hidden md:block">
-        <Sidebar />
+      <Sidebar />
       </div>
       <div className="flex-1 flex flex-col">
-        <main className="flex-grow overflow-y-auto p-6 lg:p-8">
-          
-          <Outlet />
-        </main>
+      <main className="flex-grow overflow-y-auto p-6 lg:p-8">
+        
+        <Outlet />
+      </main>
       </div>
       <div className="md:hidden">
       </div>

@@ -32,10 +32,6 @@ const Sidebar = () => {
 
   ];
 
-  // const bottomItems = [
-  //   { icon: <Settings />, label: 'Configuración', path: '/settings' },
-  // ];
-
   return (
     <div className={`
       bg-white 
@@ -93,7 +89,7 @@ const Sidebar = () => {
                   p-3 
                   rounded-xl 
                   group 
-                  hover:bg-blue-50 
+                  hover:bg-amber-50 
                   transition-colors
                   ${isCollapsed ? 'justify-center' : ''}
                 `}
@@ -129,42 +125,6 @@ const Sidebar = () => {
         mt-auto
       ">
         <ul className="space-y-2">
-          {/* {bottomItems.map((item) => (
-            <li key={item.label}>
-              <a
-                href={item.path}
-                className={`
-                  flex 
-                  items-center 
-                  p-3 
-                  rounded-xl 
-                  group 
-                  hover:bg-blue-50 
-                  transition-colors
-                  ${isCollapsed ? 'justify-center' : ''}
-                `}
-              >
-                <div className="
-                  text-gray-500 
-                  group-hover:text-blue-600 
-                  transition-colors
-                ">
-                  {item.icon}
-                </div>
-                {!isCollapsed && (
-                  <span className="
-                    ml-3 
-                    text-gray-700 
-                    group-hover:text-blue-600 
-                    transition-colors
-                  ">
-                    {item.label}
-                  </span>
-                )}
-              </a>
-            </li>
-          ))} */}
-
           {/* Botón de Logout */}
           <li>
             <button

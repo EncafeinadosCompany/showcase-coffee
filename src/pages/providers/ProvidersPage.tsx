@@ -146,39 +146,39 @@ const ProviderTable = React.memo(
 
 const ProviderDetails = React.memo(
   ({ provider, onClose }: { provider: Provider; onClose: () => void }) => (
-    <DialogContent className="max-w-2xl bg-white/80 backdrop-blur">
+    <DialogContent className="max-w-2xl bg-white/95 backdrop-blur">
       <DialogHeader>
-        <DialogTitle className="text-2xl font-bold text-amber-800">
+        <DialogTitle className="text-2xl font-bold text-amber-600">
           Detalles del Proveedor
         </DialogTitle>
       </DialogHeader>
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <span className="font-semibold text-amber-800">Nombre:</span>
+            <span className="font-semibold text-amber-700">Nombre:</span>
             <p className="text-gray-700">{provider.name}</p>
           </div>
           <div>
-            <span className="font-semibold text-amber-800">NIT:</span>
+            <span className="font-semibold text-amber-700">NIT:</span>
             <p className="text-gray-700">{provider.nit}</p>
           </div>
           <div>
-            <span className="font-semibold text-amber-800">Email:</span>
+            <span className="font-semibold text-amber-700">Email:</span>
             <p className="text-gray-700">{provider.email}</p>
           </div>
           <div>
-            <span className="font-semibold text-amber-800">Teléfono:</span>
+            <span className="font-semibold text-amber-700">Teléfono:</span>
             <p className="text-gray-700">{provider.phone}</p>
           </div>
         </div>
 
         <div>
-          <span className="font-semibold text-amber-800">Dirección:</span>
+          <span className="font-semibold text-amber-700">Dirección:</span>
           <p className="text-gray-700">{provider.address}</p>
         </div>
 
         <div>
-          <span className="font-semibold text-amber-800">Estado:</span>
+          <span className="font-semibold text-amber-700">Estado:</span>
           <span
             className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
               provider.status
@@ -226,7 +226,7 @@ const ProviderDetails = React.memo(
         )}
       </div>
       <DialogFooter className="mt-6">
-        <Button onClick={onClose} className="bg-amber-800 hover:bg-amber-900">
+        <Button onClick={onClose} className="bg-amber-600 hover:bg-amber-800 rounded-full">
           Cerrar
         </Button>
       </DialogFooter>
@@ -366,7 +366,7 @@ export const ProvidersPage = () => {
 
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
           <DialogTrigger asChild>
-            <Button size="lg" className="bg-amber-600 hover:bg-amber-800 rounded-full">
+            <Button size="lg" className="bg-amber-500 hover:bg-amber-800 rounded-full">
               <Plus className="mr-2 h-5 w-5" /> Registrar proveedor
             </Button>
           </DialogTrigger>
@@ -400,7 +400,7 @@ export const ProvidersPage = () => {
             onClick={() => setViewMode("cards")}
             variant={viewMode === "cards" ? "default" : "outline"}
             size="sm"
-            className={`bg-amber-600 hover:bg-amber-900 rounded-full`}
+            className={`bg-amber-500 hover:bg-amber-900 rounded-full`}
             >
             <Grid className="mr-2 h-4 w-4" /> Cards
             </Button>
@@ -408,7 +408,7 @@ export const ProvidersPage = () => {
             onClick={() => setViewMode("list")}
             variant={viewMode === "list" ? "default" : "outline"}
             size="sm"
-            className="bg-amber-600 hover:bg-amber-900 rounded-full"
+            className="bg-amber-500 hover:bg-amber-900 rounded-full"
           >
             <List className="mr-2 h-4 w-4" /> Lista
           </Button>
@@ -459,7 +459,7 @@ export const ProvidersPage = () => {
                   <PaginationLink
                     onClick={() => handlePageChange(index + 1)}
                     isActive={currentPage === index + 1}
-                    className="bg-amber-800 hover:bg-amber-900"
+                    className="bg-amber-500 hover:bg-amber-800 rounded-full text-white"
                   >
                     {index + 1}
                   </PaginationLink>
