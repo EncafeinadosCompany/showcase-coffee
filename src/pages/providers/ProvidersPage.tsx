@@ -53,7 +53,7 @@ export const ProvidersPage = () => {
 
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
           <DialogTrigger asChild>
-            <Button size="lg" className="bg-amber-500 hover:bg-amber-800 rounded-full">
+            <Button size="lg" className="bg-amber-200 hover:bg-amber-500 rounded-full text-amber-800 text-sm font-medium">
               <Plus className="mr-2 h-5 w-5" /> Registrar proveedor
             </Button>
           </DialogTrigger>
@@ -94,7 +94,7 @@ export const ProvidersPage = () => {
             onClick={() => setViewMode("list")}
             variant={viewMode === "list" ? "default" : "outline"}
             size="sm"
-            className="bg-amber-500 hover:bg-amber-900 rounded-full"
+            className={`bg-amber-200 hover:bg-amber-600 rounded-full text-amber-800 text-sm font-medium`}
           >
             <List className="mr-2 h-4 w-4" /> Lista
           </Button>
