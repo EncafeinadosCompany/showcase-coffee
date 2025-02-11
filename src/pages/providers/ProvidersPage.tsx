@@ -82,14 +82,14 @@ export const ProvidersPage = () => {
         </div>
 
         <div className="flex gap-2">
-          <Button
+            <Button
             onClick={() => setViewMode("cards")}
             variant={viewMode === "cards" ? "default" : "outline"}
             size="sm"
-            className={`bg-amber-500 hover:bg-amber-900 rounded-full`}
-          >
+            className={`bg-amber-200 hover:bg-amber-600 rounded-full text-amber-800 text-sm font-medium`}
+            >
             <Grid className="mr-2 h-4 w-4" /> Cards
-          </Button>
+            </Button>
           <Button
             onClick={() => setViewMode("list")}
             variant={viewMode === "list" ? "default" : "outline"}
