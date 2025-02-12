@@ -2,24 +2,29 @@ import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 
-import { fetchSaleVariants, addSale } from "@/features/transactions/saleSlice";
+import { fetchSaleVariants, addSale, fetchSales } from "@/features/transactions/saleSlice";
 import type { Sales, SalesPayload } from "@/types/transactions/saleModel";
 
 import { toast } from "react-hot-toast";
+import { Button } from "@/components/ui/button";
+import { ListIcon, XIcon } from "lucide-react";
 
 import Products from "./components/products";
 import Payment from "./components/payment";
 import Cart from "./components/cart";
+import { SalesTable } from "./saleslist";
 
 export default function Sales() {
     const dispatch = useAppDispatch();
-    const { saleVariants } = useAppSelector((state) => state.sales);
-
+    const { saleVariants, sales } = useAppSelector((state) => state.sales);
+    
     const [cartProducts, setCartProducts] = useState<any[]>([]);
     const [total, setTotal] = useState(0);
+    const [showSalesList, setShowSalesList] = useState(false);
 
     useEffect(() => {
         dispatch(fetchSaleVariants());
+        dispatch(fetchSales());
     }, [dispatch]);
 
     const handleCompleteSale = async (paymentMethod: string) => {
@@ -41,6 +46,7 @@ export default function Sales() {
     
         try {
             await dispatch(addSale(saleData)).unwrap(); 
+            await dispatch(fetchSales());
 
             toast.success("¡Venta realizada con éxito!", {
                 icon: "✅",
@@ -72,7 +78,7 @@ export default function Sales() {
         setCartProducts([]);
         setTotal(0);
     
-        toast.error("Error al registrar la venta.", {
+        toast.error("Venta cancelada.", {
             icon: "❌",
             duration: 4000,
             style: { 
@@ -84,29 +90,68 @@ export default function Sales() {
                 fontWeight: "bold"
             }
         });
-        
     };
-    
+
+    const toggleSalesList = () => {
+        setShowSalesList(!showSalesList);
+    };
 
     return (
         <div>
-            <h6 className="text-4xl font-libre-baskerville text-[#4A3728] mb-4">
-                Ventas
-            </h6>
-            <div className="flex gap-4">
-
-                <section className="w-[35%]">
-                    <Products products={saleVariants} cartProducts={cartProducts} setCartProducts={setCartProducts} />
-                </section>
-
-                <section className="w-[40%]">
-                    <Cart cartProducts={cartProducts} setCartProducts={setCartProducts} setTotal={setTotal} />
-                </section>
-
-                <section className="w-[25%]">
-                    <Payment total={total} onCompleteSale={handleCompleteSale} onCancelSale={handleCancelSale} />
-                </section>
+            <div className="flex justify-between items-center mb-4">
+                <h6 className="text-amber-600 text-5xl md:text-3xl font-extrabold">
+                    Ventas
+                </h6>
+                <Button 
+                    onClick={toggleSalesList}
+                    variant="outline"
+                    className="flex items-center gap-2"
+                >
+                    {showSalesList ? (
+                        <>
+                            <XIcon className="h-4 w-4" />
+                            Cerrar Lista
+                        </>
+                    ) : (
+                        <>
+                            <ListIcon className="h-4 w-4" />
+                            Ver Ventas
+                        </>
+                    )}
+                </Button>
             </div>
+
+            {showSalesList ? (
+                <div className="mb-4">
+                    <SalesTable sales={sales} />
+                </div>
+            ) : (
+                <div className="flex gap-4">
+                    <section className="w-[35%]">
+                        <Products 
+                            products={saleVariants} 
+                            cartProducts={cartProducts} 
+                            setCartProducts={setCartProducts} 
+                        />
+                    </section>
+
+                    <section className="w-[40%]">
+                        <Cart 
+                            cartProducts={cartProducts} 
+                            setCartProducts={setCartProducts} 
+                            setTotal={setTotal} 
+                        />
+                    </section>
+
+                    <section className="w-[25%]">
+                        <Payment 
+                            total={total} 
+                            onCompleteSale={handleCompleteSale} 
+                            onCancelSale={handleCancelSale} 
+                        />
+                    </section>
+                </div>
+            )}
         </div>
     );
 }

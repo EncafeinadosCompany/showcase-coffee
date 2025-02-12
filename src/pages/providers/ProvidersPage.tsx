@@ -47,7 +47,7 @@ export const ProvidersPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-8 space-y-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-amber-600">
+        <h1 className=" text-amber-600 text-5xl md:text-3xl font-extrabold">
           Gestión de Proveedores
         </h1>
 

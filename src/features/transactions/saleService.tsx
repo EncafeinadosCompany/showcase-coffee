@@ -2,7 +2,7 @@ import { axiosInstance } from "../../API/axiosInstance";
 import { Sales, SalesPayload } from "../../types/transactions/saleModel";
 
 export const getSale = async (): Promise<Sales[]> => {
-  const response = await axiosInstance.get<Sales[]>("/sales");
+  const response = await axiosInstance.get<Sales[]>("/transactions/sales");
   return response.data;
 };
 
