@@ -45,15 +45,15 @@ export const ProvidersPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white p-8 space-y-6">
+    <div className="bg-gradient-to-b from-amber-50 to-white p-4 space-y-3 ">
       <div className="flex justify-between items-center mb-6">
-        <h1 className=" text-amber-600 text-5xl md:text-3xl font-extrabold">
+        <h1 className=" text-amber-600 text-5xl md:text-3xl font-bold">
           Gestión de Proveedores
         </h1>
 
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
           <DialogTrigger asChild>
-            <Button size="lg" className="bg-amber-200 hover:bg-amber-500 rounded-full text-amber-800 text-sm font-medium">
+            <Button size="lg" className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium">
               <Plus className="mr-2 h-5 w-5" /> Registrar proveedor
             </Button>
           </DialogTrigger>
@@ -86,7 +86,7 @@ export const ProvidersPage = () => {
             onClick={() => setViewMode("cards")}
             variant={viewMode === "cards" ? "default" : "outline"}
             size="sm"
-            className={`bg-amber-200 hover:bg-amber-600 rounded-full text-amber-800 text-sm font-medium`}
+            className={`bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium`}
             >
             <Grid className="mr-2 h-4 w-4" /> Cards
             </Button>
@@ -94,7 +94,7 @@ export const ProvidersPage = () => {
             onClick={() => setViewMode("list")}
             variant={viewMode === "list" ? "default" : "outline"}
             size="sm"
-            className={`bg-amber-200 hover:bg-amber-600 rounded-full text-amber-800 text-sm font-medium`}
+            className={`bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium`}
           >
             <List className="mr-2 h-4 w-4" /> Lista
           </Button>
@@ -145,7 +145,7 @@ export const ProvidersPage = () => {
                   <PaginationLink
                     onClick={() => handlePageChange(index + 1)}
                     isActive={currentPage === index + 1}
-                    className="bg-amber-500 hover:bg-amber-800 rounded-full text-white"
+                    className="bg-amber-600 hover:bg-amber-500 rounded-full text-white"
                   >
                     {index + 1}
                   </PaginationLink>

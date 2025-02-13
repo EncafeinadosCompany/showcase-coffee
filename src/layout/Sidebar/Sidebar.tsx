@@ -1,4 +1,4 @@
-import { Home, ChevronLeft, BadgeDollarSign, ChevronRight, Users, Settings, BarChart2, HelpCircle, LogOut, ShoppingBasket, Coffee, ScrollText } from 'lucide-react';
+import { Home, ChevronLeft, BadgeDollarSign, ChevronRight, Users, LogOut, ShoppingBasket, Coffee } from 'lucide-react';
 import { useState } from 'react';
 
 import { useNavigate } from "react-router-dom";
@@ -45,10 +45,10 @@ const Sidebar = () => {
       flex-col 
       rounded-r-3xl 
       border-r 
-      border-gray-100
+      border-amber-100
     `}>
       {/* Encabezado con Logo y Botón de Colapso */}
-      <div className="flex items-center justify-between p-5 border-b border-gray-100 ">
+      <div className="flex items-center justify-between p-5 border-b border-amber-100 ">
         {!isCollapsed && (
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-3">
@@ -67,8 +67,10 @@ const Sidebar = () => {
           className="
             p-2 
             rounded-full 
-            bg-gray-100 
-            hover:bg-gray-200 
+            bg-amber-50 
+            hover:bg-amber-100
+            border 
+            border-amber-100
             transition-colors
           "
         >
@@ -96,7 +98,7 @@ const Sidebar = () => {
               >
                 <div className="
                   text-gray-500 
-                  group-hover:text-blue-600 
+                  group-hover:text-amber-600 
                   transition-colors
                 ">
                   {item.icon}
@@ -105,7 +107,7 @@ const Sidebar = () => {
                   <span className="
                     ml-3 
                     text-gray-700 
-                    group-hover:text-blue-600 
+                    group-hover:text-amber-600
                     transition-colors
                   ">
                     {item.label}
@@ -120,7 +122,7 @@ const Sidebar = () => {
       {/* Sección Inferior */}
       <div className="
         border-t 
-        border-gray-100 
+        border-amber-100 
         p-4 
         mt-auto
       ">

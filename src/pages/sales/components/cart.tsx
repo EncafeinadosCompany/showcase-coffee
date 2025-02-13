@@ -88,7 +88,7 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
                         </span>
                     </div>
                     <p className="text-amber-800 font-semibold">
-                        ${variant.sale_price}
+                        {variant.sale_price.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
                     </p>
                 </div>
 
@@ -104,7 +104,7 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
                     </Button>
 
                     <Input
-                        type="number"
+                        type="currency"
                         value={variant.quantity}
                         min={1}
                         max={variant.variant.stock}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAppSelector } from "@/hooks/useAppSelector";
-import { Coffee, Clock, Users, Star, ArrowRight } from 'lucide-react';
+import { Coffee, Clock, Users, Star } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 
 interface FeatureCardProps {
@@ -30,7 +30,8 @@ export const HomePage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
+    <div className="bg-gradient-to-b from-amber-50 to-white">
+
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0  bg-cover bg-center opacity-10" />
@@ -56,7 +57,7 @@ export const HomePage = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-13">
         <div className="grid md:grid-cols-3 gap-8">
           <FeatureCard
             icon={Clock}

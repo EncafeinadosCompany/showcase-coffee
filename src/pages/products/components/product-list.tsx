@@ -6,16 +6,16 @@ import { Search } from "lucide-react";
 import { fetchProducts } from "@/features/products/products/productSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import ProductCard from "./ProductCard"; // Importamos el nuevo componente
+import ProductCard from "./ProductCard";
 import { fetchBrands } from "@/features/products/brands/brandSlice";
 
 export default function ProductList() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [brandFilter, setBrandFilter] = useState("");
-  const itemsPerPage = 8;
+  const itemsPerPage = 4;
   const dispatch = useAppDispatch();
-  const {products} = useAppSelector((state) => state.products);
+  const { products } = useAppSelector((state) => state.products);
   const { brands } = useAppSelector((state) => state.brands);
 
   useEffect(() => {
@@ -34,7 +34,6 @@ export default function ProductList() {
 
   return (
     <div className="space-y-6 p-6">
-      <h1 className="text-2xl font-bold text-coffee-700">Ver todos los productos</h1>
       <div className="flex gap-4">
         <div className="flex relative items-center flex-1 max-w-md">
           <Input

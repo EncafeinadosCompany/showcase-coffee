@@ -3,12 +3,12 @@ import ProductManagement from "./components/product-management";
 
 export const Products = () => {
   return (
-    <main className="container mx-auto p-4 flex justify-center items-center h-screen overflow-hidden">
-      <div className="bg-white shadow-lg rounded-2xl p-6 max-w-4xl w-full max-h-full flex flex-col">
-        <div className="flex flex-col items-center gap-4 mb-6">
+    <main className="container mx-auto flex justify-center items-center overflow-hidden pt-4 pb-4">
+      <div className="bg-white shadow-lg rounded-2xl p-2 max-w-4xl w-full max-h-full flex flex-col">
+        <div className="flex flex-col items-center gap-4 mb-2">
           <div className="flex flex-wrap justify-center items-center gap-3">
             <Coffee className="h-8 w-8 text-[#36270b]" />
-            <h1 className="text-3xl sm:text-4xl font-bold text-center font-libre-baskerville text-[#36270b]">
+            <h1 className="text-3xl sm:text-3xl font-bold text-center font-libre-baskerville text-[#36270b]">
               El Rincón del Café
             </h1>
             <Coffee className="h-8 w-8 text-[#36270b]" />
