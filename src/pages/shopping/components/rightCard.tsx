@@ -73,7 +73,7 @@ export default function RightCard({
                                 {producto.name}
                               </h3>
                               <p className="text-sm text-gray-600">
-                                {variante.grammage}g
+                                {variante.grammage}
                               </p>
                             </div>
                             <Coffee className="h-5 w-5 text-amber-700" />
