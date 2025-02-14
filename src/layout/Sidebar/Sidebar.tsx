@@ -67,10 +67,9 @@ const Sidebar = () => {
           className="
             p-2 
             rounded-full 
-            bg-amber-50 
-            hover:bg-amber-100
+           
             border 
-            border-amber-100
+           
             transition-colors
           "
         >

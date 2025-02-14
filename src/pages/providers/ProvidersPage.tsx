@@ -1,8 +1,20 @@
 import { useState } from "react";
 import { Plus, Search, Grid, List } from "lucide-react";
 
-import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext, PaginationLink } from "@/components/ui/pagination";
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationLink,
+} from "@/components/ui/pagination";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -34,7 +46,9 @@ export const ProvidersPage = () => {
     handleSubmit,
   } = useProviders();
 
-  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(
+    null
+  );
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -53,18 +67,21 @@ export const ProvidersPage = () => {
 
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
           <DialogTrigger asChild>
-            <Button size="lg" className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium">
+            <Button
+              size="lg"
+              className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium"
+            >
               <Plus className="mr-2 h-5 w-5" /> Registrar proveedor
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-full sm:max-w-2xl mx-1 sm:mx-auto bg-white/90 backdrop-blur">
             <DialogHeader></DialogHeader>
             <ScrollArea className="h-[470px]">
-            <ProviderForm
-  editingId={editingId}
-  onSubmit={handleSubmit} 
-  initialData={selectedProvider || undefined}
-/>
+              <ProviderForm
+                editingId={editingId}
+                onSubmit={handleSubmit}
+                initialData={selectedProvider || undefined}
+              />
             </ScrollArea>
           </DialogContent>
         </Dialog>
@@ -82,14 +99,14 @@ export const ProvidersPage = () => {
         </div>
 
         <div className="flex gap-2">
-            <Button
+          <Button
             onClick={() => setViewMode("cards")}
             variant={viewMode === "cards" ? "default" : "outline"}
             size="sm"
             className={`bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium`}
-            >
+          >
             <Grid className="mr-2 h-4 w-4" /> Cards
-            </Button>
+          </Button>
           <Button
             onClick={() => setViewMode("list")}
             variant={viewMode === "list" ? "default" : "outline"}
