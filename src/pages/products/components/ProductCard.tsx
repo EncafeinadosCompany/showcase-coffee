@@ -1,54 +1,49 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
-import { Heart, List } from "lucide-react";
-import VariantModal from "./VariantModal"; 
+import { List } from "lucide-react";
+import VariantModal from "./VariantModal";
 import { productType } from "@/types/products/product";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import AttributeModal from "./attributesModal";
+import { motion } from "framer-motion";
 
 const ProductCard = ({ product }: { product: productType }) => {
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-      <CardContent className="p-4">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full">
+      <CardContent className="p-4 flex flex-col h-full">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <h3 className="font-semibold text-lg mb-2 h-12 overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer">
+              {product.name}
+            </h3>
+          </TooltipTrigger>
+          <TooltipContent className="bg-[#99582a] text-white p-2 rounded-md text-sm">
+            {product.name}
+          </TooltipContent>
+        </Tooltip>
 
-        <h3 className="font-semibold text-lg mb-2">{product.name}</h3>
         <p className="text-sm text-gray-600 mb-2">{product.brand?.name ?? "N/A"}</p>
+        <div className="space-y-2 mt-auto">
+          <AttributeModal attributes={product.attributes ?? []} />
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="mx-auto h-19 py-2 px-6 bg-gradient-to-r from-amber-600 to-amber-600 text-white text-xs font-medium hover:from-amber-600 hover:to-amber-700 flex items-center gap-2 rounded-xl shadow-lg transition-all"
+            onClick={() => setIsModalOpen(true)}
 
-        <div className="space-y-2">
-          {/* Botón Ver Atributos con HoverCard */}
-          <HoverCard>
-            <HoverCardTrigger asChild>
-              <Button  className=" mx-auto  h-2 py-4 px-3 bg-[#ffffff] border-[1px] border-[#e9e9e9] text-black text-xs hover:bg-slate-200 flex items-center gap-2   rounded-xl transition-all">
-                <Heart className="h-4 w-4 text-[#db8935]" />
-                Ver Atributos
-              </Button>
-            </HoverCardTrigger>
-            <HoverCardContent className="w-64 p-4 shadow-lg rounded-lg bg-white">
-              <div className="space-y-2">
-                {product.attributes && product.attributes.length > 0 ? (
-                  product.attributes.map((attr, index) => (
-                    <div key={index} className="flex items-center gap-2 text-cafe-medium">
-                      <span className="font-semibold">{attr.description}:</span>
-                      <Badge variant="caramel">{attr.attributes_products?.value || "N/A"}</Badge>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500 text-sm">No hay atributos disponibles</p>
-                )}
-              </div>
-            </HoverCardContent>
-          </HoverCard>
-          <Button  onClick={() => setIsModalOpen(true)} className=" mx-auto h-2 py-4 px-3 bg-[#db8935] text-white text-xs hover:bg-[#eec6a5] flex items-center gap-2  rounded-xl transition-all w-full">
+          >
             <List className="h-4 w-4 text-white" />
             Ver Variantes
-          </Button>
-          <VariantModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variants={product.product ?? []} />
+          </motion.button>
+          <VariantModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variants={product.product ?? []} product_name={product.name} imagen={product.image_url} />
         </div>
+
       </CardContent>
     </Card>
+
   );
 };
 

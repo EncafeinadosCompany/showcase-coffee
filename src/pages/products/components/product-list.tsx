@@ -40,7 +40,7 @@ export default function ProductList() {
             placeholder="Search for products..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-gray-50 pl-10"
+            className="bg-gray-50 pl-10 rounded-2xl"
           />
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
         </div>
