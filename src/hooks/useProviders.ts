@@ -81,44 +81,51 @@ export const useProviders = (itemsPerPage: number = 6) => {
         []
     );
 
-    const handleSubmit = useCallback(async (e: React.FormEvent) => {
-        e.preventDefault();
-        const formElement = e.target as HTMLFormElement;
-        const formData = new FormData(formElement);
-        const providerData = Object.fromEntries(
-            formData.entries()
-        ) as unknown as Omit<Provider, "id">;
-
-        if (!validateForm(providerData)) {
+    const handleSubmit = useCallback(
+        async (providerData: Omit<Provider, "id">) => {
+          if (!validateForm(providerData)) {
             return;
-        }
-
-        try {
+          }
+      
+          if (!employee?.id_store) {
+            toast.error("No se encontró el ID de la tienda");
+            return;
+          }
+      
+          try {
             if (editingId !== null) {
                 await dispatch(
                     editProvider({ id: editingId.toString(), provider: providerData })
-                ).unwrap();
-                toast.success("Proveedor actualizado correctamente");
-                setEditingId(null);
+                  ).unwrap();
+                  toast.success("Proveedor actualizado correctamente");
+                        setEditingId(null);
             } else {
-                const newProvider = await dispatch(addProvider(providerData)).unwrap();
-
-                if (employee?.id_store && newProvider?.id) {
-                    await dispatch(
-                        associateProvider({
-                            storeId: employee.id_store,
-                            providerId: newProvider.id,
-                        })
-                    ).unwrap();
+              const newProvider = await dispatch(addProvider(providerData)).unwrap();
+              
+              if (newProvider?.id) {
+                try {
+                  await dispatch(
+                    associateProvider({
+                      storeId: employee.id_store,
+                      providerId: newProvider.id,
+                    })
+                  ).unwrap();
+                } catch (error) {
+                  console.error("Error creating alliance:", error);
+                  toast.error("Error al asociar el proveedor con la tienda");
+                  return;
                 }
-                toast.success("Proveedor creado correctamente");
+              }
+              
+              toast.success("Proveedor creado correctamente");
             }
-
             setShowDialog(false);
-        } catch (error) {
+          } catch (error) {
             toast.error("Error al guardar el proveedor");
-        }
-    }, [dispatch, employee?.id_store, editingId, validateForm]);
+          }
+        },
+        [dispatch, employee?.id_store, editingId, validateForm]
+      );
 
     return {
         providers: currentItems,

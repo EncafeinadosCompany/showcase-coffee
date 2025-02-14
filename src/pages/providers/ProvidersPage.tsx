@@ -60,11 +60,11 @@ export const ProvidersPage = () => {
           <DialogContent className="max-w-full sm:max-w-2xl mx-1 sm:mx-auto bg-white/90 backdrop-blur">
             <DialogHeader></DialogHeader>
             <ScrollArea className="h-[470px]">
-              <ProviderForm
-                editingId={editingId}
-                onSubmit={handleSubmit}
-                initialData={selectedProvider || undefined}
-              />
+            <ProviderForm
+  editingId={editingId}
+  onSubmit={handleSubmit} 
+  initialData={selectedProvider || undefined}
+/>
             </ScrollArea>
           </DialogContent>
         </Dialog>
