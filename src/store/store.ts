@@ -17,6 +17,7 @@ import saleReducer from "../features/transactions/saleSlice";
 
 import depositReducer from "../features/payments/deposits/depositSlice";
 import liquidationReducer from "../features/payments/liquidations/liquidationSlice";
+import imageReducer from "../features/images/imageSlice";
 
 export const store = configureStore({
   reducer: {
@@ -36,6 +37,8 @@ export const store = configureStore({
 
     deposits: depositReducer,
     liquidations: liquidationReducer,
+
+    images: imageReducer
   },
 });
 

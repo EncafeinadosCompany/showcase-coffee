@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getLiquidation, createLiquidation } from "./liquidationService";
+import { getLiquidation, createLiquidation, getLiquidationById } from "./liquidationService";
 import { Liquidation } from "@/types/payments/liquidation";
 
 interface LiquidationState {
@@ -26,14 +26,21 @@ export const fetchLiquidations = createAsyncThunk("liquidations/fetchAll", async
   }
 });
 
-// Agregar una nueva liquidación
-export const addLiquidation = createAsyncThunk("liquidations/add", async (liquidation: Omit<Liquidation, "id">, { rejectWithValue }) => {
-  try {
-    return await createLiquidation(liquidation);
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Error al agregar liquidación");
+
+// Obtener liquidación por ID
+export const getID = createAsyncThunk(
+  "liquidations/getID",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      return await getLiquidationById(id);
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Error al obtener el liquidation por ID"
+      );
+    }
   }
-});
+);
+
 
 const liquidationSlice = createSlice({
   name: "liquidations",
@@ -44,31 +51,33 @@ const liquidationSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchLiquidations.pending, (state) => {
+    builder
+      .addCase(fetchLiquidations.pending, (state) => {
       state.isLoading = true;
       state.error = null;
-    });
-    builder.addCase(fetchLiquidations.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.liquidations = action.payload;
-    });
-    builder.addCase(fetchLiquidations.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload as string;
-    });
+      })
+      .addCase(fetchLiquidations.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.liquidations = action.payload;
+      })
+      .addCase(fetchLiquidations.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
 
-    builder.addCase(addLiquidation.pending, (state) => {
-      state.isLoading = true;
-      state.error = null;
-    });
-    builder.addCase(addLiquidation.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.liquidations.push(action.payload);
-    });
-    builder.addCase(addLiquidation.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload as string;
-    });
+      .addCase(getID.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getID.fulfilled, (state, action) => {
+        state.isLoading = false;
+        console.log("liquidación obtenido:", action.payload);
+      })
+      .addCase(getID.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
   },
 });
 

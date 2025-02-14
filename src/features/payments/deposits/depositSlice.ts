@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { getDeposit, createDeposit} from "./depositService";
-import { Deposit } from "@/types/payments/deposit";
+import { deposit } from "@/types/payments/deposit";
 
 interface DepositState {
-  deposits: Deposit[];
-  selectedDeposit?: Deposit | null;
+  deposits: deposit[];
+  selectedDeposit?: deposit | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -27,7 +27,7 @@ export const fetchDeposits = createAsyncThunk("deposits/fetchAll", async (_, { r
 });
 
 // Agregar un nuevo deposito
-export const addDeposit = createAsyncThunk("deposits/add", async (deposit: Omit<Deposit, "id">, { rejectWithValue }) => {
+export const addDeposit = createAsyncThunk("deposits/add", async (deposit: Omit<deposit, "id">, { rejectWithValue }) => {
   try {
     return await createDeposit(deposit);
   } catch (error: any) {
