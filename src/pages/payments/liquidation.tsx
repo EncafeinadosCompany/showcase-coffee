@@ -1,187 +1,157 @@
-import React, { useState, useEffect } from 'react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { DollarSign } from 'lucide-react';
+"use client"
 
-type LiquidationType = {
-    id: number;
-    id_shopping: number;
-    current_debt: number;
-    status: boolean;
-    created_at: string;
-};
+import { useEffect, useState } from "react"
+import { Search } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import {Pagination,PaginationContent,PaginationItem,PaginationLink,PaginationNext,PaginationPrevious,} from "@/components/ui/pagination"
+import { PaymentModal } from "./components/payment-modal"
+import { DetailsModal } from "./components/details-modal"
+import { fetchLiquidations } from "@/features/payments/liquidations/liquidationSlice"
+import { useAppDispatch } from "@/hooks/useAppDispatch"
+import { useAppSelector} from "@/hooks/useAppSelector"
+import { Liquidation } from "@/types/payments/liquidation"
 
-const Liquidation = () => {
-    const [liquidations, setLiquidations] = useState<LiquidationType[]>([]);
-    const [newLiquidation, setNewLiquidation] = useState({
-        id_shopping: '',
-        current_debt: '',
-        status: 'enviada'
-    });
+export default function LiquidationModule() {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedProvider, setSelectedProvider] = useState<Liquidation | null>(null)
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+  const { liquidations } = useAppSelector((state) => state.liquidations)
+  const dispatch = useAppDispatch()
 
-    const fetchLiquidations = async () => {
-        try {
-            const response = await fetch('/api/liquidations');
-            const data = await response.json();
-            setLiquidations(data);
-        } catch (error) {
-            console.error('Error fetching liquidations:', error);
-        }
-    };
 
-    const handleCreateLiquidation = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            const response = await fetch('/api/liquidations', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newLiquidation),
-            });
-            if (response.ok) {
-                fetchLiquidations();
-                setNewLiquidation({
-                    id_shopping: '',
-                    current_debt: '',
-                    status: 'enviada'
-                });
-            }
-        } catch (error) {
-            console.error('Error creating liquidation:', error);
-        }
-    };
+  useEffect(() => {
+    dispatch(fetchLiquidations())
+  }, [dispatch])
 
-    const handlePayment = async (id: number) => {
-        try {
-            // Aquí irá la lógica para procesar el pago
-            console.log('Procesando pago para la liquidación:', id);
-        } catch (error) {
-            console.error('Error processing payment:', error);
-        }
-    };
 
-    useEffect(() => {
-        fetchLiquidations();
-    }, []);
+  const itemsPerPage = 5
+  const filteredProviders = liquidations.filter((provider) =>
+    provider.provider.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
+  const totalPages = Math.ceil(filteredProviders.length / itemsPerPage)
+  const paginatedProviders = filteredProviders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
 
-    return (
-        <div className="p-8 max-w-7xl mx-auto ">
-            <h1 className="text-2xl font-semibold mb-8">Liquidaciones</h1>
-            
-            <div className="grid grid-cols-2 gap-8">
-                {/* Formulario de creación */}
-                <div className="bg-white p-6 rounded-lg shadow-sm">
-                    <h2 className="text-lg font-medium mb-6">Crear liquidación</h2>
-                    <form onSubmit={handleCreateLiquidation} className="space-y-6">
-                        <div className="space-y-2">
-                            <Label htmlFor="id_liquidacion">Id de liquidación</Label>
-                            <Input
-                                id="id_liquidacion"
-                                type="text"
-                                disabled
-                                placeholder="Autogenerado"
-                                className="w-full"
-                            />
-                        </div>
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
 
-                        <div className="space-y-2">
-                            <Label htmlFor="id_compra">Id de compra</Label>
-                            <Input
-                                id="id_compra"
-                                type="text"
-                                value={newLiquidation.id_shopping}
-                                onChange={(e) => setNewLiquidation({
-                                    ...newLiquidation,
-                                    id_shopping: e.target.value
-                                })}
-                                className="w-full"
-                            />
-                        </div>
+  const handlePayment = (provider: Liquidation) => {
+    setSelectedProvider(provider)
+    setIsPaymentModalOpen(true)
+  }
 
-                        <div className="space-y-2">
-                            <Label htmlFor="deuda_actual">Deuda actual</Label>
-                            <Input
-                                id="deuda_actual"
-                                type="number"
-                                value={newLiquidation.current_debt}
-                                onChange={(e) => setNewLiquidation({
-                                    ...newLiquidation,
-                                    current_debt: e.target.value
-                                })}
-                                className="w-full"
-                            />
-                        </div>
+  const handleDetails = (provider: Liquidation) => {
+    setSelectedProvider(provider)
+    setIsDetailsModalOpen(true)
+  }
 
-                        <div className="space-y-2">
-                            <Label>Estado</Label>
-                            <RadioGroup
-                              value={newLiquidation.status}
-                              onValueChange={(value: string) => setNewLiquidation({
-                                ...newLiquidation,
-                                status: value
-                              })}
-                              className="flex gap-4"
-                            >
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="enviada" id="enviada" />
-                                <Label htmlFor="enviada">Enviada</Label>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="pendiente" id="pendiente" />
-                                <Label htmlFor="pendiente">Pendiente</Label>
-                              </div>
-                            </RadioGroup>
-                        </div>
-
-                        <Button 
-                            type="submit"
-                            className="w-full bg-amber-600 hover:bg-amber-700 text-white"
-                        >
-                            Crear liquidación
-                        </Button>
-                    </form>
-                </div>
-
-                {/* Lista de liquidaciones */}
-                <div className="bg-white p-6 rounded-lg shadow-sm">
-                    <h2 className="text-lg font-medium mb-6">Liquidaciones</h2>
-                    <div className="border rounded-lg">
-                        <div className="grid grid-cols-4 gap-4 p-4 border-b bg-gray-50">
-                            <div className="font-medium">Id de liquidación</div>
-                            <div className="font-medium">Id de compra</div>
-                            <div className="font-medium">Deuda actual</div>
-                            <div className="font-medium">Acciones</div>
-                        </div>
-                        <div className="divide-y">
-                            {liquidations.map((liquidation) => (
-                                <div 
-                                    key={liquidation.id} 
-                                    className="grid grid-cols-4 gap-4 p-4 hover:bg-gray-50 items-center"
-                                >
-                                    <div>#{liquidation.id}</div>
-                                    <div>#{liquidation.id_shopping}</div>
-                                    <div>${liquidation.current_debt}</div>
-                                    <div>
-                                        <Button
-                                            onClick={() => handlePayment(liquidation.id)}
-                                            className="bg-green-600 hover:bg-green-700 text-white"
-                                            size="sm"
-                                        >
-                                            <DollarSign className="h-4 w-4 mr-1" />
-                                            Pagar
-                                        </Button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
+  return (
+    <Card className="w-full max-w-4xl mx-auto bg-amber-50">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-amber-800">Módulo de Liquidaciones</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex items-center mb-4">
+          <Search className="w-5 h-5 text-amber-600 mr-2" />
+          <Input
+            placeholder="Buscar proveedor..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="flex-grow border-amber-300 focus:ring-amber-500"
+          />
         </div>
-    );
-};
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-amber-100">
+              <TableHead className="text-amber-800">Nombre</TableHead>
+              <TableHead className="text-amber-800">Deuda Total</TableHead>
+              <TableHead className="text-amber-800">Estado</TableHead>
+              <TableHead className="text-amber-800">Acciones</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {paginatedProviders.map((provider) => (
+              <TableRow key={provider.id} className="hover:bg-amber-100">
+                <TableCell className="font-medium">{provider.provider.name}</TableCell>
+                <TableCell>${provider.current_debt.toFixed(2)}</TableCell>
+                <TableCell>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      provider.status=== true ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    Activo
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => handlePayment(provider)}
+                    className="mr-2 bg-amber-600 hover:bg-amber-500 text-white"
+                  >
+                    Abono
+                  </Button>
+                  <Button
+                    onClick={() => handleDetails(provider)}
+                    variant="outline"
+                    className="border-amber-600 text-amber-600 hover:bg-amber-100"
+                  >
+                    Ver detalles
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <Pagination className="mt-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+                className={currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""}
+              />
+            </PaginationItem>
+            {Array.from({ length: totalPages }).map((_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  onClick={() => handlePageChange(index + 1)}
+                  isActive={currentPage === index + 1}
+                  className={`${
+                    currentPage === index + 1 ? "bg-amber-600 hover:bg-amber-500" : "bg-amber-100 hover:bg-amber-200"
+                  } rounded-full text-white`}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationNext
+                onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
+                className={currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </CardContent>
+      {selectedProvider && (
+        <>
+          <PaymentModal
+            isOpen={isPaymentModalOpen}
+            onClose={() => setIsPaymentModalOpen(false)}
+            liquidation={selectedProvider??[]}
+          />
+          {/* <DetailsModal
+            isOpen={isDetailsModalOpen}
+            onClose={() => setIsDetailsModalOpen(false)}
+            provider={selectedProvider}
+          /> */}
+        </>
+      )}
+    </Card>
+  )
+}
 
-export default Liquidation;

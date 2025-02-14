@@ -1,7 +1,7 @@
 export interface Liquidation {
-    id: number;
-    currentDebt: number; 
-    status: boolean;
-    idShopping: number;
-  };
+  id: number
+  current_debt: number
+  status: boolean
+  provider: {name: string}
+}
   
