@@ -21,7 +21,12 @@ export const createProvider = async (provider: Omit<Provider, "id">): Promise<Pr
 };
 
 export const associateProviderToStore = async (storeId: number, providerId: number): Promise<void> => {
-  await axiosInstance.post("/companies/alliances", { storeId, providerId });
+  console.log("Asociando:", { id_store: storeId, id_provider: providerId });
+  
+  await axiosInstance.post("/companies/alliances", { 
+    id_store: storeId, 
+    id_provider: providerId 
+  });
 };
 
 export const updateProvider = async (id: string, provider: Partial<Provider>): Promise<Provider> => {

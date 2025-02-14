@@ -40,7 +40,7 @@ const ACCOUNT_TYPES = ["Cuenta Corriente", "Cuenta de Ahorros"];
 
 interface ProviderFormProps {
   editingId: number | null;
-  onSubmit: (e: React.FormEvent) => Promise<void>;
+  onSubmit: (formData: Omit<Provider, "id">) => Promise<void>; 
   initialData?: Omit<Provider, "id">;
 }
 
@@ -190,7 +190,7 @@ export const ProviderForm = ({
   const handleSubmitWrapper = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      await onSubmit(e);
+      await onSubmit(formData); 
     }
   };
 
