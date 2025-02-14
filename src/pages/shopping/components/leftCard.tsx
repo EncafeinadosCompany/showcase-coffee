@@ -6,9 +6,20 @@ import CartShopping from "./cartProducts";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { createShopping } from "@/features/transactions/shoppingService";
 import SelectEmployee from "./selectEmployee";
-import { ChevronLeft } from "lucide-react";
+import { AlertCircle, ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import {toast} from "react-hot-toast"
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 export default function LeftCard({
   products,
@@ -72,11 +83,17 @@ export default function LeftCard({
 
       // Limpiar el carrito después de crear la compra
       setcartProducts([]);
+      setSelectedEmployeeId(null);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Error al crear la consignación:", error);
       toast.error(error.response?.data?.message || "No se pudo crear la consignación.");
     }
+  };
+
+  const handleCancelConsignment = () => {
+    setcartProducts([]);
+    setSelectedEmployeeId(null); 
   };
 
   return (
@@ -110,10 +127,31 @@ export default function LeftCard({
           >
             Generar consignación
           </button>
-          <button className="flex w-full items-center  gap-6 mt-2 py-2 px-4  bg-white  hover:bg-slate-200 text-black border-[2px]  rounded-2xl text-sm font-medium transition-colors duration-200">
-            <ChevronLeft/>
-            Cancelar consignación
-          </button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <button className="flex w-full items-center gap-6 mt-2 py-2 px-4 bg-white hover:bg-slate-200 text-black border-[2px] rounded-2xl text-sm font-medium transition-colors duration-200">
+                <ChevronLeft />
+                Cancelar consignación
+              </button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="flex items-center gap-2">
+                  <AlertCircle className="h-5 w-5" />
+                  Confirmar Cancelación
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  ¿Estás seguro que deseas cancelar esta consignación? Esta acción no se puede deshacer.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Volver</AlertDialogCancel>
+                <AlertDialogAction onClick={handleCancelConsignment} className="bg-red-500 hover:bg-red-500">
+                  Sí, cancelar consignación
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
         <div className="w-[35%] flex flex-col gap-2 justify-center text-center">
             <span className="text-lg font-semibold text-[#4A3728] mb-3 ">Total a consignar:</span>

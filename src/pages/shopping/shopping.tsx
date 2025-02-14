@@ -40,7 +40,7 @@ export default function Shopping() {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h6 className="text-amber-600 text-5xl md:text-3xl font-extrabold">
-          Compras
+          Consignaciones
         </h6>
         <Button
           onClick={toggleShoppingList}
@@ -55,7 +55,7 @@ export default function Shopping() {
           ) : (
             <>
               <ListIcon className="h-4 w-4" />
-              Ver Compras
+              Ver consignaciones
             </>
           )}
         </Button>
