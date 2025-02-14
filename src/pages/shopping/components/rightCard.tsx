@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,7 +11,7 @@ import { Coffee, Search } from "lucide-react";
 
 import FormShopping from "./formShopping";
 import NuevaVarianteDialog from "./newVariants";
-import { ShoppingVariant } from "@/types/transactions/ShoppingVariant";
+import { ShoppingDetail } from "@/types/transactions/shoppingModel";
 import { productType } from "@/types/products/product";
 import { useState } from "react";
 
@@ -22,36 +21,16 @@ export default function RightCard({
   setcartProducts,
 }: {
   products: productType[];
-  cartProducts: ShoppingVariant[];
-  setcartProducts: React.Dispatch<React.SetStateAction<ShoppingVariant[]>>;
+  cartProducts: ShoppingDetail[];
+  setcartProducts: React.Dispatch<React.SetStateAction<ShoppingDetail[]>>;
 }) {
-  const [currentProduct, setcurrentProduct] = useState({ id: 0, name: "" });
   const [searchTerm, setSearch] = useState("");
   const productosFiltrados = products.filter((p) =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const searchProduct = () => {
-    try {
-      const productFound = products.find((p) =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      if (productFound) {
-        setcurrentProduct({
-          ...currentProduct,
-          id: productFound.id,
-          name: productFound.name,
-        });
-      } else {
-        console.log("Producto no encontrado");
-      }
-    } catch (error) {
-      console.error("Error al buscar producto:", error);
-    }
-  };
-
   return (
-    <Card className="bg-white shadow-lg h-[calc(100vh-80px)] overflow-hidden">
+    <Card className="bg-white shadow-lg h-[calc(96vh-80px)] overflow-hidden">
       <CardHeader>
         <div className="flex items-center gap-2">
           <Coffee className="h-6 w-6 text-amber-700" />
