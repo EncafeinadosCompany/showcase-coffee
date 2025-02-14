@@ -24,7 +24,7 @@ const [hoveredVariant, setHoveredVariant] = useState<Variant | null>(null)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="p-0 max-w-4xl bg-[#faf6f1] h-[calc(100vh-80px)] flex flex-col overflow-hidden">
+      <DialogContent aria-describedby={undefined} className="p-0 max-w-4xl bg-[#faf6f1] h-[calc(100vh-80px)] flex flex-col overflow-hidden">
         <DialogHeader className="p-6 pb-0">
           <DialogTitle className="flex items-center gap-2 text-3xl font-bold text-[#582f0e]">
             <Coffee className="h-8 w-8" /> {product_name}

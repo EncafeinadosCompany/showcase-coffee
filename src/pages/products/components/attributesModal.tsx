@@ -30,7 +30,7 @@ const AttributeModal = ({ attributes }: VariantModalProps) => {
           Ver Atributos
         </motion.button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-[#faf6f1] rounded-lg p-0 overflow-hidden border border-amber-200">
+      <DialogContent aria-describedby={undefined} className="sm:max-w-[425px] bg-[#faf6f1] rounded-lg p-0 overflow-hidden border border-amber-200">
         <DialogHeader className="pt-4 px-6 bg-gradient-to-b from-gray-200 to-[#faf6f1] rounded-t-lg">
           <div className="flex items-center gap-2 text-center">
             <Stars className="h-7 w-7 text-amber-500" />
@@ -58,7 +58,7 @@ const AttributeModal = ({ attributes }: VariantModalProps) => {
                     <div className="flex-1">
                       <h3 className="font-semibold text-amber-800">{attr.description}</h3>
                       <Badge className="mt-1 bg-[#faf6f1] text-amber-950 hover:bg-amber-200 rounded-2xl ">
-                        {attr.attributes_products?.value || attr.value || "N/A"}
+                        {attr.attributes_products?.value || "N/A"}
                       </Badge>
                     </div>
                   </motion.div>
