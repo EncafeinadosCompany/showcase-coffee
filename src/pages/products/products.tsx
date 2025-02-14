@@ -1,7 +1,10 @@
 import { Coffee } from "lucide-react";
 import ProductManagement from "./components/product-management";
+import { TooltipProvider } from "@/components/ui/tooltip";
+
 
 export const Products = () => {
+
   return (
     <main className="container mx-auto flex justify-center items-center overflow-hidden pt-4 pb-4">
       <div className="bg-white shadow-lg rounded-2xl p-2 max-w-4xl w-full max-h-full flex flex-col">
@@ -17,7 +20,12 @@ export const Products = () => {
             Gestión de Inventario
           </p>
         </div>
-        <div className="flex-1 overflow-auto"> <ProductManagement  /></div>
+        <div className="flex-1 overflow-auto">
+          
+          <TooltipProvider>
+            <ProductManagement />
+          </TooltipProvider>
+        </div>
        
       </div>
     </main>

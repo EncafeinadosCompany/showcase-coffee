@@ -117,7 +117,7 @@ export default function CartShopping({
                     <span className="font-medium text-gray-800">
                       {product?.name ?? "Producto desconocido"}
                       <span className="text-sm text-gray-600 ml-1">
-                        {variant?.grammage ?? "Variante desconocida"}g
+                        {variant?.grammage ?? "Variante desconocida"}
                       </span>
                     </span>
                   </div>
