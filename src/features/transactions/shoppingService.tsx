@@ -2,12 +2,17 @@ import { ShoppingData } from "@/types/transactions/shoppingModel";
 import { axiosInstance } from "../../API/axiosInstance";
 
 export const getShopping = async () => {
-  const response = await axiosInstance.get("/shopping");
+  const response = await axiosInstance.get("/transactions/shopping");
   return response.data;
 };
 
 export const getShoppingVariant = async () => {
-  const response = await axiosInstance.get("/transactions/shopping-variants");
+  const response = await axiosInstance.get("/transactions/shopping/shopping-variants");
+  return response.data;
+};
+
+export const getShoppingVariantsByShoppingId = async (id: string) => {
+  const response = await axiosInstance.get(`/transactions/shopping/shopping-variants-by-shopping/${id}`);
   return response.data;
 };
 
@@ -18,7 +23,7 @@ export const getShoppingById = async (id: unknown) => {
 
 export const getShoppingVariantById = async (id: string) => {
   const response = await axiosInstance.get(`/transactions/shopping/shopping-variants/${id}`);
-  return response.data;
+  return Array.isArray(response.data) ? response.data : [response.data]; // Convierte a array si no lo es
 };
 
 export const createShopping = async (shoppingData: ShoppingData) => {
