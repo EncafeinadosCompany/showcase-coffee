@@ -149,7 +149,7 @@ export default function CafePreview() {
                   accept="image/*"
                   className="hidden"
                   id="logo-upload"
-                  onClick={handleLogoChange}
+                  onChange={handleLogoChange}
                 />
                 <Label
                   htmlFor="logo-upload"

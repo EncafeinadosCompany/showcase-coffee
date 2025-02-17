@@ -11,6 +11,9 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { toast } from "react-hot-toast";
 import { addImages } from "@/features/images/imageSlice"
+import { Camera, Coffee, StarOff } from "lucide-react"
+import { Tooltip } from "@radix-ui/react-tooltip"
+import { TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
 export default function AddProductForm() {
 
@@ -24,12 +27,24 @@ export default function AddProductForm() {
   const { brands } = useAppSelector((state) => state.brands);
   const { attributes } = useAppSelector((state) => state.attributes);
   const { error } = useAppSelector((state) => state.products);
-  const [images, setImages] = useState<File | null>(null)
+  // const [images, setImages] = useState<File | null>(null)
+    const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
   useEffect(() => {
     dispatch(fetchBrands());
     dispatch(fetchAttributes());
   }, [dispatch])
+
+
+
+// useEffect(() => {
+
+ 
+  
+//   if (hola) {
+//     toast.error('El atributo ya ha sido agregado')
+//   }
+// },[newAttribute]) 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -59,15 +74,18 @@ export default function AddProductForm() {
       })
 
       let imageUrl = "";
-      if (images) {
-        const fileInput = document.getElementById("reference") as HTMLInputElement
-        const file = fileInput.files?.[0]
+      if (logoPreview) {
+        const fileInput = document.getElementById("logo-upload") as HTMLInputElement;
+        const file = fileInput.files?.[0];
+    
         if (file) {
-  
-          const response = await dispatch(addImages(file))
-          imageUrl = response.payload.image_url
+        
+          const response = await dispatch(addImages(file));
+           
+          const data = await response.payload.image_url;
+          imageUrl = data
         }
-      }
+      }      
 
       dispatch(addProducts(
         {
@@ -90,6 +108,18 @@ export default function AddProductForm() {
   const handleAddAttribute = () => {
     const attributeName = newAttribute === "new" ? newCustomAttribute : newAttribute
     if (attributeName && newAttributeValue) {
+      
+      const existe = productAttributes.find(attr => attr.description === newAttribute) 
+
+      if(existe){
+        toast.error('El atributo ya ha sido agregado', {
+          id: 'error',
+          duration: 4000,
+          removeDelay: 1000
+        })
+        return
+      }
+      
       setProductAttributes([...productAttributes, { description: attributeName, value: newAttributeValue }])
       toast(`¡El atributo ${attributeName} a sido agregado correctamente!`, {
         icon: '☕',
@@ -100,9 +130,8 @@ export default function AddProductForm() {
           color: '#fefae0',
         }
       })
-      setNewAttribute("")
-      setNewCustomAttribute("")
-      setNewAttributeValue("")
+      
+
       if (!attributes.some(attr => attr.description === attributeName)) {
         toast(`¡El atributo ${attributeName} a sido creado!`, {
           icon: '☕',
@@ -115,23 +144,70 @@ export default function AddProductForm() {
         })
         dispatch(addAttribute({ description: newCustomAttribute }))
       }
+
+      setNewAttribute("")
+      setNewCustomAttribute("")
+      setNewAttributeValue("")
     }
   }
 
+  const DropAttribute = (description: string) =>{
+    console.log(description)
+    setProductAttributes(productAttributes.filter(attr => attr.description !== description))
+  }
+
+
+
+  const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setLogoPreview(URL.createObjectURL(file)); // Genera una URL temporal para la previsualización
+    }
+  };
+ 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 ">
-      <div>
-        <label htmlFor="productName" className="block text-sm font-medium text-gray-700">
+    <form onSubmit={handleSubmit} className="space-y-2 mt-6 ">
+      <div className="flex space-x-4">
+      <div  className="w-1/2 flex flex-col items-center mt-5">
+      <div className="flex flex-col md:flex-row gap-8">
+            <div className="">
+              <div className="relative group">
+                <div className="w-40 h-40 rounded-full border-4 border-amber-300 overflow-hidden flex items-center justify-center bg-white group-hover:border-amber-500 transition-all duration-300 shadow-lg">
+                  {logoPreview ? (
+                    <img src={logoPreview} alt="Logo preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <Coffee className="w-16 h-16 text-amber-300 group-hover:scale-110 transition-transform duration-300" />
+                  )}
+                </div>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  id="logo-upload"
+                  onChange={handleLogoChange}
+                />
+                <label
+                  htmlFor="logo-upload"
+                  className="absolute bottom-2 right-2 bg-amber-600 text-white p-2 rounded-full cursor-pointer hover:bg-amber-700 hover:scale-110 transition-all duration-300 shadow-md"
+                >
+                  <Camera className="w-5 h-5" />
+                </label>
+              </div>
+            </div>
+      </div>
+      </div>
+        <div className="w-1/2 space-y-4">
+        <label htmlFor="productName" className="block text-sm font-medium text-gray-700 ">
           Nombre del Producto
         </label>
-        <Input id="productName" value={name} onChange={(e) => setName(e.target.value)} required />
-      </div>
-      <div>
+        <Input className="w-96 rounded-[5px]" id="productName" value={name} onChange={(e) => setName(e.target.value)} required />
+        
+        <div>
         <label htmlFor="brandSelect" className="block text-sm font-medium text-gray-700">
           Marca
         </label>
         <Select value={brandId} onValueChange={setBrandId}>
-          <SelectTrigger id="brandSelect">
+          <SelectTrigger id="brandSelect" className= "w-96 rounded-[5px]" >
             <SelectValue placeholder="Seleccionar marca" />
           </SelectTrigger>
           <SelectContent>
@@ -143,15 +219,31 @@ export default function AddProductForm() {
           </SelectContent>
         </Select>
       </div>
-      <div>
+        
+        
+        </div>
+        
+      </div>
+      <div className="p-6 overflow-auto max-w-max[100vh - 90px]">
         <h3 className="text-sm font-medium text-cafe-dark mb-2">Atributos</h3>
         {productAttributes.map((attr, index) => (
-          <div key={index} className="flex gap-2 mb-2">
+          <div key={index} className="flex gap-2 mb-4 items-center">
+            <button onClick={() => DropAttribute(attr.description)}> 
+              <Tooltip>
+                <TooltipTrigger asChild>
+                <StarOff className="w-5 text-yellow-500"/>
+                  
+                </TooltipTrigger>
+                <TooltipContent>
+                <p className="text-sm font-medium text-cafe-dark">Borrar</p>
+                  </TooltipContent>
+                  </Tooltip>
+            </button>
             <Input value={attr.description} readOnly className="bg-white border-cafe-medium" />
             <Input value={attr.value} readOnly className="bg-white border-cafe-medium" />
           </div>
         ))}
-        <div className="flex gap-2 mb-2">
+        <div className="flex gap-2 mb-2 ">
           <Select value={newAttribute} onValueChange={setNewAttribute}>
             <SelectTrigger className="bg-white border-cafe-medium">
               <SelectValue placeholder="Seleccionar atributo" />
@@ -165,6 +257,7 @@ export default function AddProductForm() {
               <SelectItem value="new">Agregar nuevo atributo</SelectItem>
             </SelectContent>
           </Select>
+          
           {newAttribute === "new" ? (
             <Input
               placeholder="Nuevo atributo"
@@ -179,12 +272,13 @@ export default function AddProductForm() {
             onChange={(e) => setNewAttributeValue(e.target.value)}
             className="bg-white border-cafe-medium"
           />
+          
           <div className="card flex justify-content-center">
             <div className="flex flex-wrap gap-2">
               <Button
                 type="button"
                 onClick={handleAddAttribute}
-                className="bg-cafe-light text-cafe-dark hover:bg-cafe-medium hover:text-cafe-cream"
+                className="bg-amber-300 text-slate-800  rounded-[5px] hover:bg-cafe-medium hover:text-cafe-cream"
               >
                 Agregar
               </Button>
@@ -192,8 +286,11 @@ export default function AddProductForm() {
           </div>
         </div>
       </div>
-      <Button
+     <div className="flex justify-center px-10 py-5 ">
+     <Button
+        className="w-full  bg-amber-600 hover:bg-amber-700 text-white "
         type="submit">Agregar Producto</Button>
+     </div>
     </form>
   )
 }

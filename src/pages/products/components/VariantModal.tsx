@@ -89,7 +89,7 @@ const [hoveredVariant, setHoveredVariant] = useState<Variant | null>(null)
                     </motion.div>
                   ))
                 ): <div className="flex content-center justify-center items-center h-32">
-                  <span className="text-[#713f12] text-xl ">No hay atributos disponibles</span>
+                  <span className="text-[#713f12] text-xl ">No hay referencias disponibles</span>
                 </div>
 
               }
