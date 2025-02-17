@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 import { fetchAttributes, addAttribute } from "@/features/products/attributes/attributeSlice"
-import { addProducts } from "@/features/products/products/productSlice"
+import { addProducts, fetchProducts } from "@/features/products/products/productSlice"
 import { fetchBrands } from "@/features/products/brands/brandSlice";
 
 import { useAppDispatch } from "@/hooks/useAppDispatch";
@@ -148,6 +148,8 @@ export default function AddProductForm() {
       setNewAttribute("")
       setNewCustomAttribute("")
       setNewAttributeValue("")
+      setLogoPreview(null)
+      dispatch(fetchProducts())
     }
   }
 
