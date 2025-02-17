@@ -1,6 +1,9 @@
 # Encafeinados ☕
 
-Encafeinados is a modern and efficient software solution designed for managing coffee shops and cafes. It provides tools to streamline operations, from handling suppliers and stores to managing sales, purchases, and settlements. Built with React and Redux, this frontend application ensures a smooth and responsive user experience.
+Encafeinados is a modern and efficient software solution designed for managing
+coffee shops and cafes. It provides tools to streamline operations, from handling suppliers
+and stores to managing sales, purchases, and settlements. Built with React and Redux, this frontend
+application ensures a smooth and responsive user experience.
 
 ## 🛠️ Technologies Used
 
