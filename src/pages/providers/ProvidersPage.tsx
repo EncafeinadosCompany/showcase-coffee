@@ -12,7 +12,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -74,8 +73,8 @@ export const ProvidersPage = () => {
               <Plus className="mr-2 h-5 w-5" /> Registrar proveedor
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-full sm:max-w-2xl mx-1 sm:mx-auto bg-white/90 backdrop-blur">
-            <DialogHeader></DialogHeader>
+          <DialogContent className="max-w-full sm:max-w-2xl mx-1 sm:mx-auto bg-white/90">
+          
             <ScrollArea className="h-[470px]">
               <ProviderForm
                 editingId={editingId}

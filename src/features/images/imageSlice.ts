@@ -36,10 +36,8 @@ const ImageSlice = createSlice({
     });
     builder.addCase(addImages.fulfilled, (state, action) => {
       state.isLoading = false;
-
-      // action.payload ya es la respuesta del backend
       if (action.payload.image_url) {
-        state.image.push(action.payload.image_url); // Guardar la URL de la imagen
+        state.image.push(action.payload.image_url); 
       }
     });
     builder.addCase(addImages.rejected, (state, action) => {

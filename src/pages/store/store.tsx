@@ -202,9 +202,6 @@ export default function CafePreview() {
         </CardContent>
       </Card>
     </div>
-
-
-
   )
 }
 
