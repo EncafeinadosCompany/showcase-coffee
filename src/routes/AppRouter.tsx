@@ -7,9 +7,6 @@ import { Products } from "@/pages/products/products";
 import { VariantsPage } from "@/pages/variantsPage";
 import { LoginPage } from "@/pages/LoginPage";
 import { HomePage } from "@/pages/home/home";
-
-import Stores from "@/pages/store/StoreManagementPage";
-import CafeProfileEditor from "@/pages/configuration/profile";
 import Shopping from "@/pages/shopping/shopping";
 import Layout from '../layout/content/content';
 import Sales from "@/pages/sales/sales";
