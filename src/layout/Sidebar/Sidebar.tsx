@@ -127,7 +127,7 @@ const Sidebar = () => {
           {/* Botón de Logout */}
           <li>
             <button
-            onClick={() => navigate('/stores')}
+            onClick={() => navigate('/profile')}
             className={`
             flex 
             items-center 
