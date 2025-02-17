@@ -1,4 +1,4 @@
-import { Home, ChevronLeft, BadgeDollarSign, ChevronRight, Users, LogOut, ShoppingBasket, Coffee, ScrollText, Store } from 'lucide-react';
+import { Store, Home, ChevronLeft, BadgeDollarSign, ChevronRight, Users, LogOut, ShoppingBasket, Coffee, ScrollText, BarChart2, Store } from 'lucide-react';
 import { useState } from 'react';
 
 import { useNavigate } from "react-router-dom";
@@ -23,13 +23,14 @@ const Sidebar = () => {
   const sidebarItems = [
     { icon: <Home />, label: 'Inicio', path: '/home' },
     { icon: <Users />, label: 'Proveedores', path: '/providers' },
-    // { icon: <BarChart2 />, label: 'Tienda', path: '/stores' },
+    { icon: <BarChart2 />, label: 'Tienda', path: '/stores' },
 
     { icon: <Coffee />, label: 'Productos', path: '/products' },
     { icon: <ShoppingBasket />, label: 'Compras', path: '/shopping' },
     { icon: <BadgeDollarSign />, label: 'Ventas', path: '/sales' },
     { icon: <ScrollText />, label: 'Liquidaciones', path: '/liquidations' },
     { icon: <Store/>, label: 'Cafetería', path: '/stores' },
+
 
   ];
 
@@ -129,6 +130,37 @@ const Sidebar = () => {
         <ul className="space-y-2">
           {/* Botón de Logout */}
           <li>
+            <button
+            onClick={() => navigate('/profile')}
+            className={`
+            flex 
+            items-center 
+            p-3 
+            rounded-xl 
+            group 
+            hover:bg-amber-50 
+            transition-colors
+            ${isCollapsed ? 'justify-center' : ''}
+            `}
+            >
+            <div className="
+            text-gray-500 
+            group-hover:text-amber-600 
+            transition-colors
+            ">
+            <Users />
+            </div>
+            {!isCollapsed && (
+            <span className="
+              ml-3 
+              text-gray-700 
+              group-hover:text-amber-600 
+              transition-colors
+            ">
+              Perfil
+            </span>
+            )}
+            </button>
             <button
               onClick={handleLogout}
               className={`

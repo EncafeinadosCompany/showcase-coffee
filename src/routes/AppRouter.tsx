@@ -9,6 +9,7 @@ import { LoginPage } from "@/pages/LoginPage";
 import { HomePage } from "@/pages/home/home";
 
 import Stores from "@/pages/store/StoreManagementPage";
+import CafeProfileEditor from "@/pages/configuration/profile";
 import Shopping from "@/pages/shopping/shopping";
 import Layout from '../layout/content/content';
 import Sales from "@/pages/sales/sales";
@@ -46,7 +47,9 @@ export function AppRouter() {
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
           <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
         
-          {/* <Route path='/stores' element={<PrivateRoute><Stores /></PrivateRoute>} /> */}
+          <Route path='/stores' element={<PrivateRoute><Stores /></PrivateRoute>} />
+          <Route path='/profile' element={<PrivateRoute><CafeProfileEditor /></PrivateRoute>} />
+          
           <Route path='/variants' element={<PrivateRoute><VariantsPage /></PrivateRoute>} />
           <Route path="/stores" element={<PrivateRoute><CafePreview/></PrivateRoute>} />
         </Route>
