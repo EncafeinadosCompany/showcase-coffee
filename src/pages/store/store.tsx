@@ -1,30 +1,34 @@
 "use client"
 
 import type React from "react"
-
 import { useEffect, useState } from "react"
-import {  Mail, Phone, MapPin, Edit, Coffee, StoreIcon } from "lucide-react"
+import { Camera, Coffee, Mail, Phone, MapPin } from 'lucide-react';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
 import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { useAppSelector } from "@/hooks/useAppSelector"
 import { fetchStoresID, editStore } from "@/features/companies/storeSlice"
-import { Store } from "@/types/companies/store"
 import { addImages } from "@/features/images/imageSlice"
+import toast, { Toaster } from 'react-hot-toast';
+
+
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  logo: string;
+}
 
 export default function CafePreview() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [references, setReferences] = useState("")
   const { stores } = useAppSelector((state) => state.stores)
   const employee = useAppSelector((state) => state.auth.employee);
   const dispatch = useAppDispatch()
-  const [formData, setFormData] = useState({
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [isHovered, setIsHovered] = useState('');
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     phone: "",
@@ -36,214 +40,172 @@ export default function CafePreview() {
     if (employee) {
 
       dispatch(fetchStoresID(String(employee.id_store)))
-      
-      .then((response) => {
-        const store = response.payload;
 
-        setFormData({
-          name: store.name,
-          email: store.email,
-          phone: store.phone,
-          address: store.address,
-          logo: store.logo ?? "Sin logo",
+        .then((response) => {
+          const store = response.payload;
+
+          setFormData({
+            name: store.name,
+            email: store.email,
+            phone: store.phone,
+            address: store.address,
+            logo: store.logo ?? "Sin logo",
+          });
+          setLogoPreview(store.logo);
         });
-      });
 
-  }
+    }
 
 
     console.log(stores)
-  }, [dispatch, employee]);  // 👈 Agregar employee como dependencia por seguridad
-  
-console.log(stores)
- 
+  }, [dispatch, employee]);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    let imageUrl = ""
-    const fileInput = document.getElementById("logo") as HTMLInputElement
-    const file = fileInput.files?.[0]
+    try {
+      if (employee) {
+        dispatch(editStore({
+          id: String(employee.id_store),
+          store: {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            address: formData.address,
+            logo: logoPreview
+          }
+        }))
 
-    if(file){
-      const response = await dispatch(addImages(file))
-      imageUrl = response.payload.image_url
+        toast.success('¡Perfil actualizado con éxito! ☕', {
+          icon: '🎉',
+          duration: 4000,
+          style: {
+            background: '#4A3428',
+            color: '#fff',
+          }
+        })
+
+      }
+
+    } catch (error: any) {
+      toast.error('¡Error al guardar los cambios!');
     }
-    
-    if(employee){
-      dispatch(editStore({ id: String(employee.id_store), 
-        store:{
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        address: formData.address,
-        logo: imageUrl
-       }}))
-    }
-    setIsModalOpen(false)
-    
+
   }
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
 
+
+  const handleLogoChange = async () => {
+
+    let imageUrl = ""
+    const fileInput = document.getElementById("logo-upload") as HTMLInputElement
+    const file = fileInput.files?.[0]
+
+    if (file) {
+      const response = await dispatch(addImages(file))
+      imageUrl = response.payload.image_url
+      setLogoPreview(imageUrl);
+    }
+
+  }
+
+  const validatePhone = (phone: string): boolean => {
+    const phoneRegex = /^3[0-9]{9}$/;
+    return phoneRegex.test(phone);
+  };
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-      <Card className="max-w-3xl mx-auto bg-white shadow-lg">
-        <CardHeader className="space-y-1 border-b pb-7 pt-7">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <StoreIcon className="h-6 w-6 text-amber-600" />
-              <CardTitle className="text-2xl font-bold">Cafeteria Management</CardTitle>
-            </div>
-            <Button onClick={() => setIsModalOpen(true)} className="bg-amber-600 hover:bg-amber-700">
-              <Edit className="h-4 w-4 mr-2" />
-              Edit Store
-            </Button>
+    <div className=" pt-4 flex items-center justify-center">
+      <Toaster position="top-right" />
+      <Card className="w-full max-w-lg bg-white/80 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden">
+        <CardHeader className="text-center space-y-2">
+          <div className="w-12 h-12 mx-auto bg-amber-100 rounded-full flex items-center justify-center animate-bounce">
+            <Coffee className="w-6 h-6 text-amber-700" />
           </div>
+          <CardTitle className="text-xl font-bold text-amber-900">Mi Cafetería</CardTitle>
+          <p className="text-amber-600 text-sm">Personaliza el perfil de tu establecimiento</p>
         </CardHeader>
-        <CardContent className="pt-8">
-          
-          {
-            stores.map((store) => (
-              <p><strong>Nombre:</strong> {store.name}</p>
-             ))
-          }
-
-              <div className="space-y-8">
-            <div className="flex items-start gap-6">
-              <Avatar className="h-24 w-24 rounded-lg border-2 border-amber-200">
-                <AvatarImage src={formData.logo ?? "default-logo.png"} alt={formData.name} />
-                <AvatarFallback className="bg-amber-50 text-amber-600">
-                  <Coffee className="h-12 w-12" />
-                </AvatarFallback>
-              </Avatar>
-              <div className="space-y-1">
-                <h2 className="text-2xl font-semibold text-gray-800">{formData.name}</h2>
-                <p className="text-amber-600 italic">Your Cozy Coffee Corner</p>
+        <CardContent className="p-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex justify-center mb-4">
+              <div className="relative group">
+                <div className="w-28 h-28 rounded-full border-4 border-amber-200 overflow-hidden flex items-center justify-center bg-amber-50 group-hover:border-amber-400 transition-all duration-300 shadow-lg">
+                  {logoPreview ? (
+                    <img src={logoPreview} alt="Logo preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <Camera className="w-12 h-12 text-amber-300 group-hover:scale-110 transition-transform duration-300" />
+                  )}
+                </div>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  id="logo-upload"
+                  onClick={handleLogoChange}
+                />
+                <Label
+                  htmlFor="logo-upload"
+                  className="absolute bottom-2 right-2 bg-amber-500 text-white p-2 rounded-full cursor-pointer hover:bg-amber-600 hover:scale-110 transition-all duration-300 shadow-lg"
+                >
+                  <Camera className="w-5 h-5" />
+                </Label>
               </div>
             </div>
 
-            <Separator className="my-6" />
-
-            <div className="grid gap-6">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-amber-50 flex items-center justify-center">
-                  <Mail className="h-5 w-5 text-amber-600" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { id: 'name', label: 'Nombre', icon: Coffee, placeholder: 'Café Aromático' },
+                { id: 'email', label: 'Correo', icon: Mail, placeholder: 'cafe@ejemplo.com', type: 'email' },
+                { id: 'phone', label: 'Teléfono', icon: Phone, placeholder: '3001234567', type: 'tel' },
+                { id: 'address', label: 'Dirección', icon: MapPin, placeholder: 'Calle 123 #45-67' }
+              ].map((field) => (
+                <div
+                  key={field.id}
+                  className={`relative transform transition-all duration-300 ${isHovered === field.id ? 'scale-105' : ''}`}
+                  onMouseEnter={() => setIsHovered(field.id)}
+                  onMouseLeave={() => setIsHovered('')}
+                >
+                  <Label htmlFor={field.id} className="text-amber-800 flex items-center gap-2">
+                    <field.icon className="w-4 h-4" />
+                    {field.label}
+                  </Label>
+                  <Input
+                    id={field.id}
+                    name={field.id}
+                    type={field.type || 'text'}
+                    value={formData[field.id as keyof FormData] || ''}
+                    onChange={handleInputChange}
+                    placeholder={field.placeholder}
+                    className="mt-1 border-amber-200 focus:border-amber-400 focus:ring-amber-400 transition-all duration-300"
+                    required
+                  />
                 </div>
-                <div>
-                  <p className="text-sm text-gray-500">Email Address</p>
-                  <p className="text-gray-800">{formData.email}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-amber-50 flex items-center justify-center">
-                  <Phone className="h-5 w-5 text-amber-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Phone Number</p>
-                  <p className="text-gray-800">{formData.phone}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-amber-50 flex items-center justify-center">
-                  <MapPin className="h-5 w-5 text-amber-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Address</p>
-                  <p className="text-gray-800">{formData.address}</p>
-                </div>
-              </div>
+              ))}
             </div>
-          </div>
+
+            <Button
+              type="submit"
+              className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-xl transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl disabled:bg-gray-400 disabled:transform-none"
+              disabled={!validatePhone(formData.phone) && !!formData.phone}
+            >
+              Guardar Cambios
+            </Button>
+          </form>
         </CardContent>
       </Card>
-
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold flex items-center gap-2">
-              <StoreIcon className="h-5 w-5 text-amber-600" />
-              Edit Store
-            </DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-1">
-              <Label htmlFor="name" className="text-sm font-medium">
-                Store Name
-              </Label>
-              <Input
-                id="name"
-                placeholder="Enter store name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label htmlFor="email" className="text-sm font-medium">
-                Email
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter email address"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label htmlFor="phone" className="text-sm font-medium">
-                Phone Number
-              </Label>
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="Enter phone number"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label htmlFor="address" className="text-sm font-medium">
-                Address
-              </Label>
-              <Textarea
-                id="address"
-                placeholder="Enter store address"
-                className="resize-none"
-                rows={3}
-                value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label htmlFor="logo" className="text-sm font-medium">
-                Store Logo
-              </Label>
-              <Input id="logo" type="file" accept="image/*" 
-              onChange={(e) => {
-                const file = e.target.files?.[0]
-                if(file){
-                  setReferences(file.name)
-                }
-
-              }}/>
-            </div>
-
-            <div className="flex justify-end pt-4">
-              <Button type="submit" className="bg-amber-600 hover:bg-amber-700">
-                Save Changes
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
     </div>
+
+
+
   )
 }
+
 
