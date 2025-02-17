@@ -10,6 +10,7 @@ import { fetchBrands } from "@/features/products/brands/brandSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { toast } from "react-hot-toast";
+import { addImages } from "@/features/images/imageSlice"
 
 export default function AddProductForm() {
 
@@ -23,13 +24,14 @@ export default function AddProductForm() {
   const { brands } = useAppSelector((state) => state.brands);
   const { attributes } = useAppSelector((state) => state.attributes);
   const { error } = useAppSelector((state) => state.products);
+  const [images, setImages] = useState<File | null>(null)
 
   useEffect(() => {
     dispatch(fetchBrands());
     dispatch(fetchAttributes());
   }, [dispatch])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (error) {
@@ -56,9 +58,21 @@ export default function AddProductForm() {
         }
       })
 
+      let imageUrl = "";
+      if (images) {
+        const fileInput = document.getElementById("reference") as HTMLInputElement
+        const file = fileInput.files?.[0]
+        if (file) {
+  
+          const response = await dispatch(addImages(file))
+          imageUrl = response.payload.image_url
+        }
+      }
+
       dispatch(addProducts(
         {
           name,
+          image_url:imageUrl,
           id_brand: Number.parseInt(brandId),
           attributes: productAttributes,
           status: true
