@@ -14,7 +14,7 @@ interface ProviderDetailsProps {
 }
 
 export const ProviderDetails = React.memo(({ provider, onClose }: ProviderDetailsProps) => (
-  <DialogContent className="max-w-2xl bg-white/95 backdrop-blur">
+  <DialogContent className="max-w-2xl bg-white/95">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-amber-600">
             Detalles del Proveedor
