@@ -1,4 +1,4 @@
-# Encafeinados ☕
+# showcase coffee ☕
 
 Encafeinados is a modern and efficient software solution designed for managing
 coffee shops and cafes. It provides tools to streamline operations, from handling suppliers
