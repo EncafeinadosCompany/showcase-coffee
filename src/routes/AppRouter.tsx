@@ -14,6 +14,7 @@ import Layout from '../layout/content/content';
 import Sales from "@/pages/sales/sales";
 import Liquidation from "@/pages/payments/liquidation";
 import Page from "@/pages/products/components/page";
+import CafePreview from "@/pages/store/store";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -45,8 +46,9 @@ export function AppRouter() {
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
           <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
         
-          <Route path='/stores' element={<PrivateRoute><Stores /></PrivateRoute>} />
+          {/* <Route path='/stores' element={<PrivateRoute><Stores /></PrivateRoute>} /> */}
           <Route path='/variants' element={<PrivateRoute><VariantsPage /></PrivateRoute>} />
+          <Route path="/stores" element={<PrivateRoute><CafePreview/></PrivateRoute>} />
         </Route>
         
         <Route path="*" element={<NotFound />} />

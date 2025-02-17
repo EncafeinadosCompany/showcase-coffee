@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {  getStores, createStore, updateStore, deleteStore } from "./storeService";
+import {  getStores, createStore, updateStore, deleteStore, getStoresID } from "./storeService";
 import {Store} from "../../types/companies/store";
 
 interface StoreState {
@@ -17,6 +17,14 @@ const initialState: StoreState = {
 export const fetchStores = createAsyncThunk("stores/fetchAll", async (_, { rejectWithValue }) => {
   try {
     return await getStores();
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message || "Error al obtener tiendas");
+  }
+});
+
+export const fetchStoresID = createAsyncThunk("stores/fetchID", async ( id:string, { rejectWithValue }) => {
+  try {
+    return await getStoresID(id);
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || "Error al obtener tiendas");
   }
@@ -62,6 +70,18 @@ const storeSlice = createSlice({
         state.stores = action.payload;
       })
       .addCase(fetchStores.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchStoresID.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchStoresID.fulfilled, (state, action) => {
+        state.isLoading = false;
+        console.log("Tienda obtenida:", action.payload);
+      })
+      .addCase(fetchStoresID.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
