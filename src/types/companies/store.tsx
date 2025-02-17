@@ -1,4 +1,7 @@
 export interface Store {
+    icon: any;
+    type: string;
+    placeholder: string | undefined;
     id: number;
     name: string;
     email: string;
