@@ -78,7 +78,7 @@ export default function LiquidationModule() {
             {paginatedProviders.map((provider) => (
               <TableRow key={provider.id} className="hover:bg-amber-100">
                 <TableCell className="font-medium">{provider.provider.name}</TableCell>
-                <TableCell>${provider.current_debt.toFixed(2)}</TableCell>
+                <TableCell>{provider.current_debt.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</TableCell>
                 <TableCell>
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium ${

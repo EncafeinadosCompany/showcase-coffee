@@ -153,9 +153,11 @@ export default function LeftCard({
             </AlertDialogContent>
           </AlertDialog>
         </div>
-        <div className="w-[35%] flex flex-col gap-2 justify-center text-center">
+        <div className="w-[25%] flex flex-col gap-2 justify-center text-center">
             <span className="text-lg font-semibold text-[#4A3728] mb-3 ">Total a consignar:</span>
-            <span className="text-2xl font-bold text-[#755841]">${totalCompra.toFixed(2)}</span>
+            <span className="text-xl font-bold text-[#755841]">
+              {totalCompra.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
+            </span>
         </div>
       </CardFooter>
     </Card>
