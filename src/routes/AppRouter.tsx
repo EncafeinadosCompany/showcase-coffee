@@ -45,13 +45,9 @@ export function AppRouter() {
           <Route path="/sales" element={<PrivateRoute><Sales/></PrivateRoute>} />
 
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
-          <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
-        
-          <Route path='/stores' element={<PrivateRoute><Stores /></PrivateRoute>} />
-          <Route path='/profile' element={<PrivateRoute><CafeProfileEditor /></PrivateRoute>} />
-          
+          <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />       
           <Route path='/variants' element={<PrivateRoute><VariantsPage /></PrivateRoute>} />
-          <Route path="/stores" element={<PrivateRoute><CafePreview/></PrivateRoute>} />
+          <Route path="/profile" element={<PrivateRoute><CafePreview/></PrivateRoute>} />
         </Route>
         
         <Route path="*" element={<NotFound />} />
