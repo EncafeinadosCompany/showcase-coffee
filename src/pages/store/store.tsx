@@ -125,8 +125,7 @@ export default function CafePreview() {
   return (
     <div className=" pt-4 flex items-center justify-center">
       <Toaster position="top-right" />
-      <div className="max-w-4xl mx-auto">
-      <Card className="bg-white/90 backdrop-blur-sm shadow-2xl hover:shadow-3xl transition-all duration-500">
+      <Card className="w-full max-w-lg bg-white/80 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden">
         <CardHeader className="text-center space-y-2">
           <div className="w-12 h-12 mx-auto bg-amber-100 rounded-full flex items-center justify-center animate-bounce">
             <Coffee className="w-6 h-6 text-amber-700" />
@@ -202,7 +201,6 @@ export default function CafePreview() {
           </form>
         </CardContent>
       </Card>
-      </div>
     </div>
   )
 }
