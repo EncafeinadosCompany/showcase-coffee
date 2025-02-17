@@ -6,6 +6,11 @@ export const getStores = async () => {
   return response.data;
 };
 
+export const getStoresID = async (id:string) => {
+  const response = await axiosInstance.get(`/companies/stores/${id}`);
+  return response.data;
+};
+
 export const createStore = async (store: Omit<Store, "id">) => {
   const response = await axiosInstance.post("/companies/stores", store);
   return response.data;
