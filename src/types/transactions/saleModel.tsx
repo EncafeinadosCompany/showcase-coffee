@@ -1,4 +1,4 @@
-export interface Sales {
+export interface Sales1 {
   date: string;
   type_payment: string;
 }
@@ -9,7 +9,7 @@ export interface SaleDetail {
 }
 
 export interface SalesPayload {
-  sale: Sales;
+  sale: Sales1;
   details: SaleDetail[];
 }
 

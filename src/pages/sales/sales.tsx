@@ -31,24 +31,20 @@ export default function Sales() {
   const [total, setTotal] = useState(0);
   const [showSalesList, setShowSalesList] = useState(false);
 
-  // Estados para el paginador
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // Número de elementos por página
+  const itemsPerPage = 6;
 
-  // Calcular los elementos de la página actual
   const currentItems = useMemo(() => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     return sales.slice(indexOfFirstItem, indexOfLastItem);
   }, [sales, currentPage, itemsPerPage]);
 
-  // Calcular el número total de páginas
   const totalPages = useMemo(
     () => Math.ceil(sales.length / itemsPerPage),
     [sales.length, itemsPerPage]
   );
 
-  // Cambiar de página
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
