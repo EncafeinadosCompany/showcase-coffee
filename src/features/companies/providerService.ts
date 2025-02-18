@@ -2,7 +2,7 @@ import { axiosInstance } from "../../API/axiosInstance";
 import { Provider } from "../../types/companies/provider";
 
 export const getProviders = async (): Promise<Provider[]> => {
-  const response = await axiosInstance.get("/companies/providers"); 
+  const response = await axiosInstance.get("/companies/providers");
   return response.data;
 };
 
@@ -20,10 +20,10 @@ export const createProvider = async (provider: Omit<Provider, "id">): Promise<Pr
 
 export const associateProviderToStore = async (storeId: number, providerId: number): Promise<void> => {
   console.log("Asociando:", { id_store: storeId, id_provider: providerId });
-  
-  await axiosInstance.post("/companies/alliances", { 
-    id_store: storeId, 
-    id_provider: providerId 
+
+  await axiosInstance.post("/companies/alliances", {
+    id_store: storeId,
+    id_provider: providerId
   });
 };
 

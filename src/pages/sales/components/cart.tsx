@@ -18,7 +18,7 @@ interface CartProduct {
 interface CartProps {
     cartProducts: CartProduct[];
     setCartProducts: React.Dispatch<React.SetStateAction<CartProduct[]>>;
-    setTotal: React.Dispatch<React.SetStateAction<number>>; // Nuevo prop
+    setTotal: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function Cart({ cartProducts, setCartProducts, setTotal }: CartProps) {

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getDeposit, createDeposit} from "./depositService";
+import { getDeposit, createDeposit } from "./depositService";
 import { deposit } from "@/types/payments/deposit";
 
 interface DepositState {
@@ -17,7 +17,6 @@ const initialState: DepositState = {
   error: null,
 };
 
-// Obtener todos los depositos
 export const fetchDeposits = createAsyncThunk("deposits/fetchAll", async (_, { rejectWithValue }) => {
   try {
     return await getDeposit();
@@ -26,7 +25,6 @@ export const fetchDeposits = createAsyncThunk("deposits/fetchAll", async (_, { r
   }
 });
 
-// Agregar un nuevo deposito
 export const addDeposit = createAsyncThunk("deposits/add", async (deposit: Omit<deposit, "id">, { rejectWithValue }) => {
   try {
     return await createDeposit(deposit);

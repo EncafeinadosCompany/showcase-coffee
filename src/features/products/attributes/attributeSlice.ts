@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getIdAttribute, getAttributes, createAttribute, updateAttribute, deleteAttribute } from "./attributeService";
 import { attributeType } from "@/types/products/attribute";
 
-
-
 interface AttributeState {
   attributes: attributeType[];
   selectedAttribute?: attributeType | null;
@@ -18,7 +16,6 @@ const initialState: AttributeState = {
   error: null,
 };
 
-// Obtener todos los atributos
 export const fetchAttributes = createAsyncThunk("attributes/fetchAll", async (_, { rejectWithValue }) => {
   try {
     return await getAttributes();
@@ -27,7 +24,6 @@ export const fetchAttributes = createAsyncThunk("attributes/fetchAll", async (_,
   }
 });
 
-// Obtener un atributo por ID
 export const getAttributeById = createAsyncThunk("attributes/getById", async (id: string | number, { rejectWithValue }) => {
   try {
     return await getIdAttribute(id);
@@ -36,7 +32,6 @@ export const getAttributeById = createAsyncThunk("attributes/getById", async (id
   }
 });
 
-// Agregar un nuevo atributo
 export const addAttribute = createAsyncThunk("attributes/add", async (attribute: Omit<attributeType, "id">, { rejectWithValue }) => {
   try {
     return await createAttribute(attribute);
@@ -45,7 +40,6 @@ export const addAttribute = createAsyncThunk("attributes/add", async (attribute:
   }
 });
 
-// Actualizar un atributo
 export const updateAttributeById = createAsyncThunk("attributes/update", async ({ id, attribute }: { id: string | number; attribute: Partial<attributeType> }, { rejectWithValue }) => {
   try {
     return await updateAttribute(id, attribute);
@@ -54,7 +48,6 @@ export const updateAttributeById = createAsyncThunk("attributes/update", async (
   }
 });
 
-// Eliminar un atributo
 export const deleteAttributeById = createAsyncThunk("attributes/delete", async (id: string | number, { rejectWithValue }) => {
   try {
     await deleteAttribute(id);
@@ -83,7 +76,7 @@ const attributeSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-      
+
       .addCase(getAttributeById.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -96,11 +89,11 @@ const attributeSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-     
+
       .addCase(addAttribute.fulfilled, (state, action) => {
         state.attributes.push(action.payload);
       })
-      
+
       .addCase(deleteAttributeById.fulfilled, (state, action) => {
         state.attributes = state.attributes.filter((attr) => attr.id !== action.payload);
       });

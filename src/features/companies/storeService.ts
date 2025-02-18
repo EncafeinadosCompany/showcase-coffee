@@ -1,12 +1,12 @@
 import { axiosInstance } from "../../API/axiosInstance";
-import {Store} from "../../types/companies/store";
+import { Store } from "../../types/companies/store";
 
 export const getStores = async () => {
   const response = await axiosInstance.get("/companies/stores");
   return response.data;
 };
 
-export const getStoresID = async (id:string) => {
+export const getStoresID = async (id: string) => {
   const response = await axiosInstance.get(`/companies/stores/${id}`);
   return response.data;
 };

@@ -5,6 +5,7 @@ import { Coffee, Search } from "lucide-react";
 import { useState } from "react";
 
 type ProductType = {
+    id: number;
     sale_price: number;
     quantity: number;
     variant: {
@@ -32,7 +33,7 @@ export default function Products({
         setCartProducts((prev) => {
             const nuevoCarrito = structuredClone(prev);
             const productoEnCarrito = nuevoCarrito.find((p) => Number(p.variant.id) === Number(producto.variant.id));
-    
+
             if (productoEnCarrito) {
                 return nuevoCarrito.map((p) =>
                     Number(p.variant.id) === Number(producto.variant.id)
@@ -54,7 +55,7 @@ export default function Products({
             }
         });
     };
-    
+
     const groupedProducts = products.reduce((acc, product) => {
         const productName = product.variant?.product?.name;
         if (!productName) return acc;

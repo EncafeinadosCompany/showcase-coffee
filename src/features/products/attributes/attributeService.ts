@@ -1,7 +1,6 @@
 import { axiosInstance } from "../../../API/axiosInstance";
 import { attributeType } from "@/types/products/attribute";
 
-
 export const getIdAttribute = async (id: string | number) => {
   const response = await axiosInstance.get(`/products/attributes${id}`);
   return response.data;

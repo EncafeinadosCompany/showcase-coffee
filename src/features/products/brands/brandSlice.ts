@@ -16,7 +16,6 @@ const initialState: BrandState = {
   error: null,
 };
 
-// Obtener todas las marcas
 export const fetchBrands = createAsyncThunk("brands/fetchAll", async (_, { rejectWithValue }) => {
   try {
     return await getBrands();
@@ -25,7 +24,6 @@ export const fetchBrands = createAsyncThunk("brands/fetchAll", async (_, { rejec
   }
 });
 
-// Obtener una marca por ID
 export const getBrand = createAsyncThunk("brands/getById", async (id: string | number, { rejectWithValue }) => {
   try {
     return await getBrandById(id);
@@ -34,7 +32,6 @@ export const getBrand = createAsyncThunk("brands/getById", async (id: string | n
   }
 });
 
-// Agregar una nueva marca
 export const addBrand = createAsyncThunk("brands/add", async (brand: Omit<brandType, "id">, { rejectWithValue }) => {
   try {
     return await createBrand(brand);
@@ -43,7 +40,6 @@ export const addBrand = createAsyncThunk("brands/add", async (brand: Omit<brandT
   }
 });
 
-// Actualizar una marca
 export const updateBrandById = createAsyncThunk("brands/update", async ({ id, brand }: { id: string | number; brand: Partial<brandType> }, { rejectWithValue }) => {
   try {
     return await updateBrand(id, brand);
@@ -52,7 +48,6 @@ export const updateBrandById = createAsyncThunk("brands/update", async ({ id, br
   }
 });
 
-// Eliminar una marca
 export const deleteBrandById = createAsyncThunk("brands/delete", async (id: string | number, { rejectWithValue }) => {
   try {
     await deleteBrand(id);
@@ -68,7 +63,7 @@ const brandSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-   
+
       .addCase(fetchBrands.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -81,7 +76,7 @@ const brandSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-    
+
       .addCase(getBrand.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -102,7 +97,7 @@ const brandSlice = createSlice({
           state.error = (action.payload as { errors: string })?.errors || "Error desconocido al agregar marca";
         }
       })
-      
+
       .addCase(addBrand.fulfilled, (state, action) => {
         state.brands.push(action.payload);
       })

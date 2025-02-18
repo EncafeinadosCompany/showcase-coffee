@@ -46,7 +46,6 @@ export const fetchShoppingVariantsByShoppingId = createAsyncThunk(
   }
 );
 
-
 export const fetchShoppingVariant = createAsyncThunk("shopping/fetchVariant", async (_, { rejectWithValue }) => {
   try {
     return await getShoppingVariant();
@@ -140,7 +139,7 @@ const ShoppingSlice = createSlice({
       .addCase(fetchShoppingVariantsByShoppingId.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
-      });      
+      });
   },
 });
 

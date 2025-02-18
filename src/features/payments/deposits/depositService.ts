@@ -16,5 +16,3 @@ export const getDepositById = async (id: string) => {
   const response = await axiosInstance.get(`/payments/deposit/${id}`);
   return response.data;
 };
-
-

@@ -97,7 +97,7 @@ const variantSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-   
+
       .addCase(fetchVariants.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -110,7 +110,7 @@ const variantSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-     
+
       .addCase(getVariantById.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -127,7 +127,7 @@ const variantSlice = createSlice({
       .addCase(addVariant.fulfilled, (state, action) => {
         state.variants.push(action.payload);
       })
-      
+
       .addCase(deleteVariantById.fulfilled, (state, action) => {
         state.variants = state.variants.filter(
           (variant) => variant.id !== action.payload

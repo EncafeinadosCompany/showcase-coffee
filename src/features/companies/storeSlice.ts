@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {  getStores, createStore, updateStore, deleteStore, getStoresID } from "./storeService";
-import {Store} from "../../types/companies/store";
+import { getStores, createStore, updateStore, deleteStore, getStoresID } from "./storeService";
+import { Store } from "../../types/companies/store";
 
 interface StoreState {
   stores: Store[];
@@ -22,7 +22,7 @@ export const fetchStores = createAsyncThunk("stores/fetchAll", async (_, { rejec
   }
 });
 
-export const fetchStoresID = createAsyncThunk("stores/fetchID", async ( id:string, { rejectWithValue }) => {
+export const fetchStoresID = createAsyncThunk("stores/fetchID", async (id: string, { rejectWithValue }) => {
   try {
     return await getStoresID(id);
   } catch (error: any) {
