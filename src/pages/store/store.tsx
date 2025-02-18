@@ -56,28 +56,7 @@ export default function CafePreview() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-  
-    // Validation checks
-    if (!validateEmail(formData.email)) {
-      toast.error('Por favor ingresa un correo electrónico válido');
-      return;
-    }
-  
-    if (!validatePhone(formData.phone)) {
-      toast.error('El número de teléfono debe comenzar con 3 y tener 10 dígitos');
-      return;
-    }
-  
-    if (formData.name.trim().length < 3) {
-      toast.error('El nombre debe tener al menos 3 caracteres');
-      return;
-    }
-  
-    if (formData.address.trim().length < 5) {
-      toast.error('La dirección debe tener al menos 5 caracteres');
-      return;
-    }
-  
+
     try {
       let imageUrl = "";
 
@@ -103,7 +82,7 @@ export default function CafePreview() {
             logo: logoPreview
           }
         }))
-  
+
         toast.success('¡Perfil actualizado con éxito! ☕', {
           icon: '🎉',
           duration: 4000,
@@ -112,18 +91,14 @@ export default function CafePreview() {
             color: '#fff',
           }
         })
+
       }
+
     } catch (error: any) {
       toast.error("¡Error al guardar los cambios!");
     }
+
   }
-  
-  // Add this validation function
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -253,7 +228,19 @@ export default function CafePreview() {
 
             <Button
               type="submit"
-              className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-xl transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl disabled:bg-gray-400 disabled:transform-none"
+              className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-xl transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              onClick={(e) => {
+              if (!validatePhone(formData.phone) && formData.phone) {
+                e.preventDefault();
+                toast.error('El número de teléfono debe tener 10 dígitos y comenzar con 3', {
+                duration: 4000,
+                style: {
+                  background: '#4A3428',
+                  color: '#fff',
+                }
+                });
+              }
+              }}
             >
               Guardar Cambios
             </Button>
