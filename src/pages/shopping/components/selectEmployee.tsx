@@ -36,16 +36,24 @@ const useEmployees = () => {
 
 type SelectEmployeeProps = {
   onSelect: (employeeId: number) => void;
+  update: boolean;
 };
 
-export default function SelectEmployee({ onSelect }: SelectEmployeeProps) {
+export default function SelectEmployee({ onSelect , update }: SelectEmployeeProps) {
   const [open, setOpen] = React.useState(false);
+  const { employees, isLoading, error } = useEmployees();
   const [selectedEmployee, setSelectedEmployee] = React.useState<{
     id: number;
     name: string;
   } | null>(null);
 
-  const { employees, isLoading, error } = useEmployees();
+  useEffect(() => {
+    if (update) {
+      setSelectedEmployee(null);
+    }
+  }, [update]);
+
+  
 
   return (
     <div className="flex items-center space-x-4 mt-6">

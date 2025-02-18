@@ -1,6 +1,8 @@
+import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
+import { Separator } from "@radix-ui/react-select";
 import { Coffee, Search } from "lucide-react";
 import { useState } from "react";
 
@@ -8,6 +10,7 @@ type ProductType = {
     id: number;
     sale_price: number;
     quantity: number;
+    remaining_quantity: number;
     variant: {
         id: number;
         grammage: string;
@@ -71,6 +74,8 @@ export default function Products({
         name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+
+    console.log(groupedProducts)
     return (
         <Card className="bg-white shadow-lg h-[calc(100vh-120px)] overflow-hidden">
             <CardHeader className="py-3">
@@ -111,25 +116,46 @@ export default function Products({
                             <AccordionContent className="px-4 py-2">
                                 <div className="flex flex-col gap-2">
                                     {groupedProducts[productName].map((product) => (
-                                        <Card
-                                            key={product.variant.id}
-                                            className="border-2 hover:border-amber-500 transition-all duration-200 w-full cursor-pointer"
-                                            onClick={() => addProduct(product)}
-                                        >
-                                            <CardContent className="p-3 flex justify-between items-center">
-                                                <div className="flex items-center gap-4">
-                                                    <h3 className="font-semibold text-lg text-gray-800">
-                                                        {product.variant.grammage}
-                                                    </h3>
-                                                    <span className="px-3 py-1 bg-amber-100 rounded-full text-amber-800 text-sm self-center">
-                                                        Stock: {product.variant.stock}
-                                                    </span>
-                                                </div>
-                                                <p className="text-lg font-bold text-amber-800">
-                                                    {product.sale_price.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
-                                                </p>
-                                            </CardContent>
-                                        </Card>
+                                       <Card
+                                       key={product.variant.id}
+                                       className="group relative overflow-hidden border-2 hover:border-coffee-500 transition-all duration-200 w-full cursor-pointer bg-white"
+                                       onClick={() => addProduct(product)}
+                                     >
+                                       <CardContent className="p-4">
+                                         <div className="flex flex-col gap-3">
+                                           {/* Header with grammage and coffee icon */}
+                                           <div className="flex items-center justify-between">
+                                             <h3 className="text-xl font-semibold text-coffee-800 flex items-center gap-2">
+                                               <Coffee className="h-5 w-5 text-coffee-600" />
+                                               {product.variant.grammage}
+                                             </h3>
+                                             <p className="text-lg font-bold text-coffee-700">
+                                               {product.sale_price.toLocaleString("es-CO", {
+                                                 style: "currency",
+                                                 currency: "COP",
+                                               })}
+                                             </p>
+                                           </div>
+                                 
+                                           <Separator className="bg-coffee-100" />
+                                 
+                                           {/* Stock information */}
+                                           <div className="flex items-center justify-between">
+                                             <div className="flex items-center gap-2">
+                                               <Badge variant="outline" className="bg-coffee-50 text-coffee-700 border-coffee-200">
+                                                 Stock disponible: {product.variant.stock}
+                                               </Badge>
+                                             </div>
+                                             <Badge variant="secondary" className="bg-coffee-100 text-coffee-800 hover:bg-coffee-200">
+                                               Lote: {product.remaining_quantity}
+                                             </Badge>
+                                           </div>
+                                         </div>
+                                 
+                                         {/* Hover effect overlay */}
+                                         <div className="absolute inset-0 bg-coffee-500/0 group-hover:bg-coffee-500/5 transition-colors duration-200" />
+                                       </CardContent>
+                                     </Card>
                                     ))}
                                 </div>
                             </AccordionContent>
