@@ -72,6 +72,7 @@ export default function Sales() {
     };
 
     try {
+      console.log(saleData)
       await dispatch(addSale(saleData)).unwrap();
       await dispatch(fetchSales());
 
