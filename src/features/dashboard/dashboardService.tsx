@@ -10,5 +10,10 @@ export const getTotalDeposit = async () => {
   return response.data;
 };
 
+export const getEarnings = async () => {
+    const response = await axiosInstance.get("dashboard/total-earnings");
+    return response.data;
+  };
+
 
 

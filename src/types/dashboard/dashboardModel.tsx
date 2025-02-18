@@ -5,3 +5,7 @@ export interface TotalLidations {
 export interface TotalDeposit {
     totalDeposits:number
 }
+
+export interface Earnings {
+    earnings:number
+}
