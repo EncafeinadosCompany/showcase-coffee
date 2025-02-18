@@ -1,31 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { ArrowUpCircle, ArrowDownCircle, Coffee, DollarSign, TrendingUp, AlertTriangle } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { ArrowUpCircle, ArrowDownCircle, Coffee, DollarSign,  AlertTriangle } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../hooks/useAppSelector';
+import type { AppDispatch } from '../../store/store';
 
-const Dashboard = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [data, setData] = useState<{
-    deudas: number;
-    pagos: number;
-    historial: { mes: string; deudas: number; pagos: number; }[];
-  } | null>(null);
-  
+import {
+  fetchProductTop,
+  fetchEarlyDate,
+  fetchEarnings,
+  fetchTotalLiquidation,
+  fetchTotalDeposits,
+} from '../../features/dashboard/dashboardSlice';
+
+  const Dashboard = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const {
+      totalLiquidation,
+      totalDeposits,
+      isLoading,
+      error,
+    } = useAppSelector((state) => state.dashboard);
+
   useEffect(() => {
-    setTimeout(() => {
-      const exampleData = {
-        deudas: 2500,
-        pagos: 1800,
-        historial: [
-          { mes: 'Ene', deudas: 800, pagos: 500 },
-          { mes: 'Feb', deudas: 900, pagos: 600 },
-          { mes: 'Mar', deudas: 800, pagos: 700 },
-        ]
-      };
-      setData(exampleData);
-      setIsLoaded(true);
-    }, 1000);
-  }, []);
-  
+    // Obtener los datos del dashboard al montar el componente
+    dispatch(fetchProductTop({ month: 10, year: 2023 })); // Ejemplo: Octubre 2023
+    dispatch(fetchEarlyDate());
+    dispatch(fetchEarnings({ month: 10, year: 2023 })); // Ejemplo: Octubre 2023
+    dispatch(fetchTotalLiquidation());
+    dispatch(fetchTotalDeposits());
+  }, [dispatch]);
+
+  // Mapear los datos de Redux a la estructura que espera el componente
+  const data = {
+    deudas: totalLiquidation || 0, // Usar totalLiquidation como deudas
+    pagos: totalDeposits || 0, // Usar totalDeposits como pagos
+    historial: [
+      { mes: 'Ene', deudas: 800, pagos: 500 },
+      { mes: 'Feb', deudas: 900, pagos: 600 },
+      { mes: 'Mar', deudas: 800, pagos: 700 },
+    ],
+  };
+
   // Componente para cuando no hay datos
   const NoDataComponent = () => (
     <div className="flex flex-col items-center justify-center h-96 rounded-2xl bg-gray-50 border-2 border-dashed border-gray-200">
@@ -37,7 +52,7 @@ const Dashboard = () => {
       </p>
     </div>
   );
-  
+
   interface MainMetricCardProps {
     label: string;
     amount: number;
@@ -49,10 +64,10 @@ const Dashboard = () => {
 
   const MainMetricCard = ({ label, amount, color, icon, trend, isPositive }: MainMetricCardProps) => {
     const TrendIcon = isPositive ? ArrowUpCircle : ArrowDownCircle;
-    
+
     return (
       <div 
-        className={`p-6 rounded-2xl overflow-hidden relative transition-all duration-700 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+        className={`p-6 rounded-2xl overflow-hidden relative transition-all duration-700 transform ${!isLoading ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
         style={{ backgroundColor: color }}
       >
         {/* Decoración de fondo */}
@@ -60,7 +75,7 @@ const Dashboard = () => {
           <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-white"></div>
           <div className="absolute -left-20 -bottom-20 w-40 h-40 rounded-full bg-white"></div>
         </div>
-        
+
         <div className="relative z-10">
           <div className="flex justify-between items-start">
             <div>
@@ -69,12 +84,12 @@ const Dashboard = () => {
                 ${amount.toLocaleString()}
               </h2>
             </div>
-            
+
             <div className="p-3 bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm rounded-xl">
               {React.cloneElement(icon, { size: 32, className: "text-white" })}
             </div>
           </div>
-          
+
           {trend && (
             <div className="flex items-center mt-6 text-white bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm rounded-lg px-3 py-2 inline-block">
               <TrendIcon size={18} className={isPositive ? "text-green-200" : "text-red-200"} />
@@ -82,25 +97,28 @@ const Dashboard = () => {
             </div>
           )}
         </div>
-        
+
         {/* Animación de entrada */}
         <div 
-          className={`absolute inset-0 bg-white transition-all duration-1000 ${isLoaded ? 'translate-x-full' : 'translate-x-0'}`}
+          className={`absolute inset-0 bg-white transition-all duration-1000 ${!isLoading ? 'translate-x-full' : 'translate-x-0'}`}
           style={{ transitionDelay: '300ms' }}
         ></div>
       </div>
     );
   };
-  
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <div className="rounded-2xl bg-white shadow-sm p-6 mb-8 transition-all duration-700 overflow-y-auto">
       <div className="max-w-7xl mx-auto">
         {/* Encabezado */}
-        <div className="flex justify-between items-center mb-8 sticky top-0  z-10 py-4">
+        <div className="flex justify-between items-center mb-8 sticky top-0 z-10 py-4">
           <h1 className="text-3xl font-bold text-gray-800">Dashboard Financiero</h1>
           <div className="text-sm font-medium text-gray-500">Cafetería "El Aroma"</div>
         </div>
-        
+
         {data ? (
           <>
             {/* Tarjetas principales */}
@@ -122,19 +140,19 @@ const Dashboard = () => {
                 isPositive={true}
               />
             </div>
-            
+
             {/* Panel informativo */}
-            <div className={`bg-white rounded-2xl shadow-sm p-6 mb-8 transition-all duration-700 transform ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+            <div className={`bg-white rounded-2xl shadow-sm p-6 mb-8 transition-all duration-700 transform ${!isLoading ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
                  style={{ transitionDelay: '400ms' }}>
               <h2 className="text-xl font-semibold text-gray-800 mb-4">Resumen Financiero</h2>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-gray-50 rounded-xl">
                   <p className="text-sm text-gray-500 mb-1">Balance Actual</p>
                   <p className={`text-2xl font-bold ${data.pagos - data.deudas >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
                     ${(data.pagos - data.deudas).toLocaleString()}
                   </p>
-                  
+
                   <div className="mt-4 flex items-center">
                     <div className="text-xs text-gray-500">Variación</div>
                     <div className={`ml-auto text-sm font-medium ${data.pagos - data.deudas >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
@@ -142,7 +160,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="p-4 bg-gray-50 rounded-xl">
                   <p className="text-sm text-gray-500 mb-1">Porcentaje Pagado</p>
                   <div className="flex items-end">
@@ -151,7 +169,7 @@ const Dashboard = () => {
                     </p>
                     <p className="text-sm text-gray-500 ml-2 mb-1">de ${data.deudas.toLocaleString()}</p>
                   </div>
-                  
+
                   <div className="mt-4">
                     <div className="w-full bg-gray-200 rounded-full h-3">
                       <div 

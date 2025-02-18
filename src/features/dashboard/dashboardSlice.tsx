@@ -1,86 +1,123 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getTotalLiquidacions, getTotalDeposit, getEarnings } from "./dashboardService";
-import { TotalLidations, TotalDeposit, Earnings } from "@/types/dashboard/dashboardModel";
+import {
+  getProductTop,
+  getEarlyDate,
+  getEarnings,
+  getTotalLiquidation,
+  getTotalDeposits,
+} from "./dashboardService";
 
-interface FinancialState {
-  liquidations: TotalLidations[];
-  deposits: TotalDeposit[];
-  earnings: Earnings | null;
+interface DashboardState {
+  productTop: any[];
+  earlyDate: any | null;
+  earnings: any | null;
+  totalLiquidation: number | null;
+  totalDeposits: number | null;
   isLoading: boolean;
   error: string | null;
 }
 
-const initialState: FinancialState = {
-  liquidations: [],
-  deposits: [],
+const initialState: DashboardState = {
+  productTop: [],
+  earlyDate: null,
   earnings: null,
+  totalLiquidation: null,
+  totalDeposits: null,
   isLoading: false,
   error: null,
 };
 
-export const fetchTotalLiquidacions = createAsyncThunk(
-  "financial/fetchTotalLiquidacions",
-  async (_, { rejectWithValue }) => {
+// Thunks para obtener los datos del dashboard
+export const fetchProductTop = createAsyncThunk(
+  "dashboard/fetchProductTop",
+  async ({ month, year }: { month: number; year: number }, { rejectWithValue }) => {
     try {
-      return await getTotalLiquidacions();
-    } catch (error: unknown) {
-      return rejectWithValue(error instanceof Error ? error.message : "Error al obtener las liquidaciones");
+      return await getProductTop(month, year);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error fetching top products.");
     }
   }
 );
 
-export const fetchTotalDeposit = createAsyncThunk(
-  "financial/fetchTotalDeposit",
+export const fetchEarlyDate = createAsyncThunk(
+  "dashboard/fetchEarlyDate",
   async (_, { rejectWithValue }) => {
     try {
-      return await getTotalDeposit();
-    } catch (error: unknown) {
-      return rejectWithValue(error instanceof Error ? error.message : "Error al obtener los depósitos");
+      return await getEarlyDate();
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error fetching early date.");
     }
   }
 );
 
 export const fetchEarnings = createAsyncThunk(
-  "financial/fetchEarnings",
-  async (_, { rejectWithValue }) => {
+  "dashboard/fetchEarnings",
+  async ({ month, year }: { month: number; year: number }, { rejectWithValue }) => {
     try {
-      return await getEarnings();
-    } catch (error: unknown) {
-      return rejectWithValue(error instanceof Error ? error.message : "Error al obtener las ganancias");
+      return await getEarnings(month, year);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error fetching earnings.");
     }
   }
 );
 
-const financialSlice = createSlice({
-  name: "financial",
+export const fetchTotalLiquidation = createAsyncThunk(
+  "dashboard/fetchTotalLiquidation",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getTotalLiquidation();
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error fetching total liquidation.");
+    }
+  }
+);
+
+export const fetchTotalDeposits = createAsyncThunk(
+  "dashboard/fetchTotalDeposits",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getTotalDeposits();
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error fetching total deposits.");
+    }
+  }
+);
+
+const dashboardSlice = createSlice({
+  name: "dashboard",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTotalLiquidacions.pending, (state) => {
+      // Product Top
+      .addCase(fetchProductTop.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchTotalLiquidacions.fulfilled, (state, action) => {
+      .addCase(fetchProductTop.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.liquidations = action.payload;
+        state.productTop = action.payload;
       })
-      .addCase(fetchTotalLiquidacions.rejected, (state, action) => {
+      .addCase(fetchProductTop.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
-      .addCase(fetchTotalDeposit.pending, (state) => {
+
+      // Early Date
+      .addCase(fetchEarlyDate.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchTotalDeposit.fulfilled, (state, action) => {
+      .addCase(fetchEarlyDate.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.deposits = action.payload;
+        state.earlyDate = action.payload;
       })
-      .addCase(fetchTotalDeposit.rejected, (state, action) => {
+      .addCase(fetchEarlyDate.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
+
+      // Earnings
       .addCase(fetchEarnings.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -92,8 +129,36 @@ const financialSlice = createSlice({
       .addCase(fetchEarnings.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+
+      // Total Liquidation
+      .addCase(fetchTotalLiquidation.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchTotalLiquidation.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.totalLiquidation = action.payload.totalLiquidation;
+      })
+      .addCase(fetchTotalLiquidation.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      // Total Deposits
+      .addCase(fetchTotalDeposits.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchTotalDeposits.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.totalDeposits = action.payload.totalDeposits;
+      })
+      .addCase(fetchTotalDeposits.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       });
   },
 });
 
-export default financialSlice.reducer;
+export default dashboardSlice.reducer;

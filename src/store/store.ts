@@ -19,6 +19,9 @@ import depositReducer from "../features/payments/deposits/depositSlice";
 import liquidationReducer from "../features/payments/liquidations/liquidationSlice";
 import imageReducer from "../features/images/imageSlice";
 
+import dashboardReducer from "../features/dashboard/dashboardSlice";
+
+
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -38,7 +41,9 @@ export const store = configureStore({
     deposits: depositReducer,
     liquidations: liquidationReducer,
 
-    images: imageReducer
+    images: imageReducer,
+
+    dashboard: dashboardReducer,
   },
 });
 
