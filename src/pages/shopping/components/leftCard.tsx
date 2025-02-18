@@ -39,6 +39,9 @@ export default function LeftCard({
 
   // Estado para almacenar el ID del empleado seleccionado
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(null);
+  const [update, setUpdate] = useState(false);
+
+
 
   const handleGenerateConsignment = async () => {
     if (!id_store) {
@@ -83,7 +86,8 @@ export default function LeftCard({
 
       // Limpiar el carrito después de crear la compra
       setcartProducts([]);
-      setSelectedEmployeeId(null);
+      setUpdate(true)
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Error al crear la consignación:", error);
@@ -93,7 +97,7 @@ export default function LeftCard({
 
   const handleCancelConsignment = () => {
     setcartProducts([]);
-    setSelectedEmployeeId(null); 
+    setSelectedEmployeeId(null);
   };
 
   return (
@@ -119,7 +123,7 @@ export default function LeftCard({
       <CardFooter className="gap-20 border-t mt-auto "> 
         <div className="w-[60%] flex flex-col gap-2">
           {/* Pasar la función onSelect a SelectEmployee */}
-          <SelectEmployee onSelect={(employeeId: number) => setSelectedEmployeeId(employeeId)} />
+          <SelectEmployee update={update} onSelect={(employeeId: number) => setSelectedEmployeeId(employeeId)} />
           {/* Botón para generar la consignación */}
           <button
             onClick={handleGenerateConsignment}
