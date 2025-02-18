@@ -26,3 +26,11 @@ export interface ShoppingwitDetail {
   status: boolean;
   shopping_variant: ShoppingDetail[]; // Asegúrate de que este campo esté presente
 }
+
+export interface ShoppingwitDetail2 {
+  id_store: number;
+  id_employee: number;
+  date_entry: string;
+  status: boolean;
+  shopping_variant: ShoppingDetail[]; // Asegúrate de que este campo esté presente
+}
