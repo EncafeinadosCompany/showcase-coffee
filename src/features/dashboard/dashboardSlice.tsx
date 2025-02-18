@@ -1,12 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getTotalLiquidacions, getTotalDeposit } from "./dashboardService";
-import { deposit } from "@/types/payments/deposit";
-import { Liquidation} from "@/types/payments/liquidation";
+import { TotalLidations, TotalDeposit} from "@/types/dashboard/dashboardModel";
 
 
 interface FinancialState {
-  liquidations: Liquidation[];
-  deposits: deposit[];
+  liquidations: TotalLidations[];
+  deposits: TotalDeposit[];
   isLoading: boolean;
   error: string | null;
 }
@@ -20,9 +19,9 @@ const initialState: FinancialState = {
 
 export const fetchTotalLiquidacions = createAsyncThunk(
   "financial/fetchTotalLiquidacions",
-  async (id: string, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      return await getTotalLiquidacions(id);
+      return await getTotalLiquidacions();
     } catch (error: unknown) {
       return rejectWithValue(error instanceof Error ? error.message : "Error al obtener las liquidaciones");
     }

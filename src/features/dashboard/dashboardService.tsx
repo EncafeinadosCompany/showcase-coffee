@@ -1,12 +1,12 @@
 import { axiosInstance } from "../../API/axiosInstance";
 
-export const getTotalLiquidacions = async (id: string) => {
-  const response = await axiosInstance.get(`/products/products/${id}`);
+export const getTotalLiquidacions = async () => {
+  const response = await axiosInstance.get("dashboard/total-liquidation");
   return response.data;
 };
 
 export const getTotalDeposit = async () => {
-  const response = await axiosInstance.get("/products/products");
+  const response = await axiosInstance.get("dashboard/total-deposits");
   return response.data;
 };
 
