@@ -30,10 +30,9 @@ import {
     dispatch(fetchTotalDeposits());
   }, [dispatch]);
 
-  // Mapear los datos de Redux a la estructura que espera el componente
   const data = {
-    deudas: totalLiquidation || 0, // Usar totalLiquidation como deudas
-    pagos: totalDeposits || 0, // Usar totalDeposits como pagos
+    deudas: totalLiquidation || 0, 
+    pagos: totalDeposits || 0,
     historial: [
       { mes: 'Ene', deudas: 800, pagos: 500 },
       { mes: 'Feb', deudas: 900, pagos: 600 },
@@ -41,7 +40,7 @@ import {
     ],
   };
 
-  // Componente para cuando no hay datos
+
   const NoDataComponent = () => (
     <div className="flex flex-col items-center justify-center h-96 rounded-2xl bg-gray-50 border-2 border-dashed border-gray-200">
       <AlertTriangle size={64} className="text-amber-400 mb-4" />
