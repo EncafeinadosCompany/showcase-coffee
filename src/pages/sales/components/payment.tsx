@@ -70,7 +70,7 @@ export default function Payment({ total, onCompleteSale, onCancelSale }: Payment
                             <Label htmlFor="received">Monto Recibido</Label>
                             <Input
                                 id="received"
-                                type="currency"
+                                type="number"
                                 value={receivedAmount}
                                 onChange={(e) => setReceivedAmount(e.target.value)}
                                 className="mt-1"
@@ -79,7 +79,7 @@ export default function Payment({ total, onCompleteSale, onCancelSale }: Payment
                         </div>
                         <div className="flex justify-between items-center bg-amber-50 p-3 rounded-lg">
                             <span className="text-amber-800">Cambio:</span>
-                            <span className="text-lg font-semibold text-amber-800">
+                            <span className="text-lg font-semibold text-amber-800 ">
                                 {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(Math.max(0, change))}
                             </span>
                         </div>

@@ -152,10 +152,10 @@ export default function Sales() {
       </div>
 
       {showSalesList ? (
-        <div className="mb-4">
+        <div className="flex flex-col gap-4 justify-center ">
           <SalesTable sales={currentItems} />
           {/* Paginador */}
-          <Pagination>
+          <Pagination className="flex justify-center">
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
