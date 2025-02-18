@@ -1,4 +1,4 @@
-import { Store, Home, ChevronLeft, BadgeDollarSign, ChevronRight, Users, LogOut, ShoppingBasket, Coffee, ScrollText, BarChart2 } from 'lucide-react';
+import { Home, ChevronLeft, BadgeDollarSign, ChevronRight, Users, LogOut, ShoppingBasket, Coffee, ScrollText } from 'lucide-react';
 import { useState } from 'react';
 
 import { useNavigate } from "react-router-dom";

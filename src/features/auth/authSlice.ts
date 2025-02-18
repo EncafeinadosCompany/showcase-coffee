@@ -42,7 +42,7 @@ const authSlice = createSlice({
       state.employee = null;
       state.token = null;
       state.isAuthenticated = false;
-      
+
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       localStorage.removeItem("employee");

@@ -18,12 +18,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const isAuthenticated = useAppSelector((state: RootState) => state.auth.isAuthenticated); 
+  const isAuthenticated = useAppSelector((state: RootState) => state.auth.isAuthenticated);
 
   const login = async (email: string, password: string) => {
     try {
       const response = await dispatch(loginUser({ email, password })).unwrap();
-      
+
       if (response.success) {
         navigate("/home");
       } else {
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error("Error en el login:", error);
     }
-  };  
+  };
 
   const logout = () => {
     localStorage.removeItem("token");

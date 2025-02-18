@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-import { getLiquidation, createLiquidation, getLiquidationById } from "./liquidationService";
+import { getLiquidation, getLiquidationById } from "./liquidationService";
 import { Liquidation } from "@/types/payments/liquidation";
 
 interface LiquidationState {
@@ -17,7 +16,6 @@ const initialState: LiquidationState = {
   error: null,
 };
 
-// Obtener todas las liquidaciones
 export const fetchLiquidations = createAsyncThunk("liquidations/fetchAll", async (_, { rejectWithValue }) => {
   try {
     return await getLiquidation();
@@ -26,8 +24,6 @@ export const fetchLiquidations = createAsyncThunk("liquidations/fetchAll", async
   }
 });
 
-
-// Obtener liquidación por ID
 export const getID = createAsyncThunk(
   "liquidations/getID",
   async (id: string, { rejectWithValue }) => {
@@ -41,7 +37,6 @@ export const getID = createAsyncThunk(
   }
 );
 
-
 const liquidationSlice = createSlice({
   name: "liquidations",
   initialState,
@@ -53,8 +48,8 @@ const liquidationSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchLiquidations.pending, (state) => {
-      state.isLoading = true;
-      state.error = null;
+        state.isLoading = true;
+        state.error = null;
       })
       .addCase(fetchLiquidations.fulfilled, (state, action) => {
         state.isLoading = false;

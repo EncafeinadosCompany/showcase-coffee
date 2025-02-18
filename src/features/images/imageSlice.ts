@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { createImages } from "./imageService";
 
 interface imageState {
-  image: string[]; // Cambiado de "imagen[]" a "string[]"
+  image: string[];
   isLoading: boolean;
   error: string | null;
 }

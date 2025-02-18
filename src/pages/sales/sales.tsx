@@ -66,12 +66,15 @@ export default function Sales() {
         type_payment: paymentMethod,
       },
       details: cartProducts.map((product) => ({
+        id_shopping_variant: product.id,
         id_variant_products: product.variant.id,
+        sale_price: product.sale_price,
         quantity: product.quantity,
       })),
     };
 
     try {
+      console.log("saleData", saleData);
       await dispatch(addSale(saleData)).unwrap();
       await dispatch(fetchSales());
 

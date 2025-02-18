@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { useAppDispatch } from "@/hooks/useAppDispatch"
-// import { useAppSelector } from "@/hooks/useAppSelector"
 import { addDeposit } from "@/features/payments/deposits/depositSlice"
 import { addImages } from "@/features/images/imageSlice"
 import { fetchLiquidations } from "@/features/payments/liquidations/liquidationSlice"
@@ -19,13 +18,11 @@ interface PaymentModalProps {
   liquidation: { id: number, current_debt: number, provider: { name: string } }
 }
 
-
 export function PaymentModal({ isOpen, onClose, liquidation }: PaymentModalProps) {
   const [paymentAmount, setPaymentAmount] = useState("")
   const [paymentType, setPaymentType] = useState("")
   const [reference, setReference] = useState("")
   const dispatch = useAppDispatch()
-
 
   useEffect(() => {
 
@@ -36,9 +33,6 @@ export function PaymentModal({ isOpen, onClose, liquidation }: PaymentModalProps
     }
     console.log(paymentAmount)
   }, [paymentAmount])
-
-
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -84,13 +78,13 @@ export function PaymentModal({ isOpen, onClose, liquidation }: PaymentModalProps
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="totalDebt" className="text-right text-amber-700">
-                Deuda Total
+              Deuda Total
               </Label>
               <Input
-                id="totalDebt"
-                value={`$${liquidation.current_debt.toFixed(2)}`}
-                disabled
-                className="col-span-3 bg-amber-100"
+              id="totalDebt"
+              value={`COP $${liquidation.current_debt.toLocaleString("es-CO", { minimumFractionDigits: 2 })}`}
+              disabled
+              className="col-span-3 bg-amber-100"
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
