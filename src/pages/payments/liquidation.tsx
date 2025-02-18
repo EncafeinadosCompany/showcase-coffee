@@ -6,12 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import {Pagination,PaginationContent,PaginationItem,PaginationLink,PaginationNext,PaginationPrevious,} from "@/components/ui/pagination"
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, } from "@/components/ui/pagination"
 import { PaymentModal } from "./components/payment-modal"
-import { DetailsModal } from "./components/details-modal"
-import { fetchLiquidations } from "@/features/payments/liquidations/liquidationSlice"
+import  DepositsModal  from "./components/details-modal"; import { fetchLiquidations } from "@/features/payments/liquidations/liquidationSlice"
 import { useAppDispatch } from "@/hooks/useAppDispatch"
-import { useAppSelector} from "@/hooks/useAppSelector"
+import { useAppSelector } from "@/hooks/useAppSelector"
 import { Liquidation } from "@/types/payments/liquidation"
 
 export default function LiquidationModule() {
@@ -81,9 +80,8 @@ export default function LiquidationModule() {
                 <TableCell>{provider.current_debt.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</TableCell>
                 <TableCell>
                   <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      provider.status=== true ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                    }`}
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${provider.status === true ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                      }`}
                   >
                     Activo
                   </span>
@@ -120,9 +118,8 @@ export default function LiquidationModule() {
                 <PaginationLink
                   onClick={() => handlePageChange(index + 1)}
                   isActive={currentPage === index + 1}
-                  className={`${
-                    currentPage === index + 1 ? "bg-amber-600 hover:bg-amber-500" : "bg-amber-100 hover:bg-amber-200"
-                  } rounded-full text-white`}
+                  className={`${currentPage === index + 1 ? "bg-amber-600 hover:bg-amber-500" : "bg-amber-100 hover:bg-amber-200"
+                    } rounded-full text-white`}
                 >
                   {index + 1}
                 </PaginationLink>
@@ -142,13 +139,13 @@ export default function LiquidationModule() {
           <PaymentModal
             isOpen={isPaymentModalOpen}
             onClose={() => setIsPaymentModalOpen(false)}
-            liquidation={selectedProvider??[]}
+            liquidation={selectedProvider}
           />
-          {/* <DetailsModal
+          <DepositsModal
             isOpen={isDetailsModalOpen}
             onClose={() => setIsDetailsModalOpen(false)}
-            provider={selectedProvider}
-          /> */}
+            liquidationId={selectedProvider.id}
+          />
         </>
       )}
     </Card>

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getDeposit, createDeposit } from "./depositService";
+import { getDeposit, createDeposit, getDepositByLiquidations } from "./depositService";
 import { deposit } from "@/types/payments/deposit";
 
 interface DepositState {
@@ -33,6 +34,17 @@ export const addDeposit = createAsyncThunk("deposits/add", async (deposit: Omit<
   }
 });
 
+export const fetchDepositsByLiquidation = createAsyncThunk(
+  "deposits/fetchByLiquidation",
+  async (liquidationId: string, { rejectWithValue }) => {
+    try {
+      return await getDepositByLiquidations(liquidationId);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error al obtener depósitos");
+    }
+  }
+);
+
 const depositSlice = createSlice({
   name: "deposits",
   initialState,
@@ -64,6 +76,18 @@ const depositSlice = createSlice({
       state.deposits.push(action.payload);
     });
     builder.addCase(addDeposit.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload as string;
+    });
+    builder.addCase(fetchDepositsByLiquidation.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(fetchDepositsByLiquidation.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.deposits = action.payload;
+    });
+    builder.addCase(fetchDepositsByLiquidation.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload as string;
     });

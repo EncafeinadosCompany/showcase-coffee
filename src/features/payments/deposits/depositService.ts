@@ -16,3 +16,8 @@ export const getDepositById = async (id: string) => {
   const response = await axiosInstance.get(`/payments/deposit/${id}`);
   return response.data;
 };
+
+export const getDepositByLiquidations = async (id: string) => {
+  const response = await axiosInstance.get(`/payments/deposit/by-liquidation/${id}`);
+  return response.data;
+};
