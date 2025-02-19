@@ -41,10 +41,10 @@ export const LoginPage = () => {
             <Coffee className="h-12 w-12 text-amber-700" />
           </div>
           <CardTitle className="text-2xl text-center font-bold text-amber-800">
-            Bienvenido a nuestra Cafetería
+            Vitrina de Cafés de Especialidad
           </CardTitle>
           <CardDescription className="text-center text-amber-600">
-            Ingresa tus credenciales para acceder
+            Inicia sesión para administrarla
           </CardDescription>
         </CardHeader>
         

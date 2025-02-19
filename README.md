@@ -1,90 +1,32 @@
-# showcase coffee ☕
+# Showcase Coffee ☕
 
-Encafeinados is a modern and efficient software solution designed for managing
+<p>
+  <img src="./src/assets/images/banner/banner_readme.png" alt="Showcase Coffee Banner" width="600">
+</p>
+
+Showcase Coffee is a modern and efficient software solution designed for managing
 coffee shops and cafes. It provides tools to streamline operations, from handling suppliers
-and stores to managing sales, purchases, and settlements. Built with React and Redux, this frontend
-application ensures a smooth and responsive user experience.
-
-## 🛠️ Technologies Used
-
-* **Frontend**: React, Redux, React Router
-* **Styling**: Tailwind CSS, shadcn/ui, and a touch of pure CSS
-* **Development Tools**: Vite, ESLint, Prettier
-* **HTTP Client**: Axios
-* **UI Libraries**: Headless UI, Radix UI, Lucide Icons, Framer Motion
-* **Form Management**: React Hook Form, Zod
-* **State Management**: Redux Toolkit
-* **Routing**: React Router DOM
-* **Notifications**: React Hot Toast
-
-## 🚀 Installation
-
-To get started with Encafeinados, follow these steps:
-
-### Prerequisites:
-
-Ensure you have Node.js and npm installed.
-
-### Clone the Repository:
-
-https://github.com/EncafeinadosCompany/showcase-coffee.git
-
-### Install Dependencies:
-
-
-npm install
-
-
-### Run the Project:
-
-npm run dev
-
-
-The application will be available at http://localhost:5173.
-
-## 🗂️ Project Structure
-
-```
-src/
-├── API/                  # API-related utilities
-├── assets/               # Static assets (images, styles)
-│   ├── images/          # Image files
-│   └── styles/          # Global styles
-├── components/          # Reusable components
-│   ├── hooks/          # Custom hooks
-│   ├── lib/            # Utility libraries
-│   └── ui/             # UI components
-├── context/            # React context providers
-├── features/           # Feature-specific modules
-│   ├── auth/           # Authentication logic
-│   ├── companies/      # Company management
-│   ├── payments/       # Payment-related features
-│   │   ├── deposits/   # Deposit management
-│   │   └── liquidations/ # Liquidation management
-│   ├── products/       # Product management
-│   │   ├── attributes/ # Product attributes
-│   │   ├── brands/     # Product brands
-│   │   ├── products/   # Products
-│   │   └── variants/   # Product variants
-│   ├── transactions/   # Transaction management
-│   └── users/          # User management
-│       └── employees/  # Employee management
-├── hooks/              # Custom hooks
-├── layout/             # Layout components
-├── pages/              # Application pages
-├── routes/             # Application routes
-├── store/              # Redux store configuration
-├── types/              # TypeScript types
-└── utils/              # Utility functions
-```
+and stores to managing sales, purchases, and settlements. Built with React, Redux, and TypeScript, this frontend application ensures a seamless and responsive user experience.
 
 ## ✨ Key Features
 
-* **Suppliers Management**: Easily manage and track suppliers
-* **Stores Management**: Handle multiple coffee shop locations
-* **Sales Management**: Track and manage sales transactions
-* **Purchases**: Manage inventory and purchases
-* **Settlements**: Handle payments and liquidations efficiently
+- **Suppliers Management**: Easily manage and track suppliers
+- **Stores Management**: Handle multiple coffee shop locations
+- **Sales Management**: Track and manage sales transactions
+- **Purchases**: Manage inventory and purchases
+- **Settlements**: Handle payments and liquidations efficiently
+
+## 🛠️ Technologies Used
+
+- _Frontend_: React, Redux, React Router
+- _Styling_: Tailwind CSS, shadcn/ui, and a touch of pure CSS
+- _Development Tools_: Vite, ESLint, Prettier
+- _HTTP Client_: Axios
+- _UI Libraries_: Headless UI, Radix UI, Lucide Icons, Framer Motion
+- _Form Management_: React Hook Form, Zod
+- _State Management_: Redux Toolkit
+- _Routing_: React Router DOM
+- _Notifications_: React Hot Toast
 
 ## 🧩 Dependencies
 
@@ -106,12 +48,76 @@ src/
 
 For a full list of dependencies, check the `package.json` file.
 
-## 🛠️ Scripts
+## 📋 Prerequisites
+
+Before running the project, make sure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (version 20 or higher)
+- [Database]: Not required for the frontend. Connects to the Showcase Coffee API.
+- [npm](https://www.npmjs.com/) (included with Node.js)
+
+## 🗂️ Project Structure
+
+```
+src/
+├── API/               # API-related utilities
+|
+├── assets/            # Static assets (images, styles)
+|
+├── components/        # Reusable components
+│   ├── hooks/             # Custom hooks
+│   ├── lib/               # Utility libraries
+│   └── ui/                # UI components
+|
+├── context/           # React context providers
+|
+├── features/          # It contains the logic, services, and Redux state of each module.
+│   ├── auth/              # Authentication logic
+│   ├── companies/         # Handles providers and stores.
+│   ├── dashboard/         # Handles dashboard-related logic
+│   ├── images/            # Handles image uploads and management
+│   ├── payments/          # Handles deposit and settlement.
+│   ├── products/          # Handles brands, attributes, Products and variants
+│   ├── transactions/      # Transaction management
+│   └── users/             # Handles roles, users and employees
+|
+├── hooks/             # Custom hooks
+├── layout/            # Layout components
+├── pages/             # Application pages
+├── routes/            # Application routes
+├── store/             # Redux store configuration
+├── types/             # TypeScript types
+└── 
+```
+
+## 🔧 Environment Variables
+Create a `.env.development` file in the root directory and configure the required variables:
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+## ⚙️ Installation
+
+Follow these steps to set up and run the project on your local machine:
+
+1. **Clone the repository**:
+```bash
+git clone https://github.com/EncafeinadosCompany/showcase-coffee.git
+cd showcase-coffee
+```
+
+2. **Install dependencies**:
+```bash
+npm install
+```
+
+## 🚀 Usage
 
 Start Development Server:
 ```bash
 npm run dev
 ```
+*The application will be available at **[http://localhost:5173](http://localhost:5173)**.*
 
 Build for Production:
 ```bash
@@ -128,15 +134,18 @@ Preview Production Build:
 npm run preview
 ```
 
-## 📄 License
+## 🔑 Default Credentials (for testing)
+If you have run the seeders in the backend, you can log in using the following credentials:
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+- **Admin Store**
+  - Email: admintienda@gmail.com
+  - Password: Admin123.
 
-## 📧 Contact
+## 🆘 Support
 
 If you have any questions or suggestions, feel free to reach out:
 
 * Email: your-email@example.com
 * GitHub: your-username
 
-Enjoy managing your coffee shops with Encafeinados! ☕✨
+Enjoy managing your coffee shops with Showcase Coffee! ☕✨
