@@ -1,11 +1,11 @@
 # Showcase Coffee ☕
 
 <p>
-  <img src="./src/assets/images/banner/banner_readme.png" alt="Showcase Coffee Banner" width="600">
+  <img src="./src/assets/images/banner/banner_readme.png" alt="Showcase Coffee Banner" width="800">
 </p>
 
 Showcase Coffee is a modern and efficient software solution designed for managing
-coffee shops and cafes. It provides tools to streamline operations, from handling suppliers
+coffee shops. It provides tools to streamline operations, from handling suppliers
 and stores to managing sales, purchases, and settlements. Built with React, Redux, and TypeScript, this frontend application ensures a seamless and responsive user experience.
 
 ## ✨ Key Features
@@ -18,15 +18,15 @@ and stores to managing sales, purchases, and settlements. Built with React, Redu
 
 ## 🛠️ Technologies Used
 
-- _Frontend_: React, Redux, React Router
-- _Styling_: Tailwind CSS, shadcn/ui, and a touch of pure CSS
-- _Development Tools_: Vite, ESLint, Prettier
-- _HTTP Client_: Axios
-- _UI Libraries_: Headless UI, Radix UI, Lucide Icons, Framer Motion
-- _Form Management_: React Hook Form, Zod
-- _State Management_: Redux Toolkit
-- _Routing_: React Router DOM
-- _Notifications_: React Hot Toast
+- **Frontend**: React, Redux, React Router
+- **Styling**: Tailwind CSS, shadcn/ui, and a touch of pure CSS
+- **Development Tools**: Vite, ESLint, Prettier
+- **HTTP Client**: Axios
+- **UI Libraries**: Headless UI, Radix UI, Lucide Icons, Framer Motion
+- **Form Management**: React Hook Form, Zod
+- **State Management**: Redux Toolkit
+- **Routing**: React Router DOM
+- **Notifications**: React Hot Toast
 
 ## 🧩 Dependencies
 
@@ -53,7 +53,7 @@ For a full list of dependencies, check the `package.json` file.
 Before running the project, make sure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (version 20 or higher)
-- [Database]: Not required for the frontend. Connects to the Showcase Coffee API.
+- Database: Not required for the frontend. Connects to the Showcase Coffee API.
 - [npm](https://www.npmjs.com/) (included with Node.js)
 
 ## 🗂️ Project Structure
@@ -141,11 +141,3 @@ If you have run the seeders in the backend, you can log in using the following c
   - Email: admintienda@gmail.com
   - Password: Admin123.
 
-## 🆘 Support
-
-If you have any questions or suggestions, feel free to reach out:
-
-* Email: your-email@example.com
-* GitHub: your-username
-
-Enjoy managing your coffee shops with Showcase Coffee! ☕✨
