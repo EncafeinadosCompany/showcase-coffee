@@ -110,7 +110,7 @@ const Sidebar = () => {
         </div>
 
       
-        <nav className="flex-grow pt-6 overflow-y-auto">
+        <nav className="flex-grow pt-2 overflow-y-auto">
           <ul className="space-y-2 px-4">
             {sidebarItems.map((item) => (
               <li key={item.label}>

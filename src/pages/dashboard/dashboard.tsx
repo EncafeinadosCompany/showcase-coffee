@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ArrowUpCircle, ArrowDownCircle, Coffee, DollarSign,  AlertTriangle } from 'lucide-react';
+import { Coffee, DollarSign,  AlertTriangle } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import type { AppDispatch } from '../../store/store';
@@ -22,16 +22,15 @@ import {
     } = useAppSelector((state) => state.dashboard);
 
   useEffect(() => {
-    // Obtener los datos del dashboard al montar el componente
-    dispatch(fetchProductTop({ month: 10, year: 2023 })); // Ejemplo: Octubre 2023
+    dispatch(fetchProductTop({ month: 10, year: 2023 }));
     dispatch(fetchEarlyDate());
-    dispatch(fetchEarnings({ month: 10, year: 2023 })); // Ejemplo: Octubre 2023
+    dispatch(fetchEarnings({ month: 10, year: 2023 }));
     dispatch(fetchTotalLiquidation());
     dispatch(fetchTotalDeposits());
   }, [dispatch]);
 
   const data = {
-    deudas: totalLiquidation || 0, 
+    deudas: totalLiquidation || 0,
     pagos: totalDeposits || 0,
     historial: [
       { mes: 'Ene', deudas: 800, pagos: 500 },
@@ -46,7 +45,7 @@ import {
       <AlertTriangle size={64} className="text-amber-400 mb-4" />
       <h3 className="text-xl font-semibold text-gray-700">Sin datos disponibles</h3>
       <p className="text-gray-500 mt-2 text-center max-w-md">
-        No se encontraron registros de transacciones en el sistema. 
+        No se encontraron registros de transacciones en el sistema.
         Por favor, agrega algunas transacciones para visualizar tus datos.
       </p>
     </div>
@@ -57,15 +56,15 @@ import {
     amount: number;
     color: string;
     icon: JSX.Element;
-    trend: string;
-    isPositive: boolean;
+    // trend: string;
+    // isPositive: boolean;
   }
 
-  const MainMetricCard = ({ label, amount, color, icon, trend, isPositive }: MainMetricCardProps) => {
-    const TrendIcon = isPositive ? ArrowUpCircle : ArrowDownCircle;
+  const MainMetricCard = ({ label, amount, color, icon }: MainMetricCardProps) => {
+    // const TrendIcon = isPositive ? ArrowUpCircle : ArrowDownCircle;
 
     return (
-      <div 
+      <div
         className={`p-6 rounded-2xl overflow-hidden relative transition-all duration-700 transform ${!isLoading ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
         style={{ backgroundColor: color }}
       >
@@ -89,16 +88,16 @@ import {
             </div>
           </div>
 
-          {trend && (
-            <div className="flex items-center mt-6 text-white bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm rounded-lg px-3 py-2 inline-block">
-              <TrendIcon size={18} className={isPositive ? "text-green-200" : "text-red-200"} />
-              <span className="ml-2 text-sm font-medium">{trend}% {isPositive ? "más que el mes pasado" : "menos que el mes pasado"}</span>
-            </div>
-          )}
+          {/* {trend && ( */}
+            {/* <div className="flex items-center mt-6 text-white bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm rounded-lg px-3 py-2 inline-block"> */}
+              {/* <TrendIcon size={18} className={isPositive ? "text-green-200" : "text-red-200"} /> */}
+              {/* <span className="ml-2 text-sm font-medium">{trend}% {isPositive ? "más que el mes pasado" : "menos que el mes pasado"}</span> */}
+            {/* </div> */}
+          {/* )} */}
         </div>
 
         {/* Animación de entrada */}
-        <div 
+        <div
           className={`absolute inset-0 bg-white transition-all duration-1000 ${!isLoading ? 'translate-x-full' : 'translate-x-0'}`}
           style={{ transitionDelay: '300ms' }}
         ></div>
@@ -122,21 +121,21 @@ import {
           <>
             {/* Tarjetas principales */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-              <MainMetricCard 
-                label="Total que Debes" 
-                amount={data.deudas} 
-                color="#7c3aed" 
+              <MainMetricCard
+                label="Total Deuda"
+                amount={data.deudas}
+                color="#7c3aed"
                 icon={<DollarSign />}
-                trend="12.5"
-                isPositive={false}
+                // trend="12.5"
+                // isPositive={false}
               />
-              <MainMetricCard 
-                label="Total Pagado" 
-                amount={data.pagos} 
-                color="#0891b2" 
+              <MainMetricCard
+                label="Total Pagado"
+                amount={data.pagos}
+                color="#0891b2"
                 icon={<Coffee />}
-                trend="8.3"
-                isPositive={true}
+                // trend="8.3"
+                // isPositive={true}
               />
             </div>
 
@@ -171,9 +170,9 @@ import {
 
                   <div className="mt-4">
                     <div className="w-full bg-gray-200 rounded-full h-3">
-                      <div 
+                      <div
                         className="h-3 rounded-full bg-gradient-to-r from-cyan-500 to-indigo-500 transition-all duration-1000 ease-out"
-                        style={{ 
+                        style={{
                           width: `${Math.round((data.pagos / data.deudas) * 100)}%`,
                           boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
                         }}
