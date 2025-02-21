@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -10,7 +15,7 @@ import { generateProductPdf } from "./downloadPDF";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { useEffect } from "react";
-import { getID } from "@/features/products/products/productSlice"
+import { getID } from "@/features/products/products/productSlice";
 
 interface VariantModalProps {
   isOpen: boolean;
@@ -42,7 +47,7 @@ const VariantModal: FC<VariantModalProps> = ({
   onClose,
   variants,
   product_name,
-  imagen
+  imagen,
 }) => {
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector((state: any) => state.products);
@@ -57,19 +62,19 @@ const VariantModal: FC<VariantModalProps> = ({
 
   const handleDownloadPDF = async () => {
     const productId = variants[0]?.id_product;
-    if (productId) {
-      try {
-        const data = await dispatch(getID(productId.toString())).unwrap();
-        await generateProductPdf({
-          product_name: data.name,
-          imagen: data.image_url, // Asegúrate de usar la propiedad correcta
-          variants: data.product, // Asegúrate de que esto coincida con la estructura de datos
-          brand: data.brand,
-          attributes: data.attributes,
-        });
-      } catch (error) {
-        console.error("Error al generar el PDF:", error);
-      }
+    try {
+      const data = productId
+        ? await dispatch(getID(productId.toString())).unwrap()
+        : {};
+      await generateProductPdf({
+        product_name: data.name || product_name,
+        imagen: data.image_url || imagen,
+        variants: data.product || [],
+        brand: data.brand || {},
+        attributes: data.attributes || [],
+      });
+    } catch (error) {
+      console.error("Error al generar el PDF:", error);
     }
   };
 
@@ -79,28 +84,30 @@ const VariantModal: FC<VariantModalProps> = ({
         aria-describedby="descripcion-del-modal"
         className="p-0 max-w-4xl bg-[#faf6f1] h-[calc(100vh-80px)] flex flex-col overflow-hidden"
       >
-        <DialogHeader className="p-6 pb-0">
+        <DialogHeader className="p-6 pb-0 mt-3">
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2">
-              <Coffee className="h-8 w-8 text-[#582f0e]" />
-              <DialogTitle className="text-3xl font-bold text-[#582f0e]">
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-3xl font-bold text-[#582f0e] flex items-center gap-2">
+                <Coffee className="h-8 w-8 text-[#582f0e]" />
                 {product_name}
               </DialogTitle>
+
+              <Button
+                variant="outline"
+                className="w-fit text-[#582f0e] hover:bg-[#582f0e] hover:text-white transition-colors rounded-full"
+                onClick={handleDownloadPDF}
+                disabled={isLoading}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                {isLoading ? "Cargando..." : "Ficha técnica PDF"}
+                {error && <p className="text-red-500">{error}</p>}
+              </Button>
             </div>
-            <Button
-              variant="outline"
-              className="w-fit text-[#582f0e] border-[#582f0e] hover:bg-[#582f0e] hover:text-white transition-colors"
-              onClick={handleDownloadPDF}
-              disabled={isLoading}
-            >
-              <Download className="h-4 w-4 mr-2" />
-              {isLoading ? "Cargando..." : "Ficha técnica PDF"}
-              {error && <p className="text-red-500">{error}</p>}
-            </Button>
+            <div className="border-b border-[#e8d5c4]"></div>
           </div>
         </DialogHeader>
 
-        <div className="flex flex-col md:flex-row gap-6 p-6 flex-1 overflow-hidden">
+        <div className="flex flex-col md:flex-row gap-6 py-4 px-7 flex-1 overflow-hidden">
           {/* Imagen creativa */}
           <div className="flex-shrink-0 w-full md:w-1/2 relative overflow-hidden rounded-2xl shadow-xl">
             <div className="absolute inset-0 bg-gradient-to-br from-[#db8935] to-[#582f0e] opacity-20"></div>
@@ -123,8 +130,12 @@ const VariantModal: FC<VariantModalProps> = ({
                   exit={{ opacity: 0, y: 20 }}
                   className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-4"
                 >
-                  <p className="text-2xl font-bold">{hoveredVariant.grammage}</p>
-                  <p className="text-sm">Stock: {hoveredVariant.stock} unidades</p>
+                  <p className="text-2xl font-bold">
+                    {hoveredVariant.grammage}
+                  </p>
+                  <p className="text-sm">
+                    Stock: {hoveredVariant.stock} unidades
+                  </p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -148,7 +159,9 @@ const VariantModal: FC<VariantModalProps> = ({
                         <div className="bg-[#db8935] rounded-full p-2">
                           <Scale className="h-6 w-6 text-white" />
                         </div>
-                        <span className="text-[#713f12] font-bold text-xl">{variant.grammage}</span>
+                        <span className="text-[#713f12] font-bold text-xl">
+                          {variant.grammage}
+                        </span>
                       </div>
                       <Badge
                         variant="outline"
@@ -159,13 +172,17 @@ const VariantModal: FC<VariantModalProps> = ({
                     </div>
                     <div className="mt-3 flex items-center gap-2 text-[#8b7355]">
                       <Package className="h-4 w-4" />
-                      <span className="text-sm">Presentación de {variant.grammage} gramos</span>
+                      <span className="text-sm">
+                        Presentación de {variant.grammage} gramos
+                      </span>
                     </div>
                   </motion.div>
                 ))
               ) : (
                 <div className="flex content-center justify-center items-center h-32">
-                  <span className="text-[#713f12] text-xl">No hay referencias disponibles</span>
+                  <span className="text-[#713f12] text-xl">
+                    No hay referencias disponibles
+                  </span>
                 </div>
               )}
             </div>
