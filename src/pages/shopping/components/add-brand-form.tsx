@@ -31,18 +31,18 @@ export default function AddBrandForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="brandName" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="brandName" className="block text-sm font-medium text-gray-700 rounded-full m-2">
           Nombre de la Marca
         </label>
-        <Input id="brandName" value={name} onChange={(e) => setName(e.target.value)}/>
+        <Input  id="brandName" className="rounded-full" value={name} onChange={(e) => setName(e.target.value)}/>
       </div>
       <div>
         <label htmlFor="brandDescription" className="block text-sm font-medium text-gray-700">
           Descripción
         </label>
-        <Textarea id="brandDescription" value={description} onChange={(e) => setDescription(e.target.value)}/>
+        <Textarea id="brandDescription" className="rounded-full" value={description} onChange={(e) => setDescription(e.target.value)}/>
       </div>
-      <Button type="submit">Agregar Marca</Button>
+      <Button type="submit" className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium">Agregar Marcaaaa</Button>
     </form>
   )
 }

@@ -12,13 +12,10 @@ export const Products = () => {
           <div className="flex flex-wrap justify-center items-center gap-3">
             <Coffee className="h-8 w-8 text-[#36270b]" />
             <h1 className="text-3xl sm:text-3xl font-bold text-center font-libre-baskerville text-[#36270b]">
-              El Rincón del Café
+            Gestión de Inventario
             </h1>
             <Coffee className="h-8 w-8 text-[#36270b]" />
           </div>
-          <p className="text-amber-800 text-base sm:text-lg font-medium italic text-center">
-            Gestión de Inventario
-          </p>
         </div>
         <div className="flex-1 overflow-auto">
           
