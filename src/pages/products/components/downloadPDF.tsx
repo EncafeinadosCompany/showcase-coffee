@@ -130,6 +130,7 @@ export const generateProductPdf = async (product: Product) => {
     doc.roundedRect(spacing.margin - 1, currentY - 1, imageSize + 2, imageSize + 2, 3, 3, "FD");
     doc.addImage(img, "JPEG", spacing.margin, currentY, imageSize, imageSize);
   } catch (error) {
+    
     doc.setFillColor(colors.lightGray);
     doc.roundedRect(spacing.margin - 1, currentY - 1, imageSize + 2, imageSize + 2, 3, 3, "F");
     
@@ -140,6 +141,7 @@ export const generateProductPdf = async (product: Product) => {
       align: "center",
       baseline: "middle"
     });
+    throw new Error(`Error: ${error}`);
   }
 
   // Description
