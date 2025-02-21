@@ -27,6 +27,7 @@ const Dashboard = () => {
     totalLiquidation,
     totalDeposits,
     topProducts,
+    earnings,
     isLoading,
     error,
   } = useAppSelector((state) => state.dashboard);
@@ -52,6 +53,7 @@ const Dashboard = () => {
   const data = {
     deudas: totalLiquidation || 0,
     pagos: totalDeposits || 0,
+    ganancias: earnings || 0,
     historial: [
       { mes: "Ene", deudas: 800, pagos: 500 },
       { mes: "Feb", deudas: 900, pagos: 600 },
@@ -90,7 +92,7 @@ const Dashboard = () => {
               />
               <MetricCard
                 label="Total Ganancias"
-                amount={0} // Cambiar por el total de ganancias
+                amount={data.ganancias}
                 color="#FF7F50"
                 icon={<HandCoins />} 
                 isLoading={isLoading}

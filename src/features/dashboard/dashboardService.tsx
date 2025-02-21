@@ -12,7 +12,7 @@ export const getEarlyDate = async () => {
 
 export const getEarnings = async (month: number, year: number) => {
   const response = await axiosInstance.post("/dashboard/data-earning", { month, year });
-  return response.data;
+  return response.data.data;
 };
 
 export const getTotalLiquidation = async () => {
