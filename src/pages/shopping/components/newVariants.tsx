@@ -1,91 +1,45 @@
 import { variantType } from "@/types/products/variant";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Coffee } from "lucide-react";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import {addVariant} from "@/features/products/variants/vatiantSlice";
+import { addVariant } from "@/features/products/variants/vatiantSlice";
 import { fetchProducts } from "@/features/products/products/productSlice";
 import toast from "react-hot-toast";
 
-
-
-export default function NuevaVarianteDialog({
-  productoId,
-}: {
-  productoId: number;
-}) {
+export default function NewVariantDialog({ productoId }: { productoId: number; }) {
   const [gramaje, setGramaje] = useState("");
-  const [fechaTostion, setFechaTostion] = useState("");
-  const [cantidad, setCantidad] = useState("");
-  const [precioCompra, setPrecioCompra] = useState("");
-  const [porcentajeVenta, setPorcentajeVenta] = useState("");
-  const [precioVenta, setPrecioVenta] = useState("");
-  const {error } = useAppSelector((state) => state.variants);
+  const { error } = useAppSelector((state) => state.variants);
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-
-  useEffect(() => {
-    if (precioCompra && porcentajeVenta) {
-      const precio = Number.parseFloat(precioCompra);
-      const porcentaje = Number.parseFloat(porcentajeVenta);
-      const nuevoPrecioVenta = precio * (1 + porcentaje / 100);
-      setPrecioVenta(nuevoPrecioVenta.toFixed(2));
-    }
-  }, [precioCompra, porcentajeVenta]);
 
   const handleSubmit = (e: React.FormEvent) => {
 
     e.preventDefault();
-  
+
     const nuevaVariante: variantType = {
-      id:null,
       grammage: gramaje,
-      stock: 0,
       id_product: productoId,
-      images: [{ url: "example.svg" }],
+      image_url: "example.svg",
     };
 
-    if(error){
-  
-      // toast({
-      //   title: "Error al agregar la variante",
-      //   description: error,
-      //   variant:"destructive"
-      // })
-    }else{
+    if (error) {
+      toast.error("Error al agregar la variante")
+    } else {
       dispatch(addVariant(nuevaVariante));
-
-      // toast({
-      //   title: `El ${gramaje}g ha sido agregado`,
-      //   description: "Puedes verlo en la lista de productos",
-      //   variant: "success",
-      //   action: (
-      //     <ToastAction altText="Goto schedule to undo">Ok</ToastAction>
-      //   ),
-      // })
+      console.log("Variante agregada", nuevaVariante);
+      toast.success(`La variante de ${gramaje}g ha sido agregada`)
     }
     setGramaje("");
-    setFechaTostion("");
-    setCantidad("");
-    setPrecioCompra("");
-    setPorcentajeVenta("");
-    setPrecioVenta("");
     setIsModalOpen(false);
     dispatch(fetchProducts());
   };
 
   return (
-    <Dialog  onOpenChange={setIsModalOpen} open={isModalOpen}>
+    <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
       <DialogTrigger asChild>
         <Button className="mt-4 bg-[#6F4E37] hover:bg-[#5A3E2B] text-white">
           <Coffee className="mr-2 h-4 w-4" /> Agregar Variante

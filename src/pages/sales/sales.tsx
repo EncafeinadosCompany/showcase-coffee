@@ -128,7 +128,7 @@ export default function Sales() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
+      <div className="h-full w-full flex justify-between items-center mb-4">
         <h6 className="text-amber-600 text-5xl md:text-3xl font-extrabold">
           Ventas
         </h6>
@@ -186,7 +186,7 @@ export default function Sales() {
           </Pagination>
         </div>
       ) : (
-        <div className="flex gap-4">
+        <div className="flex gap-4 h-full w-full">
           <section className="w-[35%]">
             <Products
               products={saleVariants}

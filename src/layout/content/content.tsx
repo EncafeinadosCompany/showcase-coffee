@@ -1,20 +1,21 @@
-import Sidebar from "../Sidebar/Sidebar";
+import Sidebar from "../Sidebar/Sidebar"; 
 import { Outlet } from "react-router-dom";
 
 const Layout = () => {
-
   return (
-    <div className="flex min-h-screen bg-gradient-to-b from-amber-50 to-white">
-      <div className="hidden md:block">
-      <Sidebar />
+    <div className="flex h-screen w-full bg-gradient-to-b from-amber-50 to-white overflow-hidden">
+      <div className="hidden m-4 md:flex md:flex-shrink-0">
+        <Sidebar />
       </div>
-      <div className="flex-1 flex flex-col">
-      <main className="flex-grow overflow-y-auto p-6 lg:p-8">
-        
-        <Outlet />
-      </main>
+      <div className="flex-1 flex flex-col w-full overflow-hidden">
+        <main className="flex-1 p-4 overflow-hidden">
+          <div className="h-full w-full mx-auto max-w-8xl rounded-2xl overflow-auto">
+            <Outlet />
+          </div>
+        </main>
       </div>
-      <div className="md:hidden">
+      <div className="md:hidden ">
+        <Sidebar />
       </div>
     </div>
   );
