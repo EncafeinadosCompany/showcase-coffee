@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
-    <div className="flex h-screen w-full bg-gradient-to-b from-amber-50 to-white overflow-hidden">
+    <div className="flex h-screen w-full bg-[#F5E6D3] overflow-hidden">
       <div className="hidden m-4 md:flex md:flex-shrink-0">
         <Sidebar />
       </div>
