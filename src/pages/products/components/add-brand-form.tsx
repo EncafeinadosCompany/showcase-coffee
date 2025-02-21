@@ -30,26 +30,49 @@ export default function AddBrandForm() {
         color: '#fefae0',
       }
     })
-    dispatch(addBrand({ name, description }))
+    dispatch(addBrand({ 
+      name, 
+      description, 
+      image_url: '', 
+      razon: '', 
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      social_networks: []
+    }))
     setName("")
     setDescription("")
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-6 p-6 bg-white rounded-xl shadow-sm">
       <div>
-        <label htmlFor="brandName" className="block text-sm font-medium text-gray-700">
-          Nombre de la Marca
-        </label>
-        <Input id="brandName" value={name} onChange={(e) => setName(e.target.value)} />
+      <label htmlFor="brandName" className="block text-sm font-medium text-amber-800 mb-2">
+        Nombre de la Marca
+      </label>
+      <Input 
+        id="brandName" 
+        className="rounded-full bg-white hover:bg-amber-100 text-amber-800" 
+        value={name} 
+        onChange={(e) => setName(e.target.value)}
+      />
       </div>
       <div>
-        <label htmlFor="brandDescription" className="block text-sm font-medium text-gray-700">
-          Descripción
-        </label>
-        <Textarea id="brandDescription" value={description} onChange={(e) => setDescription(e.target.value)} />
+      <label htmlFor="brandDescription" className="block text-sm font-medium text-amber-800 mb-2">
+        Descripción
+      </label>
+      <Textarea 
+        id="brandDescription" 
+        className="bg-white hover:bg-amber-100 text-amber-800 rounded-xl"
+        value={description} 
+        onChange={(e) => setDescription(e.target.value)}
+      />
       </div>
-      <Button type="submit">Agregar Marca</Button>
+      <Button 
+      type="submit" 
+      className=" bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium px-6 py-2 border border-amber-800"
+      >
+      Agregar Marca
+      </Button>
     </form>
   )
 }

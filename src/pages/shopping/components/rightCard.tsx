@@ -48,10 +48,10 @@ export default function RightCard({
         <div className="flex gap-2">
           <div className="relative w-full">
             <Input
+              className="rounded-full pl-10 bg-white/80 backdrop-blur"
               placeholder="Buscar producto por nombre..."
               value={searchTerm}
               onChange={(e) => setSearch(e.target.value)}
-              className="bg-white/80 backdrop-blur  rounded-full pl-10"
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-amber-700" />
           </div>

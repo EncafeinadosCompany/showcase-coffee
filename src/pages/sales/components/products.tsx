@@ -96,7 +96,7 @@ export default function Products({
                 <div className="flex gap-2 mt-4">
                     <div className="relative w-full">
                         <Input
-                            className="rounded-full pl-10"
+                            className=" pl-10 rounded-full"
                             placeholder="Buscar producto por nombre..."
                             value={searchTerm}
                             onChange={(e) => setSearch(e.target.value)}

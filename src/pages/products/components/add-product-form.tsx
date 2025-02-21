@@ -150,7 +150,7 @@ export default function AddProductForm() {
   const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setLogoPreview(URL.createObjectURL(file)); // Genera una URL temporal para la previsualización
+      setLogoPreview(URL.createObjectURL(file)); 
     }
   };
 

@@ -75,7 +75,7 @@ const Sidebar: FC = () => {
           ${isMobile && !isSidebarVisible ? '-translate-x-full' : 'translate-x-0'}
         `}
       >
-        <div className="flex items-center justify-between p-5 border-b border-amber-100">
+        <div className="flex items-center justify-between p-3 border-b border-amber-100">
           {!isCollapsed && (
             <button
               onClick={() => navigate('/home')}
