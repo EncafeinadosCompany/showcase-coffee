@@ -5,18 +5,16 @@ import AddBrandForm from "./add-brand-form"
 import AddProductForm from "./add-product-form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 
 export default function ProductManagement() {
 
- const navigate = useNavigate()
-
-
+//  const navigate = useNavigate()
 
   return (
    <div >
-     <Tabs defaultValue="products" className="w-full " >
-      <div className="flex justify-between items-center">
+     <Tabs defaultValue="products" className="h-full w-full" >
+      <div className="flex justify-between items-center ">
       <TabsList >
         <TabsTrigger className= "rounded-2xl hover:bg-gray-100 hover:text-[#99582a]"value="products">Productos</TabsTrigger>
         <TabsTrigger className= "rounded-2xl hover:bg-gray-100 hover:text-[#99582a]" value="add-brand">Agregar Marca</TabsTrigger>

@@ -61,6 +61,8 @@ export const ProvidersPage = () => {
     <div className="bg-gradient-to-b from-amber-50 to-white p-4 space-y-3 ">
       <div className="flex justify-between items-center mb-6">
         <h1 className=" text-amber-600 text-5xl md:text-3xl font-bold">
+
+
           Gestión de Proveedores
         </h1>
 
@@ -97,6 +99,9 @@ export const ProvidersPage = () => {
           />
         </div>
 
+
+
+
         <div className="flex gap-2">
           <Button
             onClick={() => setViewMode("cards")}
@@ -114,6 +119,7 @@ export const ProvidersPage = () => {
           >
             <List className="mr-2 h-4 w-4" /> Lista
           </Button>
+
         </div>
       </div>
 
@@ -132,6 +138,10 @@ export const ProvidersPage = () => {
           {viewMode === "cards" ? (
             <ScrollArea className="h-[350px]">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+
+
+
                 {providers.map((provider) => (
                   <ProviderCard
                     key={provider.id}
@@ -140,13 +150,19 @@ export const ProvidersPage = () => {
                   />
                 ))}
               </div>
+
             </ScrollArea>
           ) : (
             <ProviderTable
               providers={providers}
               onProviderClick={handleProviderClick}
             />
+
+
           )}
+
+
+
 
           <Pagination>
             <PaginationContent>
@@ -193,6 +209,7 @@ export const ProvidersPage = () => {
       )}
     </div>
   );
+
 };
 
 export default ProvidersPage;
