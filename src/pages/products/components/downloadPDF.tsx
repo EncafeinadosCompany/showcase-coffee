@@ -1,16 +1,16 @@
 import jsPDF from "jspdf";
 
 interface Attribute {
-    description: string;
-    attributes_products: {
-      value: string;
-    };
-  }
-  
-  interface Brand {
-    name: string;
-    description: string;
-  }
+  description: string;
+  attributes_products: {
+    value: string;
+  };
+}
+
+interface Brand {
+  name: string;
+  description: string;
+}
 
 interface ProductVariant {
   grammage: string;
@@ -27,141 +27,141 @@ interface Product {
   description?: string;
 }
 
-// Función para crear una imagen de placeholder usando SVG
-const createPlaceholderImage = () => {
-  const svg = `
-    <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-      <rect width="200" height="200" fill="#f3e5d8"/>
-      <text x="100" y="100" font-family="Arial" font-size="14" fill="#8b7355" text-anchor="middle">
-        Imagen no disponible
-      </text>
-      <path d="M85,80 C85,80 115,80 115,80 C125,80 125,90 125,90 L125,110 C125,110 125,120 115,120 L85,120 C75,120 75,110 75,110 L75,90 C75,90 75,80 85,80" fill="#8b7355"/>
-      <circle cx="100" cy="100" r="10" fill="#f3e5d8"/>
-    </svg>`;
-  
-  return `data:image/svg+xml;base64,${btoa(svg)}`;
-};
-
-export const generateProductPdf = (product: Product) => {
+export const generateProductPdf = async (product: Product) => {
   const doc = new jsPDF();
-  
+
   // Define colors
-  const primaryColor = "#582f0e";
-  const secondaryColor = "#db8935";
-  const textColor = "#713f12";
-  const backgroundColor = "#f3e5d8";
-  
+  const primaryColor = "#582f0e"; // Color principal (café oscuro)
+  const secondaryColor = "#db8935"; // Color secundario (café claro)
+  const textColor = "#713f12"; // Color de texto
+
+  // Margins
+  const margin = 20;
+  let currentY = margin;
+
   // Header
   doc.setFillColor(primaryColor);
-  doc.rect(0, 0, 210, 40, "F");
-  
+  doc.rect(0, 0, 210, 40, "F"); // Rectángulo de fondo para el encabezado
+
   doc.setTextColor("#ffffff");
   doc.setFontSize(24);
-  doc.text("FICHA TÉCNICA", 105, 20, { align: "center" });
-  
+  doc.setFont("helvetica", "bold");
+  doc.text("FICHA TÉCNICA", 105, 25, { align: "center" });
+
   // Product name and brand
+  currentY += 40; // Espacio después del encabezado
   doc.setTextColor(primaryColor);
-  doc.setFontSize(20);
-  doc.text(product.product_name, 105, 50, { align: "center" });
-  
+  doc.setFontSize(18);
+  doc.setFont("helvetica", "bold");
+  doc.text(product.product_name || "Nombre del producto no disponible", margin, currentY);
+
   if (product.brand) {
+    currentY += 10;
     doc.setFontSize(14);
-    doc.text(product.brand.name, 105, 60, { align: "center" });
-    doc.setFontSize(12);
-    doc.text(product.brand.description, 105, 68, { align: "center" });
+    doc.setFont("helvetica", "normal");
+    doc.text(`Marca: ${product.brand.name || "Marca no disponible"}`, margin, currentY);
   }
 
-  // Description section (new)
-  let currentY = 80;
+  // Image section
+  currentY += 20; // Espacio antes de la imagen
+  const imageWidth = 80;
+  const imageHeight = 80;
+  const imageX = margin;
+  const imageY = currentY;
+
+  try {
+    // Usar la imagen del producto o el placeholder por defecto
+    const imageUrl = product.imagen || "/public/coffee bean-pana.svg";
+
+    const img = new Image();
+    img.src = imageUrl;
+
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+    });
+
+    // Agrega la imagen con un borde sutil
+    doc.setDrawColor(secondaryColor);
+    doc.setLineWidth(0.5);
+    doc.rect(imageX, imageY, imageWidth, imageHeight);
+    doc.addImage(img, "JPEG", imageX + 2, imageY + 2, imageWidth - 4, imageHeight - 4); // Ajusta el tamaño para el borde
+  } catch (error) {
+    console.error("Error al cargar la imagen:", error);
+    // Si falla la carga de la imagen, usa el placeholder
+    const placeholderImg = "/placeholder.svg";
+    doc.addImage(placeholderImg, "JPEG", imageX, imageY, imageWidth, imageHeight);
+  }
+
+  // Description section
+  currentY += imageHeight + 15; // Espacio después de la imagen
   if (product.description) {
     doc.setFillColor(secondaryColor);
-    doc.rect(20, currentY - 5, 170, 10, "F");
+    doc.rect(margin, currentY - 5, 170, 10, "F"); // Fondo para el título de la descripción
     doc.setTextColor("#ffffff");
     doc.setFontSize(14);
-    doc.text("DESCRIPCIÓN", 105, currentY, { align: "center" });
-    
+    doc.setFont("helvetica", "bold");
+    doc.text("DESCRIPCIÓN", margin + 5, currentY);
+
+    currentY += 10;
     doc.setTextColor(textColor);
     doc.setFontSize(12);
-    const description = doc.splitTextToSize(product.description, 150);
-    currentY += 15;
-    doc.text(description, 20, currentY);
-    currentY += (description.length * 7) + 10;
+    doc.setFont("helvetica", "normal");
+    const description = doc.splitTextToSize(product.description, 170); // Ajusta el ancho del texto
+    doc.text(description, margin, currentY);
+    currentY += description.length * 7 + 10; // Ajusta el espacio según el número de líneas
   }
-  
-  // Image section with placeholder
-  doc.setFillColor(backgroundColor);
-  doc.rect(20, currentY, 80, 80, "F");
-  
-  if (product.imagen) {
-    try {
-      const img = new Image();
-      img.src = product.imagen;
-      doc.addImage(img, "JPEG", 20, currentY, 80, 80);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      // Si falla la carga de la imagen, usar el placeholder
-      const placeholderImg = createPlaceholderImage();
-      doc.addImage(placeholderImg, "PNG", 20, currentY, 80, 80);
-    }
-  } else {
-    // Si no hay imagen, usar el placeholder
-    const placeholderImg = createPlaceholderImage();
-    doc.addImage(placeholderImg, "PNG", 20, currentY, 80, 80);
-  }
-  
+
+  // Attributes section
   if (product.attributes && product.attributes.length > 0) {
-    let attrY = currentY + 90; // Ajusta la posición vertical para que no se superponga con la imagen
-    
     doc.setFillColor(secondaryColor);
-    doc.rect(110, attrY - 5, 80, 10, "F");
+    doc.rect(margin, currentY - 5, 170, 10, "F"); // Fondo para el título de los atributos
     doc.setTextColor("#ffffff");
     doc.setFontSize(14);
-    doc.text("CARACTERÍSTICAS", 150, attrY, { align: "center" });
-    
+    doc.setFont("helvetica", "bold");
+    doc.text("CARACTERÍSTICAS", margin + 5, currentY);
+
+    currentY += 10;
     doc.setTextColor(textColor);
-    doc.setFontSize(11);
-    attrY += 15;
-    
-    // Mostrar cada atributo en una línea separada
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+
     product.attributes.forEach((attr) => {
       doc.setFont("helvetica", "bold");
-      doc.text(`${attr.description}:`, 110, attrY);
+      doc.text(`${attr.description || "Atributo no disponible"}:`, margin, currentY);
       doc.setFont("helvetica", "normal");
-      
-      // Dividir el valor del atributo en varias líneas si es demasiado largo
-      const valueLines = doc.splitTextToSize(attr.attributes_products.value, 80);
-      doc.text(valueLines, 110, attrY + 5);
-      
-      // Ajustar la posición vertical para el siguiente atributo
-      attrY += 10 + (valueLines.length * 5); // Incrementar el espacio según el número de líneas
+
+      const valueLines = doc.splitTextToSize(attr.attributes_products.value || "Valor no disponible", 170);
+      doc.text(valueLines, margin + 20, currentY + 5);
+      currentY += valueLines.length * 7 + 10; // Ajusta el espacio según el número de líneas
     });
   }
-  
+
   // Variants section
-  const variantsYPos = currentY + 100;
   doc.setFillColor(secondaryColor);
-  doc.rect(20, variantsYPos - 5, 170, 10, "F");
+  doc.rect(margin, currentY - 5, 170, 10, "F"); // Fondo para el título de las variantes
   doc.setTextColor("#ffffff");
   doc.setFontSize(14);
-  doc.text("PRESENTACIONES DISPONIBLES", 105, variantsYPos, { align: "center" });
-  
-  let currentVariantY = variantsYPos + 15;
+  doc.setFont("helvetica", "bold");
+  doc.text("PRESENTACIONES DISPONIBLES", margin + 5, currentY);
+
+  currentY += 10;
   doc.setTextColor(textColor);
   doc.setFontSize(12);
-  
-  // Crear una tabla para las variantes
+  doc.setFont("helvetica", "normal");
+
   product.variants.forEach((variant) => {
     doc.setFont("helvetica", "bold");
-    doc.text(`Presentación ${variant.grammage}g`, 20, currentVariantY);
+    doc.text(`• ${variant.grammage || "N/A"}g`, margin, currentY);
     doc.setFont("helvetica", "normal");
-    doc.text(`Stock: ${variant.stock} unidades`, 120, currentVariantY);
-    currentVariantY += 10;
+    doc.text(`Stock: ${variant.stock || 0} unidades`, margin + 50, currentY);
+    currentY += 10;
   });
-  
+
   // Footer
   const pageHeight = doc.internal.pageSize.height;
   doc.setFillColor(primaryColor);
-  doc.rect(0, pageHeight - 20, 210, 20, "F");
+  doc.rect(0, pageHeight - 20, 210, 20, "F"); // Rectángulo de fondo para el pie de página
   doc.setTextColor("#ffffff");
   doc.setFontSize(10);
   doc.text(
@@ -170,7 +170,7 @@ export const generateProductPdf = (product: Product) => {
     pageHeight - 10,
     { align: "center" }
   );
-  
+
   // Save the PDF
-  doc.save(`${product.product_name}_ficha_tecnica.pdf`);
+  doc.save(`${product.product_name || "producto"}_ficha_tecnica.pdf`);
 };
