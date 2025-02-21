@@ -1,53 +1,105 @@
 import jsPDF from "jspdf";
-import {Product} from '@/types/products/PDF'
+import { Product } from '@/types/products/PDF';
 
 export const generateProductPdf = async (product: Product) => {
-  const doc = new jsPDF();
+  // Initialize PDF in A4 format
+  const doc = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "a4"
+  });
 
-  // Define colors
-  const primaryColor = "#582f0e"; // Color principal (café oscuro)
-  const secondaryColor = "#db8935"; // Color secundario (café claro)
-  const textColor = "#713f12"; // Color de texto
+  // Design constants
+  const colors = {
+    primary: "#582f0e",
+    secondary: "#db8935",
+    text: "#333333",
+    lightGray: "#f5f5f5",
+    white: "#ffffff"
+  };
 
-  // Margins
-  const margin = 20;
-  let currentY = margin;
-  const imagenDefault="https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png";
+  const fonts = {
+    title: 24,
+    subtitle: 18,
+    heading: 14,
+    normal: 12,
+    small: 10
+  };
 
-  // Header
-  doc.setFillColor(primaryColor);
-  doc.rect(0, 0, 210, 40, "F"); // Rectángulo de fondo para el encabezado
+  const spacing = {
+    margin: 20,
+    lineHeight: 7,
+    sectionGap: 15
+  };
 
-  doc.setTextColor("#ffffff");
-  doc.setFontSize(24);
-  doc.setFont("helvetica", "bold");
-  doc.text("FICHA TÉCNICA", 105, 25, { align: "center" });
+  let currentY = 0;
+  const pageWidth = doc.internal.pageSize.width;
+  const contentWidth = pageWidth - (spacing.margin * 2);
+
+  // Helper functions
+  const addNewPage = () => {
+    doc.addPage();
+    currentY = spacing.margin;
+    addHeaderToPage();
+  };
+
+  const checkPageBreak = (neededSpace: number) => {
+    if (currentY + neededSpace > doc.internal.pageSize.height - 30) {
+      addNewPage();
+      return true;
+    }
+    return false;
+  };
+
+  const addHeaderToPage = () => {
+    doc.setFillColor(colors.primary);
+    doc.rect(0, 0, pageWidth, 35, "F");
+    doc.setFillColor(colors.white);
+    
+
+    doc.setTextColor(colors.white);
+    doc.setFontSize(fonts.title);
+    doc.setFont("helvetica", "bold");
+    doc.text("FICHA TÉCNICA", pageWidth / 2, 25, { align: "center" });
+  };
+
+  const addSectionTitle = (title: string) => {
+    // Section title background
+    doc.setFillColor(colors.secondary);
+    doc.setDrawColor(colors.secondary);
+    doc.roundedRect(spacing.margin, currentY, contentWidth, 10, 2, 2, "F");
+    
+    // Title text
+    doc.setTextColor(colors.white);
+    doc.setFontSize(fonts.heading);
+    doc.setFont("helvetica", "bold");
+    doc.text(title, spacing.margin + 5, currentY + 7);
+    currentY += 15;
+  };
+
+  // Start PDF Generation
+  addHeaderToPage();
+  currentY = 50;
 
   // Product name and brand
-  currentY += 40; // Espacio después del encabezado
-  doc.setTextColor(primaryColor);
-  doc.setFontSize(18);
+  doc.setTextColor(colors.primary);
+  doc.setFontSize(fonts.subtitle);
   doc.setFont("helvetica", "bold");
-  doc.text(product.product_name || "Nombre del producto no disponible", margin, currentY);
+  doc.text(product.product_name || "Nombre del producto no disponible", spacing.margin, currentY);
 
   if (product.brand) {
-    currentY += 10;
-    doc.setFontSize(14);
+    currentY += 8;
+    doc.setFontSize(fonts.normal);
     doc.setFont("helvetica", "normal");
-    doc.text(`Marca: ${product.brand.name || "Marca no disponible"}`, margin, currentY);
+    doc.text(`Marca: ${product.brand.name || "No disponible"}`, spacing.margin, currentY);
   }
 
-  // Image section
-  currentY += 20; // Espacio antes de la imagen
-  const imageWidth = 80;
-  const imageHeight = 80;
-  const imageX = margin;
-  const imageY = currentY;
-
+  // Image and Description in two columns
+  currentY += spacing.sectionGap;
+  const imageSize = 80;
+  
   try {
-    // Usar la imagen del producto o el placeholder por defecto
-    const imageUrl = product.imagen || imagenDefault;
-
+    const imageUrl = product.imagen || "https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png";
     const img = new Image();
     img.src = imageUrl;
 
@@ -56,95 +108,124 @@ export const generateProductPdf = async (product: Product) => {
       img.onerror = reject;
     });
 
-    // Agrega la imagen con un borde sutil
-    doc.setDrawColor(secondaryColor);
-    doc.setLineWidth(0.5);
-    doc.rect(imageX, imageY, imageWidth, imageHeight);
-    doc.addImage(img, "JPEG", imageX + 2, imageY + 2, imageWidth - 4, imageHeight - 4); // Ajusta el tamaño para el borde
+    // Image container with shadow effect
+    doc.setDrawColor(colors.lightGray);
+    doc.setFillColor(colors.white);
+    doc.roundedRect(spacing.margin - 1, currentY - 1, imageSize + 2, imageSize + 2, 3, 3, "FD");
+    doc.addImage(img, "JPEG", spacing.margin, currentY, imageSize, imageSize);
   } catch (error) {
     console.error("Error al cargar la imagen:", error);
-    // Si falla la carga de la imagen, usa el placeholder
-    const placeholderImg = "/placeholder.svg";
-    doc.addImage(placeholderImg, "JPEG", imageX, imageY, imageWidth, imageHeight);
   }
 
-  // Description section
-  currentY += imageHeight + 15; // Espacio después de la imagen
+  // Description next to image
   if (product.description) {
-    doc.setFillColor(secondaryColor);
-    doc.rect(margin, currentY - 5, 170, 10, "F"); // Fondo para el título de la descripción
-    doc.setTextColor("#ffffff");
-    doc.setFontSize(14);
-    doc.setFont("helvetica", "bold");
-    doc.text("DESCRIPCIÓN", margin + 5, currentY);
-
-    currentY += 10;
-    doc.setTextColor(textColor);
-    doc.setFontSize(12);
+    const descriptionX = spacing.margin + imageSize + 10;
+    const descriptionWidth = contentWidth - imageSize - 10;
+    
+    doc.setTextColor(colors.text);
+    doc.setFontSize(fonts.normal);
     doc.setFont("helvetica", "normal");
-    const description = doc.splitTextToSize(product.description, 170); // Ajusta el ancho del texto
-    doc.text(description, margin, currentY);
-    currentY += description.length * 7 + 10; // Ajusta el espacio según el número de líneas
+    const descriptionLines = doc.splitTextToSize(product.description, descriptionWidth);
+    doc.text(descriptionLines, descriptionX, currentY + 10);
   }
 
-  // Attributes section
-  if (product.attributes && product.attributes.length > 0) {
-    doc.setFillColor(secondaryColor);
-    doc.rect(margin, currentY - 5, 170, 10, "F"); // Fondo para el título de los atributos
-    doc.setTextColor("#ffffff");
-    doc.setFontSize(14);
-    doc.setFont("helvetica", "bold");
-    doc.text("CARACTERÍSTICAS", margin + 5, currentY);
+  currentY += imageSize + spacing.sectionGap;
 
-    currentY += 10;
-    doc.setTextColor(textColor);
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "normal");
+  // Attributes
+  if ((product.attributes ?? []).length > 0) {
+    addSectionTitle("CARACTERÍSTICAS DEL PRODUCTO");
+    
+    (product.attributes ?? []).forEach((attr, index) => {
+      if (checkPageBreak(20)) return;
 
-    product.attributes.forEach((attr) => {
+      // Attribute box with alternating background
+      const isEven = index % 2 === 0;
+      doc.setFillColor(isEven ? colors.lightGray : colors.white);
+      doc.rect(spacing.margin, currentY - 5, contentWidth, 15, "F");
+
+      // Attribute name and value
+      doc.setTextColor(colors.text);
+      doc.setFontSize(fonts.normal);
       doc.setFont("helvetica", "bold");
-      doc.text(`${attr.description || "Atributo no disponible"}:`, margin, currentY);
+      doc.text(`${attr.description || ""}:`, spacing.margin + 5, currentY + 3);
       doc.setFont("helvetica", "normal");
-
-      const valueLines = doc.splitTextToSize(attr.attributes_products.value || "Valor no disponible", 170);
-      doc.text(valueLines, margin + 20, currentY + 5);
-      currentY += valueLines.length * 7 + 10; // Ajusta el espacio según el número de líneas
+      
+      const valueLines = doc.splitTextToSize(attr.attributes_products.value || "", contentWidth - 70);
+      doc.text(valueLines, spacing.margin + 70, currentY + 3);
+      
+      currentY += Math.max(20, valueLines.length * spacing.lineHeight);
     });
   }
 
-  // Variants section
-  doc.setFillColor(secondaryColor);
-  doc.rect(margin, currentY - 5, 170, 10, "F"); // Fondo para el título de las variantes
-  doc.setTextColor("#ffffff");
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "bold");
-  doc.text("PRESENTACIONES DISPONIBLES", margin + 5, currentY);
+  // Variants
+  if (product.variants?.length > 0) {
+    checkPageBreak(40);
+    addSectionTitle("PRESENTACIONES DISPONIBLES");
 
-  currentY += 10;
-  doc.setTextColor(textColor);
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "normal");
-
-  product.variants.forEach((variant) => {
+    // Table header
+    const columns = ["Presentación", "Stock", "Código"];
+    const columnWidths = [80, 40, 60];
+    
+    doc.setFillColor(colors.primary);
+    doc.rect(spacing.margin, currentY - 5, contentWidth, 15, "F");
+    
+    doc.setTextColor(colors.white);
+    doc.setFontSize(fonts.normal);
     doc.setFont("helvetica", "bold");
-    doc.text(`• ${variant.grammage || "N/A"}g`, margin, currentY);
-    doc.setFont("helvetica", "normal");
-    doc.text(`Stock: ${variant.stock || 0} unidades`, margin + 50, currentY);
+    
+    let xOffset = spacing.margin + 5;
+    columns.forEach((col, i) => {
+      doc.text(col, xOffset, currentY);
+      xOffset += columnWidths[i];
+    });
+    
     currentY += 10;
-  });
 
-  // Footer
-  const pageHeight = doc.internal.pageSize.height;
-  doc.setFillColor(primaryColor);
-  doc.rect(0, pageHeight - 20, 210, 20, "F"); // Rectángulo de fondo para el pie de página
-  doc.setTextColor("#ffffff");
-  doc.setFontSize(10);
-  doc.text(
-    `Generado el ${new Date().toLocaleDateString()}`,
-    105,
-    pageHeight - 10,
-    { align: "center" }
-  );
+    // Table content
+    product.variants.forEach((variant, index) => {
+      if (checkPageBreak(15)) return;
+
+      const isEven = index % 2 === 0;
+      doc.setFillColor(isEven ? colors.lightGray : colors.white);
+      doc.rect(spacing.margin, currentY - 5, contentWidth, 10, "F");
+
+      doc.setTextColor(colors.text);
+      doc.setFontSize(fonts.normal);
+      doc.setFont("helvetica", "normal");
+
+      xOffset = spacing.margin + 5;
+      doc.text(`${variant.grammage || "N/A"}g`, xOffset, currentY);
+      xOffset += columnWidths[0];
+      doc.text(`${variant.stock || 0} unidades`, xOffset, currentY);
+      xOffset += columnWidths[1];
+    
+
+      currentY += 10;
+    });
+  }
+
+  // Footer on each page
+  const addFooter = (pageNumber: number) => {
+    const totalPages = doc.getNumberOfPages();
+    const pageHeight = doc.internal.pageSize.height;
+    
+    doc.setFillColor(colors.primary);
+    doc.rect(0, pageHeight - 20, pageWidth, 20, "F");
+    
+    doc.setTextColor(colors.white);
+    doc.setFontSize(fonts.small);
+    doc.setFont("helvetica", "normal");
+    
+    const footerText = `Generado el ${new Date().toLocaleDateString()} | Página ${pageNumber} de ${totalPages}`;
+    doc.text(footerText, pageWidth / 2, pageHeight - 8, { align: "center" });
+  };
+
+  // Add footer to all pages
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    addFooter(i);
+  }
 
   // Save the PDF
   doc.save(`${product.product_name || "producto"}_ficha_tecnica.pdf`);
