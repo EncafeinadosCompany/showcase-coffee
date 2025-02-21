@@ -167,7 +167,7 @@ export const generateProductPdf = async (product: Product) => {
     const columnWidths = [80, 40, 60];
     
     doc.setFillColor(colors.primary);
-    doc.rect(spacing.margin, currentY - 5, contentWidth, 10, "F");
+    doc.rect(spacing.margin, currentY - 5, contentWidth, 15, "F");
     
     doc.setTextColor(colors.white);
     doc.setFontSize(fonts.normal);
