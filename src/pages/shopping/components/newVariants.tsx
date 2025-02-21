@@ -109,7 +109,7 @@ export default function NuevaVarianteDialog({
             </label>
             <Input
               id="gramaje"
-              type="number"
+              type="text"
               value={gramaje}
               onChange={(e) => setGramaje(e.target.value)}
               required

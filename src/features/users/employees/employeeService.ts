@@ -15,3 +15,8 @@ export const createEmployee = async (employee: Omit<Employee, "id">) => {
     const response = await axiosInstance.post("/users/employees", employee);
     return response.data;
 };
+
+export const getIdEmployeeProvider = async (id: string) => {
+    const response = await axiosInstance.get(`/users/employees/provider/${id}`);
+    return response.data;
+}

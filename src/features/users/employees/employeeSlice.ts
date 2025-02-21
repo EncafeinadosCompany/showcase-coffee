@@ -1,4 +1,4 @@
-import { getEmployees, getIdEmployee, createEmployee } from "./employeeService";
+import { getEmployees, getIdEmployee, createEmployee, getIdEmployeeProvider } from "./employeeService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Employee } from "@/types/users/employee";
 
@@ -38,12 +38,32 @@ export const addEmployee = createAsyncThunk("employees/add", async (employee: Om
     }
 });
 
+export const getByProvider = createAsyncThunk("employees/getByProvider", async (id: string, { rejectWithValue }) => {
+    try {
+        return await getIdEmployeeProvider(id);
+    } catch (error: unknown) {
+        return rejectWithValue(error instanceof Error ? error.message : "Error al obtener los empleados por proveedor");
+    }
+})
+
 const EmployeeSlice = createSlice({
     name: "employees",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
+            .addCase(getByProvider.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(getByProvider.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.employees = action.payload;
+            })
+            .addCase(getByProvider.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload as string;
+            })
             .addCase(fetchEmployees.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
