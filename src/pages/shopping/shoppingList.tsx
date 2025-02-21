@@ -117,17 +117,17 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Referencia</TableHead>
-                <TableHead>Fecha</TableHead>
-                <TableHead>Estado</TableHead>
+              <TableRow className="hover:bg-amber-50">
+                <TableHead className="text-amber-800">Referencia</TableHead>
+                <TableHead className="text-amber-800">Fecha</TableHead>
+                <TableHead className="text-amber-800">Estado</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginatedShopping.map((shopping) => (
                 <TableRow
                   key={shopping.id}
-                  className="cursor-pointer hover:bg-coffee-50 transition-colors duration-150"
+                  className="cursor-pointer hover:bg-amber-50 duration-150"
                   onClick={() => handleShoppingClick(shopping)}
                 >
                   <TableCell className="font-medium text-coffee-700">00{shopping.id}</TableCell>

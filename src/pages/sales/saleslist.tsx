@@ -57,19 +57,19 @@ export const SalesTable = React.memo(({ sales, onSaleClick }: SalesTableProps) =
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Fecha</TableHead>
-                <TableHead>Método de Pago</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Estado</TableHead>
+              <TableRow className="hover:bg-amber-50">
+                <TableHead className="text-amber-800">ID</TableHead>
+                <TableHead className="text-amber-800">Fecha</TableHead>
+                <TableHead className="text-amber-800">Método de Pago</TableHead>
+                <TableHead className="text-amber-800">Total</TableHead>
+                <TableHead className="text-amber-800">Estado</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {sales.map((sale) => (
                 <TableRow
                   key={sale.id}
-                  className="cursor-pointer hover:bg-gray-50"
+                  className="cursor-pointer hover:bg-amber-50"
                   onClick={() => handleSaleClick(sale)}
                 >
                   <TableCell className="font-medium">{sale.id}</TableCell>
