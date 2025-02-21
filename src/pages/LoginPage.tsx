@@ -20,9 +20,9 @@ export const LoginPage = () => {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // 🚨 Previene el doble envío
+    e.preventDefault();
   
-    const { email, password } = form; // ✅ Obtiene los valores correctos
+    const { email, password } = form;
   
     if (!email || !password) {
       console.error("Email y password son obligatorios");
@@ -56,8 +56,8 @@ export const LoginPage = () => {
           )}
           
           <form onSubmit={handleSubmit}>
-            <div className="space-y-4">
-              <div className="space-y-2">
+            <div className="space-y-4 rounded-lg">
+              <div className="">
                 <label
                   htmlFor="email"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-amber-700"
@@ -72,7 +72,7 @@ export const LoginPage = () => {
                   value={form.email}
                   onChange={handleChange}
                   required
-                  className="border-amber-200 focus:border-amber-400 focus:ring-amber-400"
+                  className="rounded-full border-amber-200 focus:border-amber-400 focus:ring-amber-400 "
                 />
               </div>
               <div className="space-y-2">
@@ -89,12 +89,12 @@ export const LoginPage = () => {
                   value={form.password}
                   onChange={handleChange}
                   required
-                  className="border-amber-200 focus:border-amber-400 focus:ring-amber-400"
+                  className="rounded-full border-amber-200 focus:border-amber-400 focus:ring-amber-400"
                 />
               </div>
             </div>
             <Button 
-              className="w-full mt-6 bg-amber-700 hover:bg-amber-800 text-white"
+              className="rounded-full w-full mt-6 bg-amber-700 hover:bg-amber-800 text-white"
               type="submit"
               disabled={isLoading}
             >

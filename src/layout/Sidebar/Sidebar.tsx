@@ -122,26 +122,26 @@ const Sidebar: FC = () => {
           <ul className="space-y-2">
             <li>
               <button
-                onClick={() => navigate('/profile')}
-                className="flex items-center p-3 rounded-xl group hover:bg-amber-50 transition-colors"
+          onClick={() => navigate('/profile')}
+          className="flex items-center w-full p-3 rounded-xl group hover:bg-amber-50 transition-colors"
               >
-                <Users className="text-gray-500 group-hover:text-amber-600 transition-colors" />
-                {!isCollapsed && (
-                  <span className="ml-3 text-gray-700 group-hover:text-amber-600 transition-colors">
-                    Perfil
-                  </span>
-                )}
+          <Users className="text-gray-500 group-hover:text-amber-600 transition-colors" />
+          {!isCollapsed && (
+            <span className="ml-3 text-gray-700 group-hover:text-amber-600 transition-colors">
+              Perfil
+            </span>
+          )}
               </button>
               <button
-                onClick={handleLogout}
-                className="flex items-center p-3 rounded-xl group hover:bg-red-50 transition-colors"
+          onClick={handleLogout}
+          className="flex items-center w-full p-3 rounded-xl group hover:bg-red-50 transition-colors"
               >
-                <LogOut className="text-gray-500 group-hover:text-red-600 transition-colors" />
-                {!isCollapsed && (
-                  <span className="ml-3 text-gray-700 group-hover:text-red-600 transition-colors">
-                    Cerrar Sesión
-                  </span>
-                )}
+          <LogOut className="text-gray-500 group-hover:text-red-600 transition-colors" />
+          {!isCollapsed && (
+            <span className="ml-3 text-gray-700 group-hover:text-red-600 transition-colors">
+              Cerrar Sesión
+            </span>
+          )}
               </button>
             </li>
           </ul>

@@ -14,9 +14,9 @@ interface PaymentSectionProps {
 }
 
 const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionProps) => {
-    const [paymentMethod, setPaymentMethod] = useState("efectivo");
+    const [paymentMethod, setPaymentMethod] = useState("Efectivo");
     const [receivedAmount, setReceivedAmount] = useState("");
-    const change = paymentMethod === "efectivo" ?
+    const change = paymentMethod === "Efectivo" ?
         Number(receivedAmount) - total : 0;
 
     const handlePaymentMethodChange = (value: string) => {
@@ -24,7 +24,7 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
     };
 
     const handleCompleteSale = () => {
-        if (paymentMethod === "efectivo" && Number(receivedAmount) < total) {
+        if (paymentMethod === "Efectivo" && Number(receivedAmount) < total) {
             console.error("Monto insuficiente.");
             return;
         }
@@ -56,28 +56,28 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
                     className="space-y-3"
                 >
                     <div
-                        className={`flex items-center space-x-2 border rounded-xl p-3 hover:bg-amber-50 cursor-pointer ${paymentMethod === "efectivo" ? "bg-amber-50" : ""}`}
-                        onClick={() => handlePaymentMethodChange("efectivo")}
+                        className={`flex items-center space-x-2 border rounded-xl p-3 hover:bg-amber-50 cursor-pointer ${paymentMethod === "Efectivo" ? "bg-amber-50" : ""}`}
+                        onClick={() => handlePaymentMethodChange("Efectivo")}
                     >
-                        <RadioGroupItem value="efectivo" id="efectivo" />
-                        <Label htmlFor="efectivo" className="flex items-center gap-2 cursor-pointer w-full">
+                        <RadioGroupItem value="Efectivo" id="Efectivo" />
+                        <Label htmlFor="Efectivo" className="flex items-center gap-2 cursor-pointer w-full">
                             <Banknote className="h-4 w-4 text-amber-700" />
                             Efectivo
                         </Label>
                     </div>
                     <div
-                        className={`flex items-center space-x-2 border rounded-xl p-3 hover:bg-amber-50 cursor-pointer ${paymentMethod === "transferencia" ? "bg-amber-50" : ""}`}
-                        onClick={() => handlePaymentMethodChange("transferencia")}
+                        className={`flex items-center space-x-2 border rounded-xl p-3 hover:bg-amber-50 cursor-pointer ${paymentMethod === "Transferencia" ? "bg-amber-50" : ""}`}
+                        onClick={() => handlePaymentMethodChange("Transferencia")}
                     >
-                        <RadioGroupItem value="transferencia" id="transferencia" />
-                        <Label htmlFor="transferencia" className="flex items-center gap-2 cursor-pointer w-full">
+                        <RadioGroupItem value="Transferencia" id="Transferencia" />
+                        <Label htmlFor="Transferencia" className="flex items-center gap-2 cursor-pointer w-full">
                             <CreditCard className="h-4 w-4 text-amber-700" />
                             Transferencia
                         </Label>
                     </div>
                 </RadioGroup>
 
-                {paymentMethod === "efectivo" && (
+                {paymentMethod === "Efectivo" && (
                     <div className="space-y-4">
                         <div>
                             <Label htmlFor="received">Monto Recibido</Label>
@@ -104,7 +104,7 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
                     className="flex gap-2 w-full bg-[#db8935] hover:bg-[#966637] text-black rounded-2xl"
                     onClick={handleCompleteSale}
                     disabled={
-                        paymentMethod === "efectivo" &&
+                        paymentMethod === "Efectivo" &&
                         (Number(receivedAmount) < total || !receivedAmount)
                     }
                 >

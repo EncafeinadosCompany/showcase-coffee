@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getSale, createSale, getSaleById, getShoppingVariant } from "./saleService";
-import { Sales, SalesPayload } from "../../types/transactions/saleModel";
+import { Sale, SalesPayload } from "../../types/transactions/saleModel";
 
 interface SaleState {
-  sales: Sales[];
-  sale: Sales | null;
+  sales: Sale[];
+  sale: Sale | null;
   saleVariants: any[];
   isLoading: boolean;
   error: string | null;

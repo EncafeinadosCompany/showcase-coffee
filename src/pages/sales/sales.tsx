@@ -3,7 +3,7 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 
 import { fetchSaleVariants, addSale, fetchSales } from "@/features/transactions/saleSlice";
-import type { Sales, SalesPayload } from "@/types/transactions/saleModel";
+import type { SalesPayload } from "@/types/transactions/saleModel";
 
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { ListIcon, XIcon } from "lucide-react";
 import Products from "./components/products";
 import Payment from "./components/payment";
 import Cart from "./components/cart";
-import { SalesTable } from "./saleslist";
+import { SalesTable } from "./components/saleslist";
 
 import {
   Pagination,

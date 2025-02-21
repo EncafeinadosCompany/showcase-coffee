@@ -12,19 +12,39 @@ import DepositsModal from "./components/details-modal"; import { fetchLiquidatio
 import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { useAppSelector } from "@/hooks/useAppSelector"
 import { Liquidation } from "@/types/payments/liquidation"
+import { fetchTotalDepositsByLiquidation } from "@/features/payments/deposits/depositSlice"
 
 export default function LiquidationModule() {
+
+  const { liquidations } = useAppSelector((state) => state.liquidations)
+  const { deposits } = useAppSelector((state) => state.deposits);
+
+  const [totalDeposits, setTotalDeposits] = useState<{ [key: number]: number }>({});
   const [currentPage, setCurrentPage] = useState(1)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedProvider, setSelectedProvider] = useState<Liquidation | null>(null)
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
-  const { liquidations } = useAppSelector((state) => state.liquidations)
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(fetchLiquidations())
   }, [dispatch])
+
+  useEffect(() => {
+    liquidations.forEach((liquidation) => {
+      dispatch(fetchTotalDepositsByLiquidation(liquidation.id.toString()));
+    });
+  }, [dispatch, liquidations]);
+
+  useEffect(() => {
+    const depositTotals: { [key: number]: number } = {};
+    deposits.forEach((deposit) => {
+      depositTotals[deposit.id_liquidation] = (depositTotals[deposit.id_liquidation] || 0) + deposit.amount;
+    });
+    setTotalDeposits(depositTotals);
+  }, [deposits]);
 
   const itemsPerPage = 5
   const filteredProviders = liquidations.filter((provider) =>
@@ -33,9 +53,7 @@ export default function LiquidationModule() {
   const totalPages = Math.ceil(filteredProviders.length / itemsPerPage)
   const paginatedProviders = filteredProviders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-  }
+  const handlePageChange = (page: number) => { setCurrentPage(page) }
 
   const handlePayment = (provider: Liquidation) => {
     setSelectedProvider(provider)
@@ -85,7 +103,7 @@ export default function LiquidationModule() {
                 <TableRow key={provider.id} className="hover:bg-amber-50">
                   <TableCell className="font-medium">{provider.provider.name}</TableCell>
                   <TableCell>{provider.current_debt.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</TableCell>
-                  <TableCell>0</TableCell>
+                  <TableCell>{(totalDeposits[provider.id] || 0).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</TableCell>
                   <TableCell>
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${provider.status === true ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
@@ -97,14 +115,14 @@ export default function LiquidationModule() {
                   <TableCell>
                     <Button
                       onClick={() => handlePayment(provider)}
-                      className="mr-2 bg-amber-600 hover:bg-amber-500 text-white"
+                      className="mr-2 bg-amber-600 hover:bg-amber-500 text-white rounded-full"
                     >
                       Abono
                     </Button>
                     <Button
                       onClick={() => handleDetails(provider)}
                       variant="outline"
-                      className="border-amber-600 text-amber-600 hover:bg-amber-100"
+                      className="border-amber-600 text-amber-600 hover:bg-amber-100 rounded-full"
                     >
                       Ver detalles
                     </Button>

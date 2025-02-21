@@ -1,22 +1,22 @@
 import { axiosInstance } from "../../API/axiosInstance";
-import { Sales, SalesPayload } from "../../types/transactions/saleModel";
+import { Sale, SalesPayload } from "../../types/transactions/saleModel";
 
-export const getSale = async (): Promise<Sales[]> => {
-  const response = await axiosInstance.get<Sales[]>("/transactions/sales");
+export const getSale = async (): Promise<Sale[]> => {
+  const response = await axiosInstance.get<Sale[]>("/transactions/sales");
   return response.data;
 };
 
-export const getSaleById = async (id: string | number): Promise<Sales | null> => {
+export const getSaleById = async (id: string | number): Promise<Sale | null> => {
   try {
-    const response = await axiosInstance.get<Sales>(`/transactions/sales/${id}`);
+    const response = await axiosInstance.get<Sale>(`/transactions/sales/${id}`);
     return response.data;
   } catch (error) {
     return null;
   }
 };
 
-export const createSale = async (sales: SalesPayload): Promise<Sales> => {
-  const response = await axiosInstance.post<Sales>("/transactions/sales", sales);
+export const createSale = async (sales: SalesPayload): Promise<Sale> => {
+  const response = await axiosInstance.post<Sale>("/transactions/sales", sales);
   return response.data;
 };
 

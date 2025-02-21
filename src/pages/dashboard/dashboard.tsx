@@ -65,7 +65,7 @@ const Dashboard = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="rounded-3xl bg-white shadow-xl border border-amber-100 p-4 w-full h-full transition-all duration-700 overflow-y-auto">
+    <div className="rounded-3xl bg-white border border-amber-100 p-4 w-full h-full transition-all duration-700 overflow-y-auto">
       <div className="max-w-7xl mx-auto">
         {/* Encabezado */}
         <div className="flex justify-between items-center mb-2 top-0 z-10 py-4">
