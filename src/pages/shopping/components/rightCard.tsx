@@ -35,18 +35,20 @@ export default function RightCard({
         <div className="flex items-center gap-2">
           <Coffee className="h-6 w-6 text-amber-700" />
           <CardTitle className="font-libre-baskerville text-2xl text-[#4A3728]">
-            <span className="block text-sm font-sans text-amber-600 uppercase tracking-wider mb-1">
+            <span className="block text-sm font-sans text-amber-600 uppercase tracking-wider">
               Productos Disponibles
             </span>
             Buscar y Agregar Producto
           </CardTitle>
         </div>
       </CardHeader>
+
       <CardContent>
-        <div className="flex gap-2 mb-2">
+
+        <div className="flex gap-2">
           <div className="relative w-full">
             <Input
-              className="rounded pl-10"
+              className="rounded-full pl-10 bg-white/80 backdrop-blur"
               placeholder="Buscar producto por nombre..."
               value={searchTerm}
               onChange={(e) => setSearch(e.target.value)}
@@ -54,6 +56,7 @@ export default function RightCard({
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-amber-700" />
           </div>
         </div>
+
         <ScrollArea className="min-h-[50px] transition-all duration-300">
           <Accordion type="single" collapsible className="w-full mb-2">
             {productosFiltrados.map((producto) => (

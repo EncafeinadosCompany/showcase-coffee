@@ -37,15 +37,17 @@ export default function Shopping() {
   };
 
   return (
-    <div>
+    <div className="p-2 space-y-3">
       <div className="flex justify-between items-center mb-4">
-        <h6 className="text-amber-600 text-5xl md:text-3xl font-extrabold">
-          Consignaciones
-        </h6>
+        
+        <h1 className="title">
+          Gestión de Consignaciones
+        </h1>
+
         <Button
           onClick={toggleShoppingList}
           variant="outline"
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 rounded-full p-2"
         >
           {showShoppingList ? (
             <>
@@ -55,7 +57,7 @@ export default function Shopping() {
           ) : (
             <>
               <ListIcon className="h-4 w-4" />
-              Ver consignaciones
+              Ver Historial de Consignaciones
             </>
           )}
         </Button>
