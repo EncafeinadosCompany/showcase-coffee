@@ -30,7 +30,15 @@ export default function AddBrandForm() {
         color: '#fefae0',
       }
     })
-    dispatch(addBrand({ name, description }))
+    dispatch(addBrand({ 
+      name, 
+      description, 
+      image_url: '', 
+      razon: '', 
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      social_networks: []
+    }))
     setName("")
     setDescription("")
   }
