@@ -1,4 +1,3 @@
-import React from 'react';
 import { Coffee, Home, ArrowLeft, CoffeeIcon, Croissant, Coffee as CoffeeCup } from 'lucide-react';
 
 const NotFound = () => {

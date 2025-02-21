@@ -13,19 +13,19 @@ export const ProviderTable = React.memo(({ providers, onProviderClick }: Provide
     <CardContent className="p-0">
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead>Nombre</TableHead>
-            <TableHead>NIT</TableHead>
-            <TableHead>Correo</TableHead>
-            <TableHead>Teléfono</TableHead>
-            <TableHead>Estado</TableHead>
+          <TableRow className="hover:bg-amber-50">
+            <TableHead className="text-amber-800">Nombre</TableHead>
+            <TableHead className="text-amber-800">NIT</TableHead>
+            <TableHead className="text-amber-800">Correo</TableHead>
+            <TableHead className="text-amber-800">Teléfono</TableHead>
+            <TableHead className="text-amber-800">Estado</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {providers.map((provider) => (
             <TableRow
               key={provider.id}
-              className="cursor-pointer hover:bg-gray-50"
+              className="cursor-pointer hover:bg-amber-50"
               onClick={() => onProviderClick(provider)}
             >
               <TableCell className="font-medium">{provider.name}</TableCell>

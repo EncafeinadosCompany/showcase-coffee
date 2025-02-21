@@ -30,7 +30,7 @@ export const HomePage = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-b from-amber-50 to-white">
+    <div className="">
 
       {/* Hero Section */}
       <div className="relative overflow-hidden">

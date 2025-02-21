@@ -98,44 +98,44 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
   const totalPages = Math.ceil(filteredShopping.length / itemsPerPage)
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm">
-      <div className="mb-4 flex justify-between items-center">
-        <div className="relative w-64">
+    <div className="p-2 space-y-3">
+
+      <div className="flex gap-4 mb-6">
+        <div className="relative flex-1 max-w-md">
           <Input
             type="text"
-            placeholder="Buscar por ID o fecha..."
+            placeholder="Buscar por referencia o fecha..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-coffee-300"
+            className="rounded-full pl-10"
           />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+          <Search className="search" size={18} />
         </div>
       </div>
 
-      <Card className="bg-coffee-100 backdrop-blur">
+      <Card className="bg-white/80 backdrop-blur">
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="bg-coffee-200">
-                <TableHead className="text-coffee-800">Referencia</TableHead>
-                <TableHead className="text-coffee-800">Fecha</TableHead>
-                <TableHead className="text-coffee-800">Estado</TableHead>
+              <TableRow className="hover:bg-amber-50">
+                <TableHead className="text-amber-800">Referencia</TableHead>
+                <TableHead className="text-amber-800">Fecha</TableHead>
+                <TableHead className="text-amber-800">Estado</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginatedShopping.map((shopping) => (
                 <TableRow
                   key={shopping.id}
-                  className="cursor-pointer hover:bg-coffee-50 transition-colors duration-150"
+                  className="cursor-pointer hover:bg-amber-50 duration-150"
                   onClick={() => handleShoppingClick(shopping)}
                 >
                   <TableCell className="font-medium text-coffee-700">00{shopping.id}</TableCell>
                   <TableCell className="text-coffee-600">{formatDate(shopping.date_entry)}</TableCell>
                   <TableCell>
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        shopping.status ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                      }`}
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${shopping.status ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                        }`}
                     >
                       {shopping.status ? "Activo" : "Inactivo"}
                     </span>

@@ -20,17 +20,17 @@ export interface SaleVariant {
   quantity: number;
   subtotal: string;
   status: boolean;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
-export interface Sales {
+export interface Sale {
   id: number;
   date: string;
   type_payment: string;
   total: string | null;
   status: boolean;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   sales_variant: SaleVariant[];
 }

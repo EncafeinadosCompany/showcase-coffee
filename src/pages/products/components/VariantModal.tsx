@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { FC, useState } from "react";
 import { Coffee, Package, Scale, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { generateProductPdf } from "./downloadPDF"; // Ajusta la ruta según tu estructura de archivos
+import { generateProductPdf } from "./downloadPDF";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { useEffect } from "react";
+import { getID } from "@/features/products/products/productSlice"
 
 interface VariantModalProps {
   isOpen: boolean;
@@ -32,50 +37,46 @@ interface Variant {
   id_product: number | string;
 }
 
-const VariantModal: FC<VariantModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  variants, 
-  product_name, 
-  imagen,
-  brand,
-  attributes 
+const VariantModal: FC<VariantModalProps> = ({
+  isOpen,
+  onClose,
+  variants,
+  product_name,
+  imagen
 }) => {
+  const dispatch = useAppDispatch();
+  const { isLoading, error } = useAppSelector((state: any) => state.products);
   const [hoveredVariant, setHoveredVariant] = useState<Variant | null>(null);
+  const [productDetails] = useState<any>(null);
 
-  const handleDownloadPDF = () => {
-    const formattedAttributes = attributes?.map(attr => ({
-      description: attr.description,
-      attributes_products: {
-        value: attr.attributes_products.value
+  useEffect(() => {
+    if (productDetails) {
+      generateProductPdf(productDetails);
+    }
+  }, [productDetails]);
+
+  const handleDownloadPDF = async () => {
+    const productId = variants[0]?.id_product;
+    if (productId) {
+      try {
+        const data = await dispatch(getID(productId.toString())).unwrap();
+        await generateProductPdf({
+          product_name: data.name,
+          imagen: data.image_url, // Asegúrate de usar la propiedad correcta
+          variants: data.product, // Asegúrate de que esto coincida con la estructura de datos
+          brand: data.brand,
+          attributes: data.attributes,
+        });
+      } catch (error) {
+        console.error("Error al generar el PDF:", error);
       }
-    })) || [];
-
-    console.log("Datos enviados al PDF:", {
-      product_name,
-      imagen,
-      variants,
-      brand,
-      attributes: formattedAttributes
-    });
-
-    generateProductPdf({
-      product_name,
-      imagen,
-      variants: variants.map(v => ({
-        grammage: v.grammage,
-        stock: v.stock,
-        id_product: v.id_product
-      })),
-      brand,
-      attributes: formattedAttributes
-    });
-  }
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
-        aria-describedby={undefined}
+        aria-describedby="descripcion-del-modal"
         className="p-0 max-w-4xl bg-[#faf6f1] h-[calc(100vh-80px)] flex flex-col overflow-hidden"
       >
         <DialogHeader className="p-6 pb-0">
@@ -89,10 +90,12 @@ const VariantModal: FC<VariantModalProps> = ({
             <Button
               variant="outline"
               className="w-fit text-[#582f0e] border-[#582f0e] hover:bg-[#582f0e] hover:text-white transition-colors"
-              onClick={handleDownloadPDF} // Cambiar aquí
+              onClick={handleDownloadPDF}
+              disabled={isLoading}
             >
               <Download className="h-4 w-4 mr-2" />
-              Ficha técnica PDF
+              {isLoading ? "Cargando..." : "Ficha técnica PDF"}
+              {error && <p className="text-red-500">{error}</p>}
             </Button>
           </div>
         </DialogHeader>

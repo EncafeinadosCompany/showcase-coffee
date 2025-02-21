@@ -13,14 +13,14 @@ export default function ProductManagement() {
 
   return (
    <div >
-     <Tabs defaultValue="products" className="h-full w-full" >
+     <Tabs defaultValue="products" className="w-full rounded-full" >
       <div className="flex justify-between items-center ">
-      <TabsList >
-        <TabsTrigger className= "rounded-2xl hover:bg-gray-100 hover:text-[#99582a]"value="products">Productos</TabsTrigger>
-        <TabsTrigger className= "rounded-2xl hover:bg-gray-100 hover:text-[#99582a]" value="add-brand">Agregar Marca</TabsTrigger>
-        <TabsTrigger className= "rounded-2xl hover:bg-gray-100 hover:text-[#99582a]" value="add-product">Agregar Producto</TabsTrigger>
+      <TabsList className="rounded-full" >
+        <TabsTrigger className= "rounded-2xl hover:bg-gray-100 text-amber-800 hover:text-[#99582a]"value="products">Productos</TabsTrigger>
+        <TabsTrigger className= "rounded-2xl hover:bg-gray-100 text-amber-800 hover:text-[#99582a]" value="add-brand">Agregar Marca</TabsTrigger>
+        <TabsTrigger className= "rounded-2xl hover:bg-gray-100 text-amber-800 hover:text-[#99582a]" value="add-product">Agregar Producto</TabsTrigger>
       </TabsList>
-      <Button onClick={() => window.open("/page", "_blank")} className="me-6 rounded-xl">Ver de otra forma</Button>
+      <Button onClick={() => window.open("/page", "_blank")} className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium">Ver de otra forma</Button>
       </div>
       <TabsContent value="products">
         <ProductList/>

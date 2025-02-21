@@ -1,176 +1,232 @@
 import jsPDF from "jspdf";
+import { Product } from '@/types/products/PDF';
 
-interface Attribute {
-    description: string;
-    attributes_products: {
-      value: string;
-    };
-  }
-  
-  interface Brand {
-    name: string;
-    description: string;
-  }
+export const generateProductPdf = async (product: Product) => {
+  // Initialize PDF in A4 format
+  const doc = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "a4"
+  });
 
-interface ProductVariant {
-  grammage: string;
-  stock: number;
-  id_product: number | string;
-}
+  // Design constants
+  const colors = {
+    primary: "#582f0e",
+    secondary: "#db8935",
+    text: "#333333",
+    lightGray: "#f5f5f5",
+    white: "#ffffff"
+  };
 
-interface Product {
-  product_name: string;
-  imagen?: string;
-  variants: ProductVariant[];
-  brand?: Brand;
-  attributes?: Attribute[];
-  description?: string;
-}
+  const fonts = {
+    title: 24,
+    subtitle: 18,
+    heading: 14,
+    normal: 12,
+    small: 10
+  };
 
-// Función para crear una imagen de placeholder usando SVG
-const createPlaceholderImage = () => {
-  const svg = `
-    <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-      <rect width="200" height="200" fill="#f3e5d8"/>
-      <text x="100" y="100" font-family="Arial" font-size="14" fill="#8b7355" text-anchor="middle">
-        Imagen no disponible
-      </text>
-      <path d="M85,80 C85,80 115,80 115,80 C125,80 125,90 125,90 L125,110 C125,110 125,120 115,120 L85,120 C75,120 75,110 75,110 L75,90 C75,90 75,80 85,80" fill="#8b7355"/>
-      <circle cx="100" cy="100" r="10" fill="#f3e5d8"/>
-    </svg>`;
-  
-  return `data:image/svg+xml;base64,${btoa(svg)}`;
-};
+  const spacing = {
+    margin: 20,
+    lineHeight: 7,
+    sectionGap: 15
+  };
 
-export const generateProductPdf = (product: Product) => {
-  const doc = new jsPDF();
-  
-  // Define colors
-  const primaryColor = "#582f0e";
-  const secondaryColor = "#db8935";
-  const textColor = "#713f12";
-  const backgroundColor = "#f3e5d8";
-  
-  // Header
-  doc.setFillColor(primaryColor);
-  doc.rect(0, 0, 210, 40, "F");
-  
-  doc.setTextColor("#ffffff");
-  doc.setFontSize(24);
-  doc.text("FICHA TÉCNICA", 105, 20, { align: "center" });
-  
-  // Product name and brand
-  doc.setTextColor(primaryColor);
-  doc.setFontSize(20);
-  doc.text(product.product_name, 105, 50, { align: "center" });
-  
-  if (product.brand) {
-    doc.setFontSize(14);
-    doc.text(product.brand.name, 105, 60, { align: "center" });
-    doc.setFontSize(12);
-    doc.text(product.brand.description, 105, 68, { align: "center" });
-  }
+  let currentY = 0;
+  const pageWidth = doc.internal.pageSize.width;
+  const contentWidth = pageWidth - (spacing.margin * 2);
 
-  // Description section (new)
-  let currentY = 80;
-  if (product.description) {
-    doc.setFillColor(secondaryColor);
-    doc.rect(20, currentY - 5, 170, 10, "F");
-    doc.setTextColor("#ffffff");
-    doc.setFontSize(14);
-    doc.text("DESCRIPCIÓN", 105, currentY, { align: "center" });
-    
-    doc.setTextColor(textColor);
-    doc.setFontSize(12);
-    const description = doc.splitTextToSize(product.description, 150);
-    currentY += 15;
-    doc.text(description, 20, currentY);
-    currentY += (description.length * 7) + 10;
-  }
-  
-  // Image section with placeholder
-  doc.setFillColor(backgroundColor);
-  doc.rect(20, currentY, 80, 80, "F");
-  
-  if (product.imagen) {
-    try {
-      const img = new Image();
-      img.src = product.imagen;
-      doc.addImage(img, "JPEG", 20, currentY, 80, 80);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      // Si falla la carga de la imagen, usar el placeholder
-      const placeholderImg = createPlaceholderImage();
-      doc.addImage(placeholderImg, "PNG", 20, currentY, 80, 80);
+  // Helper functions
+  const addNewPage = () => {
+    doc.addPage();
+    currentY = spacing.margin;
+    addHeaderToPage();
+  };
+
+  const checkPageBreak = (neededSpace: number) => {
+    if (currentY + neededSpace > doc.internal.pageSize.height - 30) {
+      addNewPage();
+      return true;
     }
-  } else {
-    // Si no hay imagen, usar el placeholder
-    const placeholderImg = createPlaceholderImage();
-    doc.addImage(placeholderImg, "PNG", 20, currentY, 80, 80);
+    return false;
+  };
+
+  const addHeaderToPage = () => {
+    doc.setFillColor(colors.primary);
+    doc.rect(0, 0, pageWidth, 35, "F");
+    doc.setFillColor(colors.white);
+    
+
+    doc.setTextColor(colors.white);
+    doc.setFontSize(fonts.title);
+    doc.setFont("helvetica", "bold");
+    doc.text("FICHA TÉCNICA", pageWidth / 2, 25, { align: "center" });
+  };
+
+  const addSectionTitle = (title: string) => {
+    // Section title background
+    doc.setFillColor(colors.secondary);
+    doc.setDrawColor(colors.secondary);
+    doc.roundedRect(spacing.margin, currentY, contentWidth, 10, 2, 2, "F");
+    
+    // Title text
+    doc.setTextColor(colors.white);
+    doc.setFontSize(fonts.heading);
+    doc.setFont("helvetica", "bold");
+    doc.text(title, spacing.margin + 5, currentY + 7);
+    currentY += 15;
+  };
+
+  // Start PDF Generation
+  addHeaderToPage();
+  currentY = 50;
+
+  // Product name and brand
+  doc.setTextColor(colors.primary);
+  doc.setFontSize(fonts.subtitle);
+  doc.setFont("helvetica", "bold");
+  doc.text(product.product_name || "Nombre del producto no disponible", spacing.margin, currentY);
+
+  if (product.brand) {
+    currentY += 8;
+    doc.setFontSize(fonts.normal);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Marca: ${product.brand.name || "No disponible"}`, spacing.margin, currentY);
   }
+
+  // Image and Description in two columns
+  currentY += spacing.sectionGap;
+  const imageSize = 80;
   
-  if (product.attributes && product.attributes.length > 0) {
-    let attrY = currentY + 90; // Ajusta la posición vertical para que no se superponga con la imagen
+  try {
+    const imageUrl = product.imagen || "https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png";
+    const img = new Image();
+    img.src = imageUrl;
+
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+    });
+
+    // Image container with shadow effect
+    doc.setDrawColor(colors.lightGray);
+    doc.setFillColor(colors.white);
+    doc.roundedRect(spacing.margin - 1, currentY - 1, imageSize + 2, imageSize + 2, 3, 3, "FD");
+    doc.addImage(img, "JPEG", spacing.margin, currentY, imageSize, imageSize);
+  } catch (error) {
+    console.error("Error al cargar la imagen:", error);
+  }
+
+  // Description next to image
+  if (product.description) {
+    const descriptionX = spacing.margin + imageSize + 10;
+    const descriptionWidth = contentWidth - imageSize - 10;
     
-    doc.setFillColor(secondaryColor);
-    doc.rect(110, attrY - 5, 80, 10, "F");
-    doc.setTextColor("#ffffff");
-    doc.setFontSize(14);
-    doc.text("CARACTERÍSTICAS", 150, attrY, { align: "center" });
+    doc.setTextColor(colors.text);
+    doc.setFontSize(fonts.normal);
+    doc.setFont("helvetica", "normal");
+    const descriptionLines = doc.splitTextToSize(product.description, descriptionWidth);
+    doc.text(descriptionLines, descriptionX, currentY + 10);
+  }
+
+  currentY += imageSize + spacing.sectionGap;
+
+  // Attributes
+  if ((product.attributes ?? []).length > 0) {
+    addSectionTitle("CARACTERÍSTICAS DEL PRODUCTO");
     
-    doc.setTextColor(textColor);
-    doc.setFontSize(11);
-    attrY += 15;
-    
-    // Mostrar cada atributo en una línea separada
-    product.attributes.forEach((attr) => {
+    (product.attributes ?? []).forEach((attr, index) => {
+      if (checkPageBreak(20)) return;
+
+      // Attribute box with alternating background
+      const isEven = index % 2 === 0;
+      doc.setFillColor(isEven ? colors.lightGray : colors.white);
+      doc.rect(spacing.margin, currentY - 5, contentWidth, 15, "F");
+
+      // Attribute name and value
+      doc.setTextColor(colors.text);
+      doc.setFontSize(fonts.normal);
       doc.setFont("helvetica", "bold");
-      doc.text(`${attr.description}:`, 110, attrY);
+      doc.text(`${attr.description || ""}:`, spacing.margin + 5, currentY + 3);
       doc.setFont("helvetica", "normal");
       
-      // Dividir el valor del atributo en varias líneas si es demasiado largo
-      const valueLines = doc.splitTextToSize(attr.attributes_products.value, 80);
-      doc.text(valueLines, 110, attrY + 5);
+      const valueLines = doc.splitTextToSize(attr.attributes_products.value || "", contentWidth - 70);
+      doc.text(valueLines, spacing.margin + 70, currentY + 3);
       
-      // Ajustar la posición vertical para el siguiente atributo
-      attrY += 10 + (valueLines.length * 5); // Incrementar el espacio según el número de líneas
+      currentY += Math.max(20, valueLines.length * spacing.lineHeight);
     });
   }
-  
-  // Variants section
-  const variantsYPos = currentY + 100;
-  doc.setFillColor(secondaryColor);
-  doc.rect(20, variantsYPos - 5, 170, 10, "F");
-  doc.setTextColor("#ffffff");
-  doc.setFontSize(14);
-  doc.text("PRESENTACIONES DISPONIBLES", 105, variantsYPos, { align: "center" });
-  
-  let currentVariantY = variantsYPos + 15;
-  doc.setTextColor(textColor);
-  doc.setFontSize(12);
-  
-  // Crear una tabla para las variantes
-  product.variants.forEach((variant) => {
+
+  // Variants
+  if (product.variants?.length > 0) {
+    checkPageBreak(40);
+    addSectionTitle("PRESENTACIONES DISPONIBLES");
+
+    // Table header
+    const columns = ["Presentación", "Stock", "Código"];
+    const columnWidths = [80, 40, 60];
+    
+    doc.setFillColor(colors.primary);
+    doc.rect(spacing.margin, currentY - 5, contentWidth, 15, "F");
+    
+    doc.setTextColor(colors.white);
+    doc.setFontSize(fonts.normal);
     doc.setFont("helvetica", "bold");
-    doc.text(`Presentación ${variant.grammage}g`, 20, currentVariantY);
+    
+    let xOffset = spacing.margin + 5;
+    columns.forEach((col, i) => {
+      doc.text(col, xOffset, currentY);
+      xOffset += columnWidths[i];
+    });
+    
+    currentY += 10;
+
+    // Table content
+    product.variants.forEach((variant, index) => {
+      if (checkPageBreak(15)) return;
+
+      const isEven = index % 2 === 0;
+      doc.setFillColor(isEven ? colors.lightGray : colors.white);
+      doc.rect(spacing.margin, currentY - 5, contentWidth, 10, "F");
+
+      doc.setTextColor(colors.text);
+      doc.setFontSize(fonts.normal);
+      doc.setFont("helvetica", "normal");
+
+      xOffset = spacing.margin + 5;
+      doc.text(`${variant.grammage || "N/A"}g`, xOffset, currentY);
+      xOffset += columnWidths[0];
+      doc.text(`${variant.stock || 0} unidades`, xOffset, currentY);
+      xOffset += columnWidths[1];
+    
+
+      currentY += 10;
+    });
+  }
+
+  // Footer on each page
+  const addFooter = (pageNumber: number) => {
+    const totalPages = doc.getNumberOfPages();
+    const pageHeight = doc.internal.pageSize.height;
+    
+    doc.setFillColor(colors.primary);
+    doc.rect(0, pageHeight - 20, pageWidth, 20, "F");
+    
+    doc.setTextColor(colors.white);
+    doc.setFontSize(fonts.small);
     doc.setFont("helvetica", "normal");
-    doc.text(`Stock: ${variant.stock} unidades`, 120, currentVariantY);
-    currentVariantY += 10;
-  });
-  
-  // Footer
-  const pageHeight = doc.internal.pageSize.height;
-  doc.setFillColor(primaryColor);
-  doc.rect(0, pageHeight - 20, 210, 20, "F");
-  doc.setTextColor("#ffffff");
-  doc.setFontSize(10);
-  doc.text(
-    `Generado el ${new Date().toLocaleDateString()}`,
-    105,
-    pageHeight - 10,
-    { align: "center" }
-  );
-  
+    
+    const footerText = `Generado el ${new Date().toLocaleDateString()} | Página ${pageNumber} de ${totalPages}`;
+    doc.text(footerText, pageWidth / 2, pageHeight - 8, { align: "center" });
+  };
+
+  // Add footer to all pages
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    addFooter(i);
+  }
+
   // Save the PDF
-  doc.save(`${product.product_name}_ficha_tecnica.pdf`);
+  doc.save(`${product.product_name || "producto"}_ficha_tecnica.pdf`);
 };

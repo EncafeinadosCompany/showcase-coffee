@@ -45,7 +45,7 @@ export default function ProductList() {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
         </div>
         <Select value={brandFilter} onValueChange={setBrandFilter}>
-          <SelectTrigger className="w-[180px] bg-white">
+          <SelectTrigger className="w-[180px] bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium">
             <SelectValue defaultValue="0" placeholder="Filtrar por Marcas" />
           </SelectTrigger>
           <SelectContent>
