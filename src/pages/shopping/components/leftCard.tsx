@@ -8,7 +8,7 @@ import { createShopping } from "@/features/transactions/shoppingService";
 import SelectEmployee from "./selectEmployee";
 import { AlertCircle, ChevronLeft } from "lucide-react";
 import { useState } from "react";
-import {toast} from "react-hot-toast"
+import { toast } from "react-hot-toast"
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -32,16 +32,12 @@ export default function LeftCard({
   setcartProducts: React.Dispatch<React.SetStateAction<ShoppingDetail[]>>;
   totalCompra: number;
 }) {
- 
-  // Obtener el empleado y el ID de la tienda desde Redux
+
   const employee = useAppSelector((state) => state.auth.employee);
   const id_store = employee ? employee.id_store : null;
 
-  // Estado para almacenar el ID del empleado seleccionado
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(null);
   const [update, setUpdate] = useState(false);
-
-
 
   const handleGenerateConsignment = async () => {
     if (!id_store) {
@@ -59,36 +55,29 @@ export default function LeftCard({
       return;
     }
 
-    // Crear el objeto de compra
     const shoppingData: ShoppingData = {
       shopping: {
-        id_store: id_store, // Usar el id_store
-        id_employee: selectedEmployeeId, // Usar el ID del empleado seleccionado
-        date_entry: new Date().toISOString(), // Fecha actual en formato ISO
+        id_store: id_store,
+        id_employee: selectedEmployeeId,
+        date_entry: new Date().toISOString(),
         status: true,
       },
       details: cartProducts.map((product) => ({
         id_variant_products: product.id_variant_products,
-        roasting_date: new Date(product.roasting_date).toISOString(), // Convertir a ISO
+        roasting_date: new Date(product.roasting_date).toISOString(),
         quantity: product.quantity,
         shopping_price: product.shopping_price,
         sale_price: product.sale_price,
       })),
     };
 
-    // Mostrar los datos enviados en la consola
-    console.log("Datos enviados:", JSON.stringify(shoppingData, null, 2));
-
     try {
-      // Enviar la compra al backend
       await createShopping(shoppingData);
       toast.success("La consignación se ha creado correctamente.");
 
-      // Limpiar el carrito después de crear la compra
       setcartProducts([]);
       setUpdate(true)
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Error al crear la consignación:", error);
       toast.error(error.response?.data?.message || "No se pudo crear la consignación.");
@@ -103,8 +92,8 @@ export default function LeftCard({
   return (
     <Card className="bg-white shadow-lg h-[calc(96vh-80px)] overflow-hidden ">
       <CardHeader>
-        <CardTitle className="relative font-libre-baskerville text-2xl text-[#755841] pb-2">
-          <span className="block text-sm uppercase tracking-wider text-amber-600 mb-1 font-sans opacity-80">
+        <CardTitle className="relative font-libre-baskerville text-2xl text-[#755841]">
+          <span className="block text-sm uppercase tracking-wider text-amber-600 font-sans opacity-80">
             Consignación
           </span>
           <span className="relative inline-block">
@@ -120,7 +109,7 @@ export default function LeftCard({
           products={products}
         />
       </ScrollArea>
-      <CardFooter className="gap-20 border-t mt-auto "> 
+      <CardFooter className="gap-20 border-t mt-auto ">
         <div className="w-[60%] flex flex-col gap-2">
           {/* Pasar la función onSelect a SelectEmployee */}
           <SelectEmployee update={update} onSelect={(employeeId: number) => setSelectedEmployeeId(employeeId)} />
@@ -158,10 +147,10 @@ export default function LeftCard({
           </AlertDialog>
         </div>
         <div className="w-[25%] flex flex-col gap-2 justify-center text-center">
-            <span className="text-lg font-semibold text-[#4A3728] mb-3 ">Total a consignar:</span>
-            <span className="text-xl font-bold text-[#755841]">
-              {totalCompra.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
-            </span>
+          <span className="text-lg font-semibold text-[#4A3728] mb-3 ">Total a consignar:</span>
+          <span className="text-xl font-bold text-[#755841]">
+            {totalCompra.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
+          </span>
         </div>
       </CardFooter>
     </Card>

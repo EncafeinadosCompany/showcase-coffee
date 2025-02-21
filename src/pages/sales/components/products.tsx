@@ -38,23 +38,31 @@ export default function Products({
             const productoEnCarrito = nuevoCarrito.find((p) => Number(p.variant.id) === Number(producto.variant.id));
 
             if (productoEnCarrito) {
-                return nuevoCarrito.map((p) =>
-                    Number(p.variant.id) === Number(producto.variant.id)
-                        ? { ...p, quantity: (p.quantity || 0) + 1 }
-                        : p
-                );
+                if (productoEnCarrito.quantity < producto.variant.stock) {
+                    return nuevoCarrito.map((p) =>
+                        Number(p.variant.id) === Number(producto.variant.id)
+                            ? { ...p, quantity: (p.quantity || 0) + 1 }
+                            : p
+                    );
+                } else {
+                    return nuevoCarrito;
+                }
             } else {
-                return [
-                    ...nuevoCarrito,
-                    {
-                        ...producto,
-                        quantity: 1,
-                        variant: {
-                            ...producto.variant,
-                            product: { ...producto.variant.product }
-                        }
-                    },
-                ];
+                if (producto.variant.stock > 0) {
+                    return [
+                        ...nuevoCarrito,
+                        {
+                            ...producto,
+                            quantity: 1,
+                            variant: {
+                                ...producto.variant,
+                                product: { ...producto.variant.product }
+                            }
+                        },
+                    ];
+                } else {
+                    return nuevoCarrito;
+                }
             }
         });
     };
@@ -88,7 +96,7 @@ export default function Products({
                 <div className="flex gap-2 mt-4">
                     <div className="relative w-full">
                         <Input
-                            className="rounded pl-10"
+                            className="rounded-full pl-10"
                             placeholder="Buscar producto por nombre..."
                             value={searchTerm}
                             onChange={(e) => setSearch(e.target.value)}
@@ -100,14 +108,14 @@ export default function Products({
             </CardHeader>
 
             <CardContent className="h-[calc(100%-80px)] overflow-y-auto">
-                <Accordion type="single" collapsible className="w-full space-y-2">
+                <Accordion type="single" collapsible className="w-full space-y-2 ">
                     {filteredProductNames.map((productName) => (
                         <AccordionItem
                             value={productName}
                             key={productName}
-                            className="border rounded-lg overflow-hidden"
+                            className="border rounded-xl overflow-hidden hover:bg-amber-50"
                         >
-                            <AccordionTrigger className="px-4 py-3 hover:bg-amber-50">
+                            <AccordionTrigger className="px-4 py-3 ">
                                 <div className="flex items-center gap-2">
                                     <Coffee className="h-5 w-5 text-amber-700" />
                                     <span className="font-semibold">{productName}</span>
