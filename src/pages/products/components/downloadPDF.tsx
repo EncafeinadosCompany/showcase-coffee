@@ -38,6 +38,7 @@ export const generateProductPdf = async (product: Product) => {
   // Margins
   const margin = 20;
   let currentY = margin;
+  const imagenDefault="https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png";
 
   // Header
   doc.setFillColor(primaryColor);
@@ -71,7 +72,7 @@ export const generateProductPdf = async (product: Product) => {
 
   try {
     // Usar la imagen del producto o el placeholder por defecto
-    const imageUrl = product.imagen || "/public/coffee bean-pana.svg";
+    const imageUrl = product.imagen || imagenDefault;
 
     const img = new Image();
     img.src = imageUrl;
