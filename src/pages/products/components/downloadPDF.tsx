@@ -1,31 +1,5 @@
 import jsPDF from "jspdf";
-
-interface Attribute {
-  description: string;
-  attributes_products: {
-    value: string;
-  };
-}
-
-interface Brand {
-  name: string;
-  description: string;
-}
-
-interface ProductVariant {
-  grammage: string;
-  stock: number;
-  id_product: number | string;
-}
-
-interface Product {
-  product_name: string;
-  imagen?: string;
-  variants: ProductVariant[];
-  brand?: Brand;
-  attributes?: Attribute[];
-  description?: string;
-}
+import {Product} from '@/types/products/PDF'
 
 export const generateProductPdf = async (product: Product) => {
   const doc = new jsPDF();
