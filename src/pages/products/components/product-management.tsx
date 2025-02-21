@@ -5,13 +5,11 @@ import AddBrandForm from "./add-brand-form"
 import AddProductForm from "./add-product-form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 
 export default function ProductManagement() {
 
- const navigate = useNavigate()
-
-
+//  const navigate = useNavigate()
 
   return (
    <div >

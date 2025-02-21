@@ -19,12 +19,12 @@ export interface ShoppingData {
 }
 
 export interface ShoppingwitDetail {
-  id: number; // Asegúrate de que este campo esté presente
+  id: number;
   id_store: number;
   id_employee: number;
   date_entry: string;
   status: boolean;
-  shopping_variant: ShoppingDetail[]; // Asegúrate de que este campo esté presente
+  shopping_variant: ShoppingDetail[];
 }
 
 export interface ShoppingwitDetail2 {
@@ -32,5 +32,5 @@ export interface ShoppingwitDetail2 {
   id_employee: number;
   date_entry: string;
   status: boolean;
-  shopping_variant: ShoppingDetail[]; // Asegúrate de que este campo esté presente
+  shopping_variant: ShoppingDetail[];
 }

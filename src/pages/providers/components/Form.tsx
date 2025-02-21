@@ -1,24 +1,12 @@
 import React, { useState, useCallback } from "react";
-import {
-  Plus,
-  Trash2,
-  Landmark,
-  Building2,
-  Mail,
-  Phone,
-  MapPin,
+import { Plus, Trash2, Landmark, Building2, Mail, Phone, MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Provider, BankAccount } from "@/types/companies/provider";
@@ -39,19 +27,12 @@ const ACCOUNT_TYPES = ["Cuenta Corriente", "Cuenta de Ahorros"];
 
 interface ProviderFormProps {
   editingId: number | null;
-  onSubmit: (formData: Omit<Provider, "id">) => Promise<void>; 
+  onSubmit: (formData: Omit<Provider, "id">) => Promise<void>;
   initialData?: Omit<Provider, "id">;
 }
 
 const FormField = React.memo(
-  ({
-    label,
-    name,
-    icon: Icon,
-    type = "text",
-    value,
-    error,
-    onChange,
+  ({ label, name, icon: Icon, type = "text", value, error, onChange,
   }: {
     label: string;
     name: string;
@@ -189,7 +170,7 @@ export const ProviderForm = ({
   const handleSubmitWrapper = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      await onSubmit(formData); 
+      await onSubmit(formData);
     }
   };
 
@@ -348,9 +329,8 @@ export const ProviderForm = ({
                             )
                           }
                           placeholder="0000000000"
-                          className={`w-full ${
-                            errors[`account-${index}`] ? "border-red-500" : ""
-                          }`}
+                          className={`w-full ${errors[`account-${index}`] ? "border-red-500" : ""
+                            }`}
                         />
                         {errors[`account-${index}`] && (
                           <span className="text-sm text-red-500">

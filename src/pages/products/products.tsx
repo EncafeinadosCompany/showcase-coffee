@@ -6,8 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 export const Products = () => {
 
   return (
-    <main className="container mx-auto flex justify-center items-center overflow-hidden pt-4 pb-4">
-      <div className="bg-white shadow-lg rounded-2xl p-2 max-w-4xl w-full max-h-full flex flex-col">
+    <main className="bg-white shadow-lg rounded-2xl h-full w-full flex p-4 justify-center items-center overflow-hidden">
+      <div className="flex flex-col">
         <div className="flex flex-col items-center gap-4 mb-2">
           <div className="flex flex-wrap justify-center items-center gap-3">
             <Coffee className="h-8 w-8 text-[#36270b]" />

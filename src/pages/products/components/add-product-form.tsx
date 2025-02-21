@@ -28,13 +28,12 @@ export default function AddProductForm() {
   const { attributes } = useAppSelector((state) => state.attributes);
   const { error } = useAppSelector((state) => state.products);
   // const [images, setImages] = useState<File | null>(null)
-    const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
   useEffect(() => {
     dispatch(fetchBrands());
     dispatch(fetchAttributes());
   }, [dispatch])
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -63,24 +62,24 @@ export default function AddProductForm() {
         }
       })
 
-      let imageUrl = "";
+      let imageUrl = "https://via.placeholder.com/150";
       if (logoPreview) {
         const fileInput = document.getElementById("logo-upload") as HTMLInputElement;
         const file = fileInput.files?.[0];
-    
+
         if (file) {
-        
+
           const response = await dispatch(addImages(file));
-           
+
           const data = await response.payload.image_url;
           imageUrl = data
         }
-      }      
+      }
 
       dispatch(addProducts(
         {
           name,
-          image_url:imageUrl,
+          image_url: imageUrl,
           id_brand: Number.parseInt(brandId),
           attributes: productAttributes,
           status: true
@@ -98,10 +97,10 @@ export default function AddProductForm() {
   const handleAddAttribute = () => {
     const attributeName = newAttribute === "new" ? newCustomAttribute : newAttribute
     if (attributeName && newAttributeValue) {
-      
-      const existe = productAttributes.find(attr => attr.description === newAttribute) 
 
-      if(existe){
+      const existe = productAttributes.find(attr => attr.description === newAttribute)
+
+      if (existe) {
         toast.error('El atributo ya ha sido agregado', {
           id: 'error',
           duration: 4000,
@@ -109,7 +108,7 @@ export default function AddProductForm() {
         })
         return
       }
-      
+
       setProductAttributes([...productAttributes, { description: attributeName, value: newAttributeValue }])
       toast(`¡El atributo ${attributeName} a sido agregado correctamente!`, {
         icon: '☕',
@@ -120,7 +119,7 @@ export default function AddProductForm() {
           color: '#fefae0',
         }
       })
-      
+
 
       if (!attributes.some(attr => attr.description === attributeName)) {
         toast(`¡El atributo ${attributeName} a sido creado!`, {
@@ -143,12 +142,10 @@ export default function AddProductForm() {
     }
   }
 
-  const DropAttribute = (description: string) =>{
+  const DropAttribute = (description: string) => {
     console.log(description)
     setProductAttributes(productAttributes.filter(attr => attr.description !== description))
   }
-
-
 
   const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -156,132 +153,133 @@ export default function AddProductForm() {
       setLogoPreview(URL.createObjectURL(file)); 
     }
   };
- 
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-2 mt-6 ">
+    <form onSubmit={handleSubmit}>
       <div className="flex space-x-4">
-      <div  className="w-1/2 flex flex-col items-center mt-5">
-      <div className="flex flex-col md:flex-row gap-8">
-        <div className="">
-          <div className="relative group">
-          <div className="w-40 h-40 rounded-full border-4 border-amber-300 overflow-hidden flex items-center justify-center bg-white group-hover:border-amber-500 transition-all duration-300 shadow-lg">
-            {logoPreview ? (
-            <img src={logoPreview} alt="Logo preview" className="w-full h-full object-cover" />
-            ) : (
-            <Coffee className="w-16 h-16 text-amber-300 group-hover:scale-110 transition-transform duration-300" />
-            )}
-          </div>
-          <Input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            id="logo-upload"
-            onChange={handleLogoChange}
-          />
-          <label
-            htmlFor="logo-upload"
-            className="absolute bottom-2 right-2 bg-white hover:bg-amber-100 rounded-full text-amber-800 p-2 cursor-pointer transition-all duration-300 shadow-md border "
-          >
-            <Camera className="w-5 h-5" />
-          </label>
+        <div className="h-full w-full flex-col items-center mt-5">
+          <div className="flex flex-col md:flex-row gap-8">
+            <div className="">
+              <div className="relative group">
+                <div className="w-40 h-40 rounded-full border-4 border-amber-300 overflow-hidden flex items-center justify-center bg-white group-hover:border-amber-500 transition-all duration-300 shadow-lg">
+                  {logoPreview ? (
+                    <img src={logoPreview} alt="Logo preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <Coffee className="w-16 h-16 text-amber-300 group-hover:scale-110 transition-transform duration-300" />
+                  )}
+                </div>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  id="logo-upload"
+                  onChange={handleLogoChange}
+                />
+                <label
+                  htmlFor="logo-upload"
+                  className="absolute bottom-2 right-2 bg-amber-600 text-white p-2 rounded-full cursor-pointer hover:bg-amber-700 hover:scale-110 transition-all duration-300 shadow-md"
+                >
+                  <Camera className="w-5 h-5" />
+                </label>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      </div>
-      <div className="w-1/2 space-y-4">
-      <label htmlFor="productName" className="block text-sm font-medium text-gray-700 ">
-        Nombre del Producto
-      </label>
-      <Input className="w-96 bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium px-6 py-2 border " id="productName" value={name} onChange={(e) => setName(e.target.value)} required />
-      
-      <div>
-      <label htmlFor="brandSelect" className="block text-sm font-medium text-gray-700">
-        Marca
-      </label>
-      <Select value={brandId} onValueChange={setBrandId}>
-        <SelectTrigger id="brandSelect" className="w-96 bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium px-6 py-2 border " >
-        <SelectValue placeholder="Seleccionar marca" />
-        </SelectTrigger>
-        <SelectContent>
-        {brands.map((brand) => (
-          <SelectItem key={brand.id} value={brand.id.toString()}>
-          {brand.name}
-          </SelectItem>
-        ))}
-        </SelectContent>
-      </Select>
-      </div>
-      
-      
-      </div>
-      
+        <div className="h-full w-full space-y-4">
+          <label htmlFor="productName" className="block text-sm font-medium text-gray-700 ">
+            Nombre del Producto
+          </label>
+          <Input className="w-96 rounded-[5px]" id="productName" value={name} onChange={(e) => setName(e.target.value)} required />
+
+          <div>
+            <label htmlFor="brandSelect" className="block text-sm font-medium text-gray-700">
+              Marca
+            </label>
+            <Select value={brandId} onValueChange={setBrandId}>
+              <SelectTrigger id="brandSelect" className="w-96 rounded-[5px]" >
+                <SelectValue placeholder="Seleccionar marca" />
+              </SelectTrigger>
+              <SelectContent>
+                {brands.map((brand) => (
+                  <SelectItem key={brand.id} value={brand.id.toString()}>
+                    {brand.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+
+        </div>
+
       </div>
       <div className="p-6 overflow-auto max-w-max[100vh - 90px]">
-      <h3 className="text-sm font-medium text-cafe-dark mb-2">Atributos</h3>
-      {productAttributes.map((attr, index) => (
-        <div key={index} className="flex gap-2 mb-4 items-center">
-        <button onClick={() => DropAttribute(attr.description)}> 
-          <Tooltip>
-          <TooltipTrigger asChild>
-          <StarOff className="w-5 text-amber-800"/>
-          </TooltipTrigger>
-          <TooltipContent>
-          <p className="text-sm font-medium text-cafe-dark">Borrar</p>
-          </TooltipContent>
-          </Tooltip>
-        </button>
-        <Input value={attr.description} readOnly className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium px-6 py-2 border " />
-        <Input value={attr.value} readOnly className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium px-6 py-2 border " />
-        </div>
-      ))}
-      <div className="flex gap-2 mb-2 ">
-        <Select value={newAttribute} onValueChange={setNewAttribute}>
-        <SelectTrigger className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium px-6 py-2 border ">
-          <SelectValue placeholder="Seleccionar atributo" />
-        </SelectTrigger>
-        <SelectContent>
-          {attributes.map((attr) => (
-          <SelectItem key={attr.id} value={attr.description}>
-            {attr.description}
-          </SelectItem>
-          ))}
-          <SelectItem value="new">Agregar nuevo atributo</SelectItem>
-        </SelectContent>
-        </Select>
-        
-        {newAttribute === "new" ? (
-        <Input
-          placeholder="Nuevo atributo"
-          value={newCustomAttribute}
-          onChange={(e) => setNewCustomAttribute(e.target.value)}
-          className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium px-6 py-2 border "
-        />
-        ) : null}
-        <Input
-        placeholder="Valor"
-        value={newAttributeValue}
-        onChange={(e) => setNewAttributeValue(e.target.value)}
-        className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium px-6 py-2 border "
-        />
-        
-        <div className="card flex justify-content-center">
-        <div className="flex flex-wrap gap-2">
-          <Button
-          type="button"
-          onClick={handleAddAttribute}
-          className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium px-6 py-2 border "
-          >
-          Agregar
-          </Button>
-        </div>
+        <h3 className="text-sm font-medium text-cafe-dark mb-2">Atributos</h3>
+        {productAttributes.map((attr, index) => (
+          <div key={index} className="flex gap-2 mb-4 items-center">
+            <button onClick={() => DropAttribute(attr.description)}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <StarOff className="w-5 text-yellow-500" />
+
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-sm font-medium text-cafe-dark">Borrar</p>
+                </TooltipContent>
+              </Tooltip>
+            </button>
+            <Input value={attr.description} readOnly className="bg-white border-cafe-medium" />
+            <Input value={attr.value} readOnly className="bg-white border-cafe-medium" />
+          </div>
+        ))}
+        <div className="flex gap-2 mb-2 ">
+          <Select value={newAttribute} onValueChange={setNewAttribute}>
+            <SelectTrigger className="bg-white border-cafe-medium">
+              <SelectValue placeholder="Seleccionar atributo" />
+            </SelectTrigger>
+            <SelectContent>
+              {attributes.map((attr) => (
+                <SelectItem key={attr.id} value={attr.description}>
+                  {attr.description}
+                </SelectItem>
+              ))}
+              <SelectItem value="new">Agregar nuevo atributo</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {newAttribute === "new" ? (
+            <Input
+              placeholder="Nuevo atributo"
+              value={newCustomAttribute}
+              onChange={(e) => setNewCustomAttribute(e.target.value)}
+              className="bg-white border-cafe-medium"
+            />
+          ) : null}
+          <Input
+            placeholder="Valor"
+            value={newAttributeValue}
+            onChange={(e) => setNewAttributeValue(e.target.value)}
+            className="bg-white border-cafe-medium"
+          />
+
+          <div className="card flex justify-content-center">
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                onClick={handleAddAttribute}
+                className="bg-amber-300 text-slate-800  rounded-[5px] hover:bg-cafe-medium hover:text-cafe-cream"
+              >
+                Agregar
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
+      <div className="flex justify-center px-10 py-5 ">
+        <Button
+          className="w-full  bg-amber-600 hover:bg-amber-700 text-white "
+          type="submit">Agregar Producto</Button>
       </div>
-     <div className="flex  px-10 py-5 ">
-     <Button
-      className=" bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium px-6  border "
-      type="submit">Agregar Producto</Button>
-     </div>
     </form>
   )
 }

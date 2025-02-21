@@ -127,15 +127,15 @@ export default function Sales() {
   };
 
   return (
-    <div>
+    <div className="h-full w-full p-2 space-y-3 overflow-hidden">
       <div className="flex justify-between items-center mb-4">
-        <h6 className="text-amber-600 text-5xl md:text-3xl font-extrabold">
+        <h1 className="title">
           Ventas
-        </h6>
+        </h1>
         <Button
           onClick={toggleSalesList}
           variant="outline"
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 rounded-full"
         >
           {showSalesList ? (
             <>
@@ -145,7 +145,7 @@ export default function Sales() {
           ) : (
             <>
               <ListIcon className="h-4 w-4" />
-              Ver Ventas
+              Ver Historial de Ventas
             </>
           )}
         </Button>
@@ -186,7 +186,7 @@ export default function Sales() {
           </Pagination>
         </div>
       ) : (
-        <div className="flex gap-4">
+        <div className="flex gap-4 h-full w-full">
           <section className="w-[35%]">
             <Products
               products={saleVariants}

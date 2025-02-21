@@ -58,9 +58,9 @@ export const ProvidersPage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-amber-50 to-white p-4 space-y-3 ">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className=" text-amber-600 text-5xl md:text-3xl font-bold">
+    <div className="p-2 h-full space-y-3"> 
+      <div className="flex justify-between items-center">
+        <h1 className="title">
           Gestión de Proveedores
         </h1>
 
@@ -74,7 +74,7 @@ export const ProvidersPage = () => {
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-full sm:max-w-2xl mx-1 sm:mx-auto bg-white/90">
-          
+
             <ScrollArea className="h-[470px]">
               <ProviderForm
                 editingId={editingId}
@@ -86,15 +86,15 @@ export const ProvidersPage = () => {
         </Dialog>
       </div>
 
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-4 mb-4">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-amber-800 rounded-full" />
           <Input
             placeholder="Buscar proveedores..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8 bg-white/80 backdrop-blur rounded-full"
+            className="bg-white/80 backdrop-blur rounded-full pl-10"
           />
+          <Search className="search" />
         </div>
 
         <div className="flex gap-2">
@@ -114,6 +114,7 @@ export const ProvidersPage = () => {
           >
             <List className="mr-2 h-4 w-4" /> Lista
           </Button>
+
         </div>
       </div>
 
@@ -130,8 +131,9 @@ export const ProvidersPage = () => {
       ) : (
         <>
           {viewMode === "cards" ? (
-            <ScrollArea className="h-[350px]">
+            <ScrollArea className="h-[400px]">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
                 {providers.map((provider) => (
                   <ProviderCard
                     key={provider.id}
@@ -140,43 +142,17 @@ export const ProvidersPage = () => {
                   />
                 ))}
               </div>
+
             </ScrollArea>
           ) : (
             <ProviderTable
               providers={providers}
               onProviderClick={handleProviderClick}
             />
+
           )}
 
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-                  className={currentPage === 1 ? "disabled" : ""}
-                />
-              </PaginationItem>
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <PaginationItem key={index}>
-                  <PaginationLink
-                    onClick={() => handlePageChange(index + 1)}
-                    isActive={currentPage === index + 1}
-                    className="bg-amber-600 hover:bg-amber-500 rounded-full text-white"
-                  >
-                    {index + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() =>
-                    handlePageChange(Math.min(currentPage + 1, totalPages))
-                  }
-                  className={currentPage === totalPages ? "disabled" : ""}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+
         </>
       )}
 
@@ -191,8 +167,41 @@ export const ProvidersPage = () => {
           />
         </Dialog>
       )}
+
+      <Pagination >
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+              className={currentPage === 1 ? "disabled" : ""}
+            />
+          </PaginationItem>
+          {Array.from({ length: totalPages }).map((_, index) => (
+            <PaginationItem key={index}>
+              <PaginationLink
+                onClick={() => handlePageChange(index + 1)}
+                isActive={currentPage === index + 1}
+                className="bg-amber-600 hover:bg-amber-500 rounded-full text-white"
+              >
+                {index + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+          <PaginationItem>
+            <PaginationNext
+              onClick={() =>
+                handlePageChange(Math.min(currentPage + 1, totalPages))
+              }
+              className={currentPage === totalPages ? "disabled" : ""}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
+
+
   );
+
 };
 
 export default ProvidersPage;

@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import {addBrand} from "@/features/products/brands/brandSlice";
+import { addBrand } from "@/features/products/brands/brandSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import toast from "react-hot-toast";
@@ -11,20 +11,17 @@ export default function AddBrandForm() {
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const dispatch = useAppDispatch();
-  const {error} =useAppSelector(state => state.brands)
-
-  
-
+  const { error } = useAppSelector(state => state.brands)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if(!name && error ){
+    if (!name && error) {
       toast.error(error || "El nombre de la marca es requerido")
       return
     }
 
-    toast(`¡La marca ${name} a sido agregada correctamente!`,{
+    toast(`¡La marca ${name} a sido agregada correctamente!`, {
       icon: '☕',
       duration: 4000,
       removeDelay: 1000,
@@ -33,7 +30,7 @@ export default function AddBrandForm() {
         color: '#fefae0',
       }
     })
-    dispatch(addBrand({name, description}))
+    dispatch(addBrand({ name, description }))
     setName("")
     setDescription("")
   }

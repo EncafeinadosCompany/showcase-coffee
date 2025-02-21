@@ -36,11 +36,11 @@ export const HomePage = () => {
       <div className="relative overflow-hidden">
         <div className="absolute inset-0  bg-cover bg-center opacity-10" />
         
-        <div className="max-w-7xl mx-auto px-1 sm:px-1 lg:px-8">
+        <div className="max-w-7xl mx-auto px-1 sm:px-1 lg:px-8 p-10">
           <div className={`text-center  space-y-8 transform transition-all duration-1000 ${showWelcome ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
             <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900">
               <span className="block text-amber-800">Bienvenido a</span>
-              <span className="block text-amber-600 mt--2">Encafeinados</span>
+              <span className="block text-amber-600 mt-2">Encafeinados</span>
             </h1>
             
             {employee && (
@@ -57,7 +57,7 @@ export const HomePage = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-13">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-1">
         <div className="grid md:grid-cols-3 gap-8">
           <FeatureCard
             icon={Clock}
