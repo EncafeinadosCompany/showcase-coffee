@@ -8,7 +8,7 @@ import {
 } from "./dashboardService";
 
 interface DashboardState {
-  productTop: any[];
+  topProducts: any[];
   earlyDate: any | null;
   earnings: any | null;
   totalLiquidation: number | null;
@@ -18,7 +18,7 @@ interface DashboardState {
 }
 
 const initialState: DashboardState = {
-  productTop: [],
+  topProducts: [],
   earlyDate: null,
   earnings: null,
   totalLiquidation: null,
@@ -27,7 +27,6 @@ const initialState: DashboardState = {
   error: null,
 };
 
-// Thunks para obtener los datos del dashboard
 export const fetchProductTop = createAsyncThunk(
   "dashboard/fetchProductTop",
   async ({ month, year }: { month: number; year: number }, { rejectWithValue }) => {
@@ -96,7 +95,7 @@ const dashboardSlice = createSlice({
       })
       .addCase(fetchProductTop.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.productTop = action.payload;
+        state.topProducts = action.payload;
       })
       .addCase(fetchProductTop.rejected, (state, action) => {
         state.isLoading = false;

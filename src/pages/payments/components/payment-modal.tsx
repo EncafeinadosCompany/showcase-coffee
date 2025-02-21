@@ -59,6 +59,8 @@ export function PaymentModal({ isOpen, onClose, liquidation }: PaymentModalProps
 
     dispatch(fetchLiquidations())
     setPaymentType("")
+    setPaymentAmount("")
+    setReference("")
     onClose()
   }
 

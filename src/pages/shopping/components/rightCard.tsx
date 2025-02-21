@@ -10,7 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Coffee, Search } from "lucide-react";
 
 import FormShopping from "./formShopping";
-import NuevaVarianteDialog from "./newVariants";
+import NewVariantDialog from "./newVariants";
 import { ShoppingDetail } from "@/types/transactions/shoppingModel";
 import { productType } from "@/types/products/product";
 import { useState } from "react";
@@ -95,7 +95,7 @@ export default function RightCard({
                     </div>
                   </div>
                   <div className="mt-4 flex justify-center">
-                    <NuevaVarianteDialog productoId={producto.id} />
+                    <NewVariantDialog productoId={producto.id} />
                   </div>
                 </AccordionContent>
               </AccordionItem>

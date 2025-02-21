@@ -1,7 +1,7 @@
 export interface variantType {
-id: string | number | null ,
+id?: string | number | null ,
 grammage: string,
-stock: number,
+stock?: number,
 id_product: string | number,
-images?: Array<{url: string}>,
+image_url: string,
 }

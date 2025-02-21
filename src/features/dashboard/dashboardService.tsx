@@ -2,7 +2,7 @@ import { axiosInstance } from "../../API/axiosInstance";
 
 export const getProductTop = async (month: number, year: number) => {
   const response = await axiosInstance.post("/dashboard/data-top", { month, year });
-  return response.data;
+  return response.data.data;
 };
 
 export const getEarlyDate = async () => {
