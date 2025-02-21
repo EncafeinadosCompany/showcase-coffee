@@ -2,14 +2,13 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form"
-
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import {useAppSelector} from "@/hooks/useAppSelector";
+import { fetchBrands } from "@/features/products/brands/brandSlice";
 import * as z from "zod"
+import { useEffect } from "react";
 
-const BRANDS = [
-    { id: 1, name: "Café Delicioso", description: "Una marca premium de café" },
-    { id: 2, name: "Aroma Intenso", description: "Café de origen único" },
-    // ... más marcas
-  ]
+ 
 
 
   const productSchema = z.object({
@@ -36,7 +35,17 @@ interface BasicInfoStepProps {
 }
 
 export default function BasicInfoStep({ form, imagePreview, handleImageChange }: BasicInfoStepProps) {
-    return (
+   
+
+  const dispatch = useAppDispatch();
+  
+      useEffect(() => {
+          dispatch(fetchBrands());
+      },[dispatch]);
+  
+
+  const {brands} = useAppSelector((state) => state.brands);
+  return (
         <div className="grid grid-cols-2 gap-6 items-center">
           {/* Vista previa de la imagen */}
           <div className="flex justify-center">
@@ -66,7 +75,7 @@ export default function BasicInfoStep({ form, imagePreview, handleImageChange }:
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {BRANDS.map((brand) => (
+                      {brands.map((brand) => (
                         <SelectItem key={brand.id} value={brand.id.toString()}>
                           {brand.name}
                         </SelectItem>

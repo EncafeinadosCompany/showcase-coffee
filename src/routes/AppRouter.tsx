@@ -18,6 +18,7 @@ import Brands from "@/pages/prueba/brands/brands";
 import Details from "@/pages/prueba/page";
 import FormBrand from "@/pages/prueba/brands/components/formBrands";
 import ProductosPage from "@/pages/prueba/products/products";
+import ProductForm from "@/pages/prueba/products/components/productsForm";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -48,9 +49,10 @@ export function AppRouter() {
 
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
           <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />    
-          <Route path="/brands" element = {<PrivateRoute><Brands/></PrivateRoute>} />  
+          <Route path="/brands" element = {<PrivateRoute><Brands/></PrivateRoute>} />   
           <Route path="/products-page" element={<PrivateRoute><ProductosPage/></PrivateRoute>} />
           <Route path= "/form-brands" element = {<PrivateRoute><FormBrand/></PrivateRoute>} />
+          <Route path= "/form-products" element = {<PrivateRoute><ProductForm/></PrivateRoute>}/>
           <Route path="/details" element={<PrivateRoute><Details/></PrivateRoute>} />
           <Route path='/variants' element={<PrivateRoute><VariantsPage /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><CafePreview/></PrivateRoute>} />

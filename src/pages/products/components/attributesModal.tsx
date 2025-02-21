@@ -30,7 +30,7 @@ const AttributeModal = ({ attributes }: VariantModalProps) => {
           Ver Atributos
         </motion.button>
       </DialogTrigger>
-      <DialogContent aria-describedby={undefined} className="sm:max-w-[425px] bg-[#faf6f1] rounded-lg p-0 overflow-hidden border border-amber-200">
+      <DialogContent aria-describedby={undefined} className="sm:max-w-[425px] min-h-[320px] bg-[#faf6f1] rounded-lg p-0 overflow-hidden border border-amber-200">
         <DialogHeader className="pt-4 px-6 bg-gradient-to-b from-gray-200 to-[#faf6f1] rounded-t-lg">
           <div className="flex items-center gap-2 text-center">
             <Stars className="h-7 w-7 text-amber-500" />
