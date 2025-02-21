@@ -1,26 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Building2, Mail, Phone } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Provider } from "@/types/companies/provider";
-import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
-import { Button } from "@/components/ui/button";
-import { AddEmployeeModal } from "./addEmployeeModal";
-import { EmployeeListModal } from "./employeeList";
 
 interface ProviderCardProps {
   provider: Provider;
   onClick: (provider: Provider) => void;
 }
 
-export const ProviderCard = React.memo(({ provider, onClick }: ProviderCardProps) => {
-
-  const [isAddEmployeeOpen, setIsAddEmployeeOpen] = useState(false);
-  const [isEmployeeListOpen, setIsEmployeeListOpen] = useState(false);
-  
-  console.log(provider)
-  
- return (
-
+export const ProviderCard = React.memo(({ provider, onClick }: ProviderCardProps) => (
   <Card
     onClick={() => onClick(provider)}
     className="cursor-pointer hover:shadow-xl h-50 flex flex-col transition-all duration-300 transform hover:-translate-y-1 bg-white/80 backdrop-blur relative"
@@ -57,4 +45,4 @@ export const ProviderCard = React.memo(({ provider, onClick }: ProviderCardProps
       </div>
     </CardContent>
   </Card>
-)})
+));
