@@ -12,6 +12,7 @@ import variantReducer from "../features/products/variants/vatiantSlice";
 import brandReducer from "../features/products/brands/brandSlice";
 import attributeReducer from "../features/products/attributes/attributeSlice";
 
+import socialNetworkReducer from "../features/products/socialNetworks/socialNetworkSlice";
 import shoppingReducer from "../features/transactions/shoppingSlice";
 import saleReducer from "../features/transactions/saleSlice";
 
@@ -35,6 +36,7 @@ export const store = configureStore({
     brands: brandReducer,
     attributes: attributeReducer,
 
+    socialNetworks: socialNetworkReducer,
     shopping: shoppingReducer,
     sales: saleReducer,
 

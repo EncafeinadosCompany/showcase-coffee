@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getBrandById, getBrands, createBrand, updateBrand, deleteBrand } from "./brandService";
-import { brandType } from "@/types/products/brand";
+import { BrandType, brandType } from "@/types/products/brand";
 
 interface BrandState {
   brands: brandType[];
@@ -32,7 +32,7 @@ export const getBrand = createAsyncThunk("brands/getById", async (id: string | n
   }
 });
 
-export const addBrand = createAsyncThunk("brands/add", async (brand: Omit<brandType, "id">, { rejectWithValue }) => {
+export const addBrand = createAsyncThunk("brands/add", async (brand: Omit<BrandType, "id">, { rejectWithValue }) => {
   try {
     return await createBrand(brand);
   } catch (error: any) {

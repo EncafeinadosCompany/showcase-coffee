@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
-// import { useAppSelector } from "@/hooks/useAppSelector";
 import { fetchBrands } from "@/features/products/brands/brandSlice";
 import { useEffect } from "react";
-import BrandForm from "./brandsForm";
+import BrandForm from "./BrandForm";
 
 export default function FormBrand () {
 

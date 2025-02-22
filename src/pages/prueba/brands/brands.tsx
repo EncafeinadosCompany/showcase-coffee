@@ -52,14 +52,14 @@ export default function Brands() {
     <div className=" bg-[#F5E6D3] text-[#4A3933] h-full transition-all duration-700 overflow-y-auto py-4 px-4 ">
       <div className="">
         <div className="flex items-center justify-between ">
-          <Link to="/details">
+            <Link to="/details">
             <Button
               variant="outline"
-              className="mb-4 bg-amber-600 rounded-[5px]  hover:bg-amber-700 hover:shadow-sm"
+              className="mb-4 rounded-[5px] hover:shadow-sm"
             >
               <ArrowLeft className="mr-2 h-4 w-4 text-black" /> Volver
             </Button>
-          </Link>
+            </Link>
           <Link to="/form-brands">
             <Button
               variant="outline"

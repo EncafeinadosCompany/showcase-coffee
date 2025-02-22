@@ -63,6 +63,7 @@ export default function ProductForm() {
 
   const onSubmit = async (data: ProductFormValues) => {
     console.log(data)
+    
     if(data.attributes.length > 0) {
         data.attributes.map((attr) => {
             const exists = attributes.find((a) => a.description === attr.description)
