@@ -85,7 +85,7 @@ export default function RightCard({
                   <img
                     width="60%"
                     className="mx-auto"
-                    src="./public/undraw_page-not-found_6wni.svg"
+                    src="./public/undraw_page-not-found_6wni .svg"
                     alt="No se encontraron productos"
                   />
                   <p className="text-muted-foreground text-center">
