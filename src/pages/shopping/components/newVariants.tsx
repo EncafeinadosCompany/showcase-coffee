@@ -8,12 +8,13 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { addVariant } from "@/features/products/variants/vatiantSlice";
 import { fetchProducts } from "@/features/products/products/productSlice";
-import toast from "react-hot-toast";
+import { showToast } from "@/features/common/toast/toastSlice";
 
 export default function NewVariantDialog({ productoId }: { productoId: number; }) {
   const [gramaje, setGramaje] = useState("");
   const { error } = useAppSelector((state) => state.variants);
   const dispatch = useAppDispatch();
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -27,16 +28,16 @@ export default function NewVariantDialog({ productoId }: { productoId: number; }
     };
 
     if (error) {
-      toast.error("Error al agregar la variante")
+      dispatch(showToast({ message: "Error al agregar la variante", type: "error" }));
     } else {
       dispatch(addVariant(nuevaVariante))
       .unwrap()
       .then(() => {
-        toast.success(`La variante de ${gramaje}g ha sido agregada`)
+        dispatch(showToast({ message: `La variante de ${gramaje}g ha sido agregada`, type: "success" }));
         dispatch(fetchProducts());
       })
       .catch(() => {
-        toast.error("La variante ya existe")
+        dispatch(showToast({ message: "La variante ya existe", type: "error" }));
       })
     
     }

@@ -21,7 +21,7 @@ import liquidationReducer from "../features/payments/liquidations/liquidationSli
 import imageReducer from "../features/images/imageSlice";
 
 import dashboardReducer from "../features/dashboard/dashboardSlice";
-
+import toastReducer from "../features/common/toast/toastSlice";
 
 export const store = configureStore({
   reducer: {
@@ -46,6 +46,8 @@ export const store = configureStore({
     images: imageReducer,
 
     dashboard: dashboardReducer,
+
+    toast: toastReducer,
   },
 });
 

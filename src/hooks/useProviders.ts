@@ -9,6 +9,7 @@ import {
     editProvider,
     associateProvider,
 } from "@/features/companies/providerSlice";
+import { showToast } from "@/features/common/toast/toastSlice";
 
 export const useProviders = (itemsPerPage: number = 6) => {
     const dispatch = useAppDispatch();
@@ -28,7 +29,7 @@ export const useProviders = (itemsPerPage: number = 6) => {
                 .unwrap()
                 .catch((error) => {
                     console.error(error);
-                    toast.error("No se pudieron cargar los proveedores");
+                    dispatch(showToast({ message: "Error al cargar los proveedores", type: "error" }));
                 });
         }
     }, [storeId, dispatch]);
@@ -116,12 +117,12 @@ export const useProviders = (itemsPerPage: number = 6) => {
                   return;
                 }
               }
-              
-              toast.success("Proveedor creado correctamente");
+              dispatch(showToast({ message: "¡Proveedor creado con éxito!", type: "success" }));
             }
             setShowDialog(false);
           } catch (error) {
-            toast.error("Error al guardar el proveedor");
+            dispatch(showToast({ message: "Error al guardar el proveedor", type: "error" }));
+
           }
         },
         [dispatch, employee?.id_store, editingId, validateForm]
