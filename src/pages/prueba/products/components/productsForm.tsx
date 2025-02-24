@@ -87,7 +87,7 @@ export default function ProductForm() {
     form.setValue("image_url", imageUrl);
 
     const productData: productType = {
-      id: null, // or any default value
+      id: 0, 
       name: data.name,
       id_brand: data.id_brand,
       image_url: imageUrl,
@@ -100,6 +100,7 @@ export default function ProductForm() {
     .then(() => {
       toast.success("Producto creado")
       form.reset()
+      setImagePreview(null);
       setCurrentStep(1)
     })
     .catch((error) => {

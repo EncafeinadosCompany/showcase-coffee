@@ -146,7 +146,7 @@ export default function Brands() {
                               className="flex items-center space-x-2 text-sm text-blue-600 hover:underline"
                             >
                               {getSocialIcon(network.social_network.name)}
-                              <span>{network.url}</span>
+                              <span>{network.description}</span>
                             </a>
                           ))}
                         </div>

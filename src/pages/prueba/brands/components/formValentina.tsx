@@ -111,10 +111,15 @@ useEffect(() => {
     .unwrap()
     .then(() => {
       toast.success("Marca de café creada con éxito");
+      form.reset();
+      setImagePreview(null);
+      setCurrentPage(1);
     })
     .catch((error) => {
       toast.error(error)
     });
+
+    
    
   };
 
@@ -281,7 +286,7 @@ useEffect(() => {
                                   defaultValue={field.value?.toString()}
                                 >
                                   <FormControl>
-                                    <SelectTrigger className="w-full border-[#6F4E37]">
+                                    <SelectTrigger className="w-full border-[#6F4E37] rounded-sm">
                                       <SelectValue placeholder="Red social" />
                                     </SelectTrigger>
                                   </FormControl>
@@ -309,7 +314,7 @@ useEffect(() => {
                                   <Input
                                     placeholder="https://..."
                                     {...field}
-                                    className="border-[#6F4E37]"
+                                    className="border-[#6F4E37] rounded-sm"
                                   />
                                 </FormControl>
                                 <FormMessage />
@@ -325,7 +330,7 @@ useEffect(() => {
                                   <Input
                                     placeholder="Descripción"
                                     {...field}
-                                    className="border-[#6F4E37]"
+                                    className="border-[#6F4E37] rounded-sm"
                                   />
                                 </FormControl>
                                 <FormMessage />
