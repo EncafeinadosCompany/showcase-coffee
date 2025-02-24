@@ -69,7 +69,7 @@ const Dashboard = () => {
       <div className="max-w-7xl mx-auto">
         {/* Encabezado */}
         <div className="flex justify-between items-center mb-2 top-0 z-10 py-4">
-          <h1 className="text-2xl font-bold text-gray-800">Finanzas de  {store?.name || "Cargando..."} </h1>
+          <h1 className="title">Finanzas de  {store?.name || "Cargando..."} </h1>
         </div>
 
         {data ? (
