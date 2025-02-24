@@ -14,14 +14,8 @@ import Payment from "./components/payment";
 import Cart from "./components/cart";
 import { SalesTable } from "./components/saleslist";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationPrevious,
-  PaginationNext,
-  PaginationLink,
-} from "@/components/ui/pagination";
+import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext, PaginationLink } from "@/components/ui/pagination";
+import { showToast } from "@/features/common/toast/toastSlice";
 
 export default function Sales() {
   const dispatch = useAppDispatch();
@@ -74,22 +68,10 @@ export default function Sales() {
     };
 
     try {
-      console.log("saleData", saleData);
       await dispatch(addSale(saleData)).unwrap();
       await dispatch(fetchSales());
 
-      toast.success("¡Venta realizada con éxito!", {
-        icon: "✅",
-        duration: 4000,
-        style: {
-          background: "#FFF8E1",
-          color: "#6D4C41",
-          border: "1px solid #4E342E",
-          padding: "12px",
-          borderRadius: "8px",
-          fontWeight: "bold",
-        },
-      });
+      dispatch(showToast({ message: "¡Venta realizada con éxito!", type: "success" }));
 
       setCartProducts([]);
       setTotal(0);
@@ -107,19 +89,7 @@ export default function Sales() {
   const handleCancelSale = () => {
     setCartProducts([]);
     setTotal(0);
-
-    toast.error("Venta cancelada.", {
-      icon: "❌",
-      duration: 4000,
-      style: {
-        background: "#B71C1C",
-        color: "#FFEBEE",
-        border: "1px solid #7F0000",
-        padding: "12px",
-        borderRadius: "8px",
-        fontWeight: "bold",
-      },
-    });
+    dispatch(showToast({ message: "Venta cancelada.", type: "error" }));
   };
 
   const toggleSalesList = () => {
@@ -154,6 +124,7 @@ export default function Sales() {
       {showSalesList ? (
         <div className="flex flex-col gap-4 justify-center ">
           <SalesTable sales={currentItems} />
+
           {/* Paginador */}
           <Pagination className="flex justify-center">
             <PaginationContent>
@@ -184,6 +155,7 @@ export default function Sales() {
               </PaginationItem>
             </PaginationContent>
           </Pagination>
+          
         </div>
       ) : (
         <div className="flex gap-4 h-full w-full">
