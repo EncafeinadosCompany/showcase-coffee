@@ -1,36 +1,40 @@
-"use client"
+import { useEffect, useState } from "react";
+import { Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { PaymentModal } from "./components/payment-modal";
+import DepositsModal from "./components/details-modal";
+import { fetchLiquidations } from "@/features/payments/liquidations/liquidationSlice";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { Liquidation } from "@/types/payments/liquidation";
+import { fetchTotalDepositsByLiquidation } from "@/features/payments/deposits/depositSlice";
+import Paginator from "@/components/common/paginator";
+import usePagination from "@/components/hooks/usePagination";
 
-import { useEffect, useState } from "react"
-import { Search } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, } from "@/components/ui/pagination"
-import { PaymentModal } from "./components/payment-modal"
-import DepositsModal from "./components/details-modal"; import { fetchLiquidations } from "@/features/payments/liquidations/liquidationSlice"
-import { useAppDispatch } from "@/hooks/useAppDispatch"
-import { useAppSelector } from "@/hooks/useAppSelector"
-import { Liquidation } from "@/types/payments/liquidation"
-import { fetchTotalDepositsByLiquidation } from "@/features/payments/deposits/depositSlice"
 
 export default function LiquidationModule() {
-
-  const { liquidations } = useAppSelector((state) => state.liquidations)
+  const { liquidations } = useAppSelector((state) => state.liquidations);
   const { deposits } = useAppSelector((state) => state.deposits);
 
   const [totalDeposits, setTotalDeposits] = useState<{ [key: number]: number }>({});
-  const [currentPage, setCurrentPage] = useState(1)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedProvider, setSelectedProvider] = useState<Liquidation | null>(null)
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProvider, setSelectedProvider] = useState<Liquidation | null>(null);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [filteredProviders, setFilteredProviders] = useState<Liquidation[]>([]);
 
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+
+  const pagination = usePagination<Liquidation>({
+    initialItemsPerPage: 5
+  });
 
   useEffect(() => {
-    dispatch(fetchLiquidations())
-  }, [dispatch])
+    dispatch(fetchLiquidations());
+  }, [dispatch]);
 
   useEffect(() => {
     liquidations.forEach((liquidation) => {
@@ -46,32 +50,31 @@ export default function LiquidationModule() {
     setTotalDeposits(depositTotals);
   }, [deposits]);
 
-  const itemsPerPage = 5
-  const filteredProviders = liquidations.filter((provider) =>
-    provider.provider.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
-  const totalPages = Math.ceil(filteredProviders.length / itemsPerPage)
-  const paginatedProviders = filteredProviders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-
-  const handlePageChange = (page: number) => { setCurrentPage(page) }
+  useEffect(() => {
+    const filtered = liquidations.filter((provider) =>
+      provider.provider.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredProviders(filtered);
+    pagination.setTotalItems(filtered.length);
+  }, [liquidations, searchTerm]);
 
   const handlePayment = (provider: Liquidation) => {
-    setSelectedProvider(provider)
-    setIsPaymentModalOpen(true)
-  }
+    setSelectedProvider(provider);
+    setIsPaymentModalOpen(true);
+  };
 
   const handleDetails = (provider: Liquidation) => {
-    setSelectedProvider(provider)
-    setIsDetailsModalOpen(true)
-  }
+    setSelectedProvider(provider);
+    setIsDetailsModalOpen(true);
+  };
+
+  // Obtener las liquidaciones de la página actual
+  const currentPage = pagination.paginatedData(filteredProviders);
 
   return (
     <div className="p-2 h-full space-y-3">
-
       <div className="flex justify-between items-center">
-        <h1 className="title">
-          Gestión de Liquidaciones
-        </h1>
+        <h1 className="title">Gestión de Liquidaciones</h1>
       </div>
 
       <div className="flex gap-4 mb-4">
@@ -86,113 +89,97 @@ export default function LiquidationModule() {
         </div>
       </div>
 
-      <Card className="bg-white/80 backdrop-blur">
+      <Card className="bg-white/80 backdrop-blur flex-1 flex flex-col max-h-[calc(100vh-150px)]">
         <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-amber-800">Nombre</TableHead>
-                <TableHead className="text-amber-800">Deuda Actual</TableHead>
-                <TableHead className="text-amber-800">Total Abonado</TableHead>
-                <TableHead className="text-amber-800">Estado</TableHead>
-                <TableHead className="text-amber-800">Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              { paginatedProviders.length === 0 ? (
-                  searchTerm.trim() === "" ? (
-                    <>
-                      <h3 className="text-xl font-semibold mb-2 mt-10">
-                        No hay liquidaciones disponibles
-                      </h3>
-                      <img
-                        width={"50%"}
-                        className="mx-auto"
-                        src="./public/undraw_search-app_cpm0.svg"
-                      ></img>
-                      <p className="text-muted-foreground text-center">
-                        ¡Realice una compra para comenzar!.
-                      </p>
-                    </>
-                  ) : (
-                    <div className=" w-full flex flex-col items-center justify-center">
-                      <h3 className="text-xl font-semibold mb-2 mt-10">
-                        No se encontraron Liquidaciones
-                      </h3>
-                      <img
-                        width="50%"
-                        src="./public/undraw_page-not-found_6wni .svg"
-                        alt="No se encontraron productos"
-                      />
-                      <p className="text-muted-foreground text-center">
-                        Intenta con otro término de búsqueda.
-                      </p>
-                    </div>
-                  )
-              ):
-              (paginatedProviders.map((provider) => (
-                <TableRow key={provider.id} className="hover:bg-amber-50">
-                  <TableCell className="font-medium">{provider.provider.name}</TableCell>
-                  <TableCell>{provider.current_debt.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</TableCell>
-                  <TableCell>{(totalDeposits[provider.id] || 0).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</TableCell>
-                  <TableCell>
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${provider.status === true ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                        }`}
-                    >
-                      Activo
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      onClick={() => handlePayment(provider)}
-                      className="mr-2 bg-amber-600 hover:bg-amber-500 text-white rounded-full"
-                    >
-                      Abono
-                    </Button>
-                    <Button
-                      onClick={() => handleDetails(provider)}
-                      variant="outline"
-                      className="border-amber-600 text-amber-600 hover:bg-amber-100 rounded-full"
-                    >
-                      Ver detalles
-                    </Button>
-                  </TableCell>
+          <div className="overflow-y-auto flex-1 max-h-[calc(100vh-250px)]">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-amber-800">Nombre</TableHead>
+                  <TableHead className="text-amber-800">Deuda Actual</TableHead>
+                  <TableHead className="text-amber-800">Total Abonado</TableHead>
+                  <TableHead className="text-amber-800">Estado</TableHead>
+                  <TableHead className="text-amber-800">Acciones</TableHead>
                 </TableRow>
-              )))}
-            </TableBody>
-          </Table>
-          <Pagination className="mt-4">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-                  className={currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""}
-                />
-              </PaginationItem>
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <PaginationItem key={index}>
-                  <PaginationLink
-                    onClick={() => handlePageChange(index + 1)}
-                    isActive={currentPage === index + 1}
-                    className={`${currentPage === index + 1 ? "bg-amber-600 hover:bg-amber-500" : "bg-amber-100 hover:bg-amber-200"
-                      } rounded-full text-white`}
-                  >
-                    {index + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
-                  className={currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+              </TableHeader>
+              <TableBody>
+                {currentPage.length === 0 ? (
+                  searchTerm.trim() === "" ? (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center py-8">
+                        <h3 className="text-xl font-semibold mb-2">
+                          No hay liquidaciones disponibles
+                        </h3>
+                        <p className="text-muted-foreground">
+                          ¡Realice una compra para comenzar!
+                        </p>
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center py-8">
+                        <h3 className="text-xl font-semibold mb-2">
+                          No se encontraron Liquidaciones
+                        </h3>
+                        <p className="text-muted-foreground">
+                          Intenta con otro término de búsqueda.
+                        </p>
+                      </TableCell>
+                    </TableRow>
+                  )
+                ) : (
+                  currentPage.map((provider) => (
+                    <TableRow key={provider.id} className="hover:bg-amber-50">
+                      <TableCell className="font-medium">{provider.provider.name}</TableCell>
+                      <TableCell>
+                        {provider.current_debt.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
+                      </TableCell>
+                      <TableCell>
+                        {(totalDeposits[provider.id] || 0).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${provider.status === true ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                            }`}
+                        >
+                          Activo
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          onClick={() => handlePayment(provider)}
+                          className="mr-2 bg-amber-600 hover:bg-amber-500 text-white rounded-full"
+                        >
+                          Abono
+                        </Button>
+                        <Button
+                          onClick={() => handleDetails(provider)}
+                          variant="outline"
+                          className="border-amber-600 text-amber-600 hover:bg-amber-100 rounded-full"
+                        >
+                          Ver detalles
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          {/* Paginador */}
+          <div className="">
+            <Paginator
+              totalItems={filteredProviders.length}
+              itemsPerPage={pagination.itemsPerPage}
+              currentPage={pagination.currentPage}
+              onPageChange={pagination.handlePageChange}
+              onItemsPerPageChange={pagination.handleItemsPerPageChange}
+              pageSizeOptions={[5, 10, 20, 50]}
+            />
+          </div>
         </CardContent>
-
       </Card>
+
       {selectedProvider && (
         <>
           <PaymentModal
@@ -208,6 +195,5 @@ export default function LiquidationModule() {
         </>
       )}
     </div>
-  )
+  );
 }
-
