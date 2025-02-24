@@ -34,7 +34,6 @@ useEffect(() => {
 }, [dispatch]);
 
 
-
   const form = useForm<BrandFormValues>({
     resolver: zodResolver(brandFormSchema),
     defaultValues: {
@@ -113,6 +112,7 @@ useEffect(() => {
       toast.success("Marca de café creada con éxito");
       form.reset();
       setImagePreview(null);
+      
       setCurrentPage(1);
     })
     .catch((error) => {
@@ -142,7 +142,7 @@ useEffect(() => {
           {currentPage === 1 && (
             <div className="flex justify-center">
               <div className="text-center w-1/2 col-span-6 items-center">
-                <p className="text-lg font-mono mt-4 ">
+                <p className="text-lg mt-4 ">
                   Cada taza cuenta una historia, y la nuestra apenas comienza
                 </p>
                 <img
@@ -214,7 +214,7 @@ useEffect(() => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-lg font-semibold text-[#6F4E37]">
-                        Proposito
+                        Propósito
                       </FormLabel>
                       <FormControl>
                         <Input

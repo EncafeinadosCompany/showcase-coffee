@@ -11,9 +11,7 @@ import { productSchema } from "./validation";
 import { fetchProducts } from "@/features/products/products/productSlice";
 import toast from "react-hot-toast";
 
- 
-
-  type ProductFormValues = z.infer<typeof productSchema>
+ type ProductFormValues = z.infer<typeof productSchema>
 
 
 interface BasicInfoStepProps {
@@ -62,8 +60,7 @@ export default function BasicInfoStep({ form, imagePreview, handleImageChange }:
               className="w-52 h-52 rounded-full border-2 border-[#6F4E37] object-cover"
             />
           </div>
-      
-        
+           
           <div className="space-y-4">
            
             <FormField
