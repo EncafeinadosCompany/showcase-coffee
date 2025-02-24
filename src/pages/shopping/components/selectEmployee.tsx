@@ -57,10 +57,10 @@ export default function SelectEmployee({ onSelect , update }: SelectEmployeeProp
 
   return (
     <div className="flex items-center space-x-4 mt-6">
-      <p className="text-sm text-muted-foreground">Empleados</p>
+      <p className="text-sm text-muted-foreground">Empleados:</p>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="w-[80%] justify-start">
+          <Button variant="outline" className="w-[80%] justify-start rounded-sm">
             {selectedEmployee ? (
               <>{selectedEmployee.name}</>
             ) : (

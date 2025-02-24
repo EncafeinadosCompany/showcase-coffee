@@ -92,12 +92,12 @@ export default function Brands() {
         {filteredCoffee.length === 0 ? (
           <div className="text-center py-12 mx-auto  ">
             <h3 className="text-xl font-semibold mb-2">
-              No se encontraron productos
+              No se encontraron Marcas
             </h3>
             <img
               width={"20%"}
               className="mx-auto"
-              src="./public/undraw_search-app_cpm0.svg"
+              src="./public/undraw_page-not-found_6wni .svg"
             ></img>
             <p className="text-muted-foreground">
               Intenta con una búsqueda diferente

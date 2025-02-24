@@ -135,7 +135,7 @@ export default function Sales() {
         <Button
           onClick={toggleSalesList}
           variant="outline"
-          className="flex items-center gap-2 rounded-full"
+          className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium"
         >
           {showSalesList ? (
             <>

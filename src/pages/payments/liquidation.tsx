@@ -99,7 +99,38 @@ export default function LiquidationModule() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginatedProviders.map((provider) => (
+              { paginatedProviders.length === 0 ? (
+                  searchTerm.trim() === "" ? (
+                    <>
+                      <h3 className="text-xl font-semibold mb-2 mt-10">
+                        No hay liquidaciones disponibles
+                      </h3>
+                      <img
+                        width={"50%"}
+                        className="mx-auto"
+                        src="./public/undraw_search-app_cpm0.svg"
+                      ></img>
+                      <p className="text-muted-foreground text-center">
+                        ¡Realice una compra para comenzar!.
+                      </p>
+                    </>
+                  ) : (
+                    <div className=" w-full flex flex-col items-center justify-center">
+                      <h3 className="text-xl font-semibold mb-2 mt-10">
+                        No se encontraron Liquidaciones
+                      </h3>
+                      <img
+                        width="50%"
+                        src="./public/undraw_page-not-found_6wni .svg"
+                        alt="No se encontraron productos"
+                      />
+                      <p className="text-muted-foreground text-center">
+                        Intenta con otro término de búsqueda.
+                      </p>
+                    </div>
+                  )
+              ):
+              (paginatedProviders.map((provider) => (
                 <TableRow key={provider.id} className="hover:bg-amber-50">
                   <TableCell className="font-medium">{provider.provider.name}</TableCell>
                   <TableCell>{provider.current_debt.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}</TableCell>
@@ -128,7 +159,7 @@ export default function LiquidationModule() {
                     </Button>
                   </TableCell>
                 </TableRow>
-              ))}
+              )))}
             </TableBody>
           </Table>
           <Pagination className="mt-4">

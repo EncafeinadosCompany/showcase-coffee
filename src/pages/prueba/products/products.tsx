@@ -75,9 +75,9 @@ export default function ProductosPage() {
             <img
               width={"20%"}
               className="mx-auto"
-              src="./public/undraw_search-app_cpm0.svg"
+              src="./public/undraw_page-not-found_6wni .svg"
             ></img>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground mt-4">
               Intenta con una búsqueda diferente
             </p>
           </div>

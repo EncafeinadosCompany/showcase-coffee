@@ -29,13 +29,20 @@ export default function NewVariantDialog({ productoId }: { productoId: number; }
     if (error) {
       toast.error("Error al agregar la variante")
     } else {
-      dispatch(addVariant(nuevaVariante));
-      console.log("Variante agregada", nuevaVariante);
-      toast.success(`La variante de ${gramaje}g ha sido agregada`)
+      dispatch(addVariant(nuevaVariante))
+      .unwrap()
+      .then(() => {
+        toast.success(`La variante de ${gramaje}g ha sido agregada`)
+        dispatch(fetchProducts());
+      })
+      .catch(() => {
+        toast.error("La variante ya existe")
+      })
+    
     }
     setGramaje("");
     setIsModalOpen(false);
-    dispatch(fetchProducts());
+    
   };
 
   return (
@@ -47,7 +54,7 @@ export default function NewVariantDialog({ productoId }: { productoId: number; }
       </DialogTrigger>
       <DialogContent aria-describedby="dialog-description">
         <DialogHeader>
-          <DialogTitle>Agregar Nueva Variante</DialogTitle>
+          <DialogTitle className="mx-auto">Agregar una nueva referencia</DialogTitle>
         </DialogHeader>
         <p id="dialog-description" className="sr-only">
           Por favor, completa los campos a continuación para agregar una nueva
@@ -66,16 +73,19 @@ export default function NewVariantDialog({ productoId }: { productoId: number; }
               type="text"
               value={gramaje}
               onChange={(e) => setGramaje(e.target.value)}
+              className="rouned-sm mt-2 border border-gray-300 focus:border-coffee-500 focus:rounded-sm focus:ring-coffee-500"
               required
             />
           </div>
 
+          <div className="flex justify-center">
           <Button
             type="submit"
-            className="bg-[#6F4E37] hover:bg-[#5A3E2B] text-white"
+            className="bg-[#6F4E37] hover:bg-[#5A3E2B] text-white rounded-sm w-1/2"
           >
             Agregar
           </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

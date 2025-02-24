@@ -1,7 +1,7 @@
 export interface productType
 {
      
-     id: number | null,
+     id: number ,
      name: string,
      id_brand?: number,
      image_url?: string | undefined,

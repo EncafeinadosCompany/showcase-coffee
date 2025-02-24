@@ -131,7 +131,7 @@ useEffect(() => {
   const totalPages = 3;
 
   return (
-    <div className="">
+    <div className="mt-8">
       <Form {...form}>
         <form className="space-y-6">
           {currentPage === 1 && (

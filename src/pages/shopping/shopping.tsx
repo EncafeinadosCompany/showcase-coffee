@@ -47,7 +47,8 @@ export default function Shopping() {
         <Button
           onClick={toggleShoppingList}
           variant="outline"
-          className="flex items-center gap-2 rounded-full p-2"
+          className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium"
+         
         >
           {showShoppingList ? (
             <>

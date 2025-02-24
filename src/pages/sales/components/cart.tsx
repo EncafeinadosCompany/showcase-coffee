@@ -150,8 +150,16 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
                 <ScrollArea className="h-[350px]">
                     <div className="space-y-3 p-2">
                         {cartProducts.length === 0 ? (
-                            <div className="text-center text-gray-500 py-8">
-                                No hay productos en el carrito
+                            <div className="text-center py-12 mx-auto">
+                                <h3 className="text-xl font-semibold mb-2">
+                                    No hay productos en el carrito
+                                </h3>
+                                <img
+                                    width={"55%"}
+                                    className="mx-auto"
+                                    src="./public/undraw_add-to-cart_c8f2.svg"
+                                    alt="Carrito vacío"
+                                />
                             </div>
                         ) : (
                             cartProducts.map((variant) => (

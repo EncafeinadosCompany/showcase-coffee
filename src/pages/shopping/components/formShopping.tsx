@@ -156,13 +156,13 @@ export default function FormShopping({
   return (
     <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors duration-200">
+        <Button className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 text-sm font-medium  transition-colors duration-200 rounded-sm">
           Agregar
         </Button>
       </DialogTrigger>
       <DialogContent aria-describedby="dialog-description">
-        <DialogHeader>
-          <DialogTitle>Agregar Nueva Variante</DialogTitle>
+        <DialogHeader className="mx-auto ">
+          <DialogTitle>Agregar referencia</DialogTitle>
         </DialogHeader>
         <p id="dialog-description" className="sr-only">
           Por favor, completa los campos a continuación para agregar una nueva
@@ -179,6 +179,7 @@ export default function FormShopping({
             <Input
               id="roasting_date"
               type="date"
+              className="rounded-[5px]"
               value={roasting_date}
               onChange={(e) => setRoasting_date(e.target.value)}
               required
@@ -196,6 +197,7 @@ export default function FormShopping({
               type="number"
               min={1}
               value={cantidad}
+              className="rounded-[5px]"
               onChange={(e) => setCantidad(e.target.value)}
               required
             />
@@ -211,6 +213,7 @@ export default function FormShopping({
               id="shopping_price"
               type="number"
               step="1000"
+              className="rounded-[5px]"
               value={shopping_price}
               onChange={(e) => setShopping_price(e.target.value)}
               required
@@ -227,6 +230,7 @@ export default function FormShopping({
               id="porcentajeVenta"
               type="number"
               step="10"
+              className="rounded-[5px]"
               value={porcentajeVenta}
               onChange={(e) => setPorcentajeVenta(e.target.value)}
               required
@@ -243,6 +247,7 @@ export default function FormShopping({
               id="sale_price"
               type="number"
               step="0.01"
+              className="rounded-[5px] bg-[#faedcd57]"
               value={sale_price}
               readOnly
             />
