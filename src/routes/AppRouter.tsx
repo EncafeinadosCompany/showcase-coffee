@@ -19,6 +19,9 @@ import FormBrand from "@/pages/prueba/brands/components/formBrands";
 import ProductosPage from "@/pages/prueba/products/products";
 import NotFound from "@/pages/404/404";
 import ProductForm from "@/pages/prueba/products/components/productsForm";
+// import BrandForm from "@/pages/prueba/brands/components/BrandForm";
+import { BrandInfo } from "@/pages/prueba/brands/components/brandInfo";
+import BrandForms from "@/pages/prueba/brands/components/formValentina";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -51,7 +54,7 @@ export function AppRouter() {
           <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
           <Route path="/brands" element={<PrivateRoute><Brands /></PrivateRoute>} /> 
           <Route path="/products-page" element={<PrivateRoute><ProductosPage /></PrivateRoute>} />
-          <Route path="/form-brands" element={<PrivateRoute><FormBrand /></PrivateRoute>} />
+          <Route path="/form-brands" element={<PrivateRoute><FormBrand/></PrivateRoute>} />
           <Route path= "/form-products" element = {<PrivateRoute><ProductForm/></PrivateRoute>}/>
           <Route path="/details" element={<PrivateRoute><Details /></PrivateRoute>} />
           <Route path='/variants' element={<PrivateRoute><VariantsPage /></PrivateRoute>} />

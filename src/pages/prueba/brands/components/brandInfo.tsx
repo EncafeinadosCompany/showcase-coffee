@@ -114,7 +114,7 @@ export const LogoUpload = ({ imagePreview, onImageChange }: LogoUploadProps) => 
 
 interface SocialNetworkProps {
   form: UseFormReturn<FormValues>;
-  socialNetworks: Array<{ id: number; name: string }>;
+  socialNetworks: { id: number; url: string }[];
   fields: any[];
   append: (value: any) => void;
   remove: (index: number) => void;
@@ -164,7 +164,7 @@ export const SocialNetworks = ({ form, socialNetworks, fields, append, remove }:
                               value={network.id.toString()}
                               className="flex items-center gap-2"
                             >
-                              {network.name}
+                              {network.url}
                             </SelectItem>
                           ))}
                         </SelectContent>

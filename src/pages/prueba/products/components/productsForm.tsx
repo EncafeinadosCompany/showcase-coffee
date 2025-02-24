@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { Coffee, ChevronRight, ChevronLeft, ArrowLeft } from "lucide-react"
+import { ChevronRight, ChevronLeft, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -16,30 +16,19 @@ import { addAttribute, fetchAttributes } from "@/features/products/attributes/at
 import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { useAppSelector } from "@/hooks/useAppSelector"
 import { Link } from "react-router-dom"
-import { addProducts } from "@/features/products/products/productSlice"
+import { addProducts} from "@/features/products/products/productSlice"
 import { addImages } from "@/features/images/imageSlice"
+import toast from "react-hot-toast"
+import { productType } from "@/types/products/product"
 type ProductFormValues = z.infer<typeof productSchema>
 
 export default function ProductForm() {
   const [currentStep, setCurrentStep] = useState(1)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const dispatch = useAppDispatch()
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const { attributes } = useAppSelector((state) => state.attributes)
 
-
-  const base64ToFile = (base64String: string, fileName: string) => {
-    const arr = base64String.split(",");
-    const mime = arr[0].match(/:(.*?);/)?.[1] || "image/png"; 
-    const bstr = atob(arr[1]); 
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-
-    return new File([u8arr], fileName, { type: mime });
-};
 
   useEffect(() => {
     dispatch(fetchAttributes())
@@ -61,6 +50,17 @@ export default function ProductForm() {
     name: "attributes",
   })
 
+
+  const uploadImage = async (file: File) => {
+    const formData = new FormData()
+    formData.append("image", file)
+    const response = await dispatch(addImages(file))
+    return response.payload.image_url
+  }
+
+
+
+
   const onSubmit = async (data: ProductFormValues) => {
     console.log(data)
     
@@ -72,39 +72,57 @@ export default function ProductForm() {
             }
         })
     }
- 
-    let imageUrl = "https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png"
 
-    if (typeof data.image_url === "string" && data.image_url.startsWith("data:image")) {
-      // ✅ Convertir base64 a File
-      const imageFile = base64ToFile(data.image_url, "product-image.png");
+    let imageUrl = "https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png"; // Imagen por defecto
 
+    if (selectedFile) {
       try {
-          const response = await dispatch(addImages(imageFile)).unwrap();
-          let  imageUrl = response.image_url; // URL de la imagen en Cloudinary
-          console.log(imageUrl)
-          data.image_url = imageUrl
+        imageUrl = await uploadImage(selectedFile); 
       } catch (error) {
-          console.error("Error subiendo imagen:", error);
-          return; // Detenemos la ejecución si falla la subida
+        toast.error("Error al subir la imagen");
+        return; 
       }
+    }
+  
+    form.setValue("image_url", imageUrl);
+
+    const productData: productType = {
+      id: null, // or any default value
+      name: data.name,
+      id_brand: data.id_brand,
+      image_url: imageUrl,
+      status: data.status,
+      attributes: data.attributes,
+    }
+ 
+    dispatch(addProducts(productData))
+    .unwrap()
+    .then(() => {
+      toast.success("Producto creado")
+      form.reset()
+      setCurrentStep(1)
+    })
+    .catch((error) => {
+      toast.error(error)
+    })
+
   }
 
-    dispatch(addProducts(data));
 
-  }
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-        form.setValue("image_url", reader.result as string)
-      }
-      reader.readAsDataURL(file)
+      setSelectedFile(file)
+      const imageUrl = URL.createObjectURL(file)
+      setImagePreview(imageUrl)
+      form.setValue("image_url", imageUrl)
+      
     }
   }
+
+
+
 
   const steps = [
     { title: "Información Básica", component: BasicInfoStep },
@@ -117,7 +135,7 @@ export default function ProductForm() {
   return (
     <div className="max-w-4xl mx-auto p-2 ">
        <Link to="/products-page">
-      <Button variant="outline" className="mb-4">
+      <Button variant="ghost" className="mb-4">
         <ArrowLeft className="mr-2 h-4 w-4" /> Volver
       </Button>
     </Link>
@@ -144,7 +162,7 @@ export default function ProductForm() {
                   type="button"
                   onClick={() => setCurrentStep((prev) => prev - 1)}
                   variant="outline"
-                  className="text-[#6F4E37]"
+                  className="text-[#6F4E37] rounded-sm"
                 >
                   <ChevronLeft className="mr-2 h-4 w-4" /> Anterior
                 </Button>
@@ -153,13 +171,13 @@ export default function ProductForm() {
                 <Button
                   type="button"
                   onClick={() => setCurrentStep((prev) => prev + 1)}
-                  className="bg-[#6F4E37] text-white ml-auto"
+                    className="bg-[#bc6c25] hover:bg-[#a35d20] rounded-[5px] text-white"
                 >
                   Siguiente <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
               )}
               {currentStep === steps.length && (
-                <Button type="submit" className="bg-[#6F4E37] text-white ml-auto">
+                <Button type="submit" className="bg-[#6F4E37] text-white ml-auto rounded-[5px]">
                   Guardar Producto
                 </Button>
               )}

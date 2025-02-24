@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom"
-import { ArrowLeft, Calendar, Plus, RefreshCw, Search } from "lucide-react"
+import { ArrowLeft,  Plus,Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 import CartsProducts from "./components/cartsProducts"
@@ -8,11 +8,6 @@ import { useEffect, useState } from "react"
 import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { useAppSelector } from "@/hooks/useAppSelector"
 import { fetchProducts } from "@/features/products/products/productSlice"
-import { DialogHeader } from "@/components/ui/dialog"
-import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog"
-import { ScrollArea } from "@radix-ui/react-scroll-area"
-import { Separator } from "@radix-ui/react-select"
-import CartsBrands from "../brands/components/cartsBrands"
 export default function ProductosPage() {
 
   const dispatch = useAppDispatch()
@@ -20,7 +15,6 @@ export default function ProductosPage() {
 
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const { brands } = useAppSelector((state) => state.brands);
     const itemsPerPage = 4;
   
     const filteredCoffee = products.filter((coffee) =>
@@ -40,21 +34,24 @@ export default function ProductosPage() {
     <div className="bg-[#F5E6D3] text-[#4A3933] h-full transition-all duration-700 overflow-y-auto py-4 px-4 ">
    <div className="flex items-center justify-between ">
    <Link to="/details">
-      <Button variant="outline" className="mb-4">
+      <Button variant="ghost" 
+        className="mb-4 rounded-[5px] hover:shadow-sm">
         <ArrowLeft className="mr-2 h-4 w-4" /> Volver
       </Button>
     </Link>
     <Link to="/form-products">
-      <Button variant="outline" className="mb-4">
+      <Button variant="outline" 
+        size="lg"
+        className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium">
       <Plus className="mr-1 h-4 w-4 text-black" /> Crear Producto
       </Button>
     </Link>
    </div>
     <div>
     <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold mb-2">Nuestra Selección de Marcas</h1>
+          <h1 className="text-4xl font-bold mb-2">Nuestra Selección de Productos</h1>
           <p className="text-muted-foreground">
-            Descubre nuestras marcar aleadas y disfruta de la mejor calidad de café
+            Descubre nuestra selección de productos y vive la experiencia del café en su máxima expresión.
           </p>
         </div>
 
@@ -99,6 +96,7 @@ export default function ProductosPage() {
               disabled={currentPage === 1}
               variant="outline"
               size="sm"
+              className="rounded-full"
             >
               Anterior
             </Button>
@@ -112,6 +110,7 @@ export default function ProductosPage() {
               disabled={currentPage === pageCount}
               variant="outline"
               size="sm"
+              className="rounded-full"
             >
               Siguiente
             </Button>

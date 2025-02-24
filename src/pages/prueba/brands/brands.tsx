@@ -44,9 +44,11 @@ export default function Brands() {
     currentPage * itemsPerPage
   );
 
+
+
   useEffect(() => {
     dispatch(fetchBrands());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className=" bg-[#F5E6D3] text-[#4A3933] h-full transition-all duration-700 overflow-y-auto py-4 px-4 ">
@@ -54,18 +56,17 @@ export default function Brands() {
         <div className="flex items-center justify-between ">
             <Link to="/details">
             <Button
-              variant="outline"
+              variant="ghost"
               className="mb-4 rounded-[5px] hover:shadow-sm"
             >
-              <ArrowLeft className="mr-2 h-4 w-4 text-black" /> Volver
+              <ArrowLeft className="mr-2 h-4 w-4" /> Volver
             </Button>
             </Link>
           <Link to="/form-brands">
             <Button
               variant="outline"
-              className="mb-4 bg-[#dda15e] rounded-[5px]  hover:bg-[#99582aad] hover:shadow-sm"
-            >
-              <Plus className="mr-1 h-4 w-4 text-black" /> Crear Marca
+              className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium">
+              <Plus className="mr-0 h-4 w-4 text-black" /> Crear Marca
             </Button>
           </Link>
         </div>
@@ -80,7 +81,7 @@ export default function Brands() {
           <div className="relative max-w-md w-full">
             <Input
               type="text"
-              placeholder="Buscar café..."
+              placeholder="Buscar Marca..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 pr-4 py-2 rounded-full border-2 border-brown-300 focus:border-brown-500 focus:ring-2 focus:ring-brown-200"
@@ -118,7 +119,7 @@ export default function Brands() {
                       <div className="relative w-full h-64">
                         <img
                           src={
-                            coffee.image_url || "/public/undraw_coffee_7r49.svg"
+                            coffee.image_url || "/placeholder.svg"
                           }
                           alt={coffee.name}
                           className="object-cover w-full h-full"
@@ -145,7 +146,7 @@ export default function Brands() {
                               className="flex items-center space-x-2 text-sm text-blue-600 hover:underline"
                             >
                               {getSocialIcon(network.social_network.name)}
-                              <span>{network.description}</span>
+                              <span>{network.url}</span>
                             </a>
                           ))}
                         </div>
@@ -181,6 +182,7 @@ export default function Brands() {
               disabled={currentPage === 1}
               variant="outline"
               size="sm"
+              className="rounded-full"
             >
               Anterior
             </Button>
@@ -194,6 +196,7 @@ export default function Brands() {
               disabled={currentPage === pageCount}
               variant="outline"
               size="sm"
+              className="rounded-full"
             >
               Siguiente
             </Button>

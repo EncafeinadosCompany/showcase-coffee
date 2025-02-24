@@ -7,24 +7,12 @@ import {useAppSelector} from "@/hooks/useAppSelector";
 import { fetchBrands } from "@/features/products/brands/brandSlice";
 import * as z from "zod"
 import { useEffect } from "react";
+import { productSchema } from "./validation";
+import { fetchProducts } from "@/features/products/products/productSlice";
+import toast from "react-hot-toast";
 
  
 
-
-  const productSchema = z.object({
-    name: z.string().min(1, "El nombre es requerido"),
-    id_brand: z.number().min(1, "Seleccione una marca"),
-    image_url: z.string().url("URL de imagen inválida"),
-    status: z.boolean(),
-    attributes: z.array(
-      z.object({
-        id: z.number().optional(),
-        description: z.string().min(1, "La descripción es requerida"),
-        value: z.string().min(1, "El valor es requerido"),
-      }),
-    ),
-  })
-  
   type ProductFormValues = z.infer<typeof productSchema>
 
 
@@ -35,19 +23,38 @@ interface BasicInfoStepProps {
 }
 
 export default function BasicInfoStep({ form, imagePreview, handleImageChange }: BasicInfoStepProps) {
+     const {products} = useAppSelector((state) => state.products)
    
+     useEffect(() => {
+       dispatch(fetchProducts())
+     },[])
 
   const dispatch = useAppDispatch();
   
       useEffect(() => {
           dispatch(fetchBrands());
       },[dispatch]);
+
+
+    
+      useEffect(() => {
+        const productName = form.watch("name"); 
+      
+        if (!productName) return; 
+      
+        const exist = products.some((product) => product.name.toLowerCase() === productName.toLowerCase());
+      
+        if (exist) {
+          toast.error("El producto ya existe");
+          form.setValue("name", ""); 
+        }
+      }, [form.watch("name")]); 
   
 
   const {brands} = useAppSelector((state) => state.brands);
   return (
         <div className="grid grid-cols-2 gap-6 items-center">
-          {/* Vista previa de la imagen */}
+         
           <div className="flex justify-center">
             <img
               src={imagePreview || "/placeholder.svg"}
@@ -56,7 +63,7 @@ export default function BasicInfoStep({ form, imagePreview, handleImageChange }:
             />
           </div>
       
-          {/* Formulario */}
+        
           <div className="space-y-4">
            
             <FormField
@@ -70,7 +77,7 @@ export default function BasicInfoStep({ form, imagePreview, handleImageChange }:
                     defaultValue={field.value.toString()}
                   >
                     <FormControl>
-                      <SelectTrigger className="border-[#6F4E37]">
+                      <SelectTrigger className="border-[#6F4E37] rounded-[5px]">
                         <SelectValue placeholder="Seleccione una marca" />
                       </SelectTrigger>
                     </FormControl>
@@ -97,7 +104,7 @@ export default function BasicInfoStep({ form, imagePreview, handleImageChange }:
                       type="file"
                       accept="image/*"
                       onChange={handleImageChange}
-                      className="border-[#6F4E37]"
+                      className="border-[#6F4E37] rounded-[5px]"
                     />
                   </FormControl>
                   <FormMessage />

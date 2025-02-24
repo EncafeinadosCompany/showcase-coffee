@@ -27,7 +27,7 @@ export default function Productos() {
           >
             <Card className="bg-[#8C7A6B] text-white h-[250px] flex flex-col justify-center items-center cursor-pointer">
               <CardContent className="flex flex-col items-center">
-                <img width="50%" src="./public/undraw_coffee_7r49.svg" alt="Café" />
+                <img width="35%" src="./public/undraw_coffee_7r49.svg" alt="Café" />
                 <h2 className="text-3xl font-semibold text-center mb-2">
                   Marcas
                 </h2>
@@ -44,7 +44,7 @@ export default function Productos() {
           >
             <Card className="bg-[#D4A574] text-white h-[250px] flex flex-col justify-center items-center cursor-pointer">
               <CardContent className="flex flex-col items-center">
-                <img width="30%" src="./public/undraw_barista_wwfa.svg" alt="Barista" />
+                <img width="25%" src="./public/undraw_barista_wwfa.svg" alt="Barista" />
                 <h2 className="text-3xl font-semibold text-center mb-2">
                   Productos
                 </h2>

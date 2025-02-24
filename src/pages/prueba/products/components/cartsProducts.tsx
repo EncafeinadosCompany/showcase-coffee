@@ -5,17 +5,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { DialogTrigger } from "@/components/ui/dialog";
 import { productType } from "@/types/products/product";
-import { fetchProducts } from "@/features/products/products/productSlice";
-import { useEffect, useState } from "react";
-import { useAppDispatch } from "@/hooks/useAppDispatch";
-import { useAppSelector } from "@/hooks/useAppSelector";
-import AttributeModal from "@/pages/products/components/attributesModal";
-import VariantModal from "@/pages/products/components/VariantModal";
+import {  useState } from "react";
 import { List } from "lucide-react";
 import { motion } from "framer-motion";
+import AttributeModal from "@/pages/products/components/attributesModal";
+import VariantModal from "@/pages/products/components/VariantModal";
 export default function CartsProducts({ products }: { products: productType }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
@@ -55,7 +50,7 @@ export default function CartsProducts({ products }: { products: productType }) {
             <List className="h-4 w-4 text-white" />
             Ver Variantes
           </motion.button>
-          <VariantModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variants={products.product ?? []} product_name={products.name} imagen={products.image_url} />
+          <VariantModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variants={products.product ?? []} product_name={products.name} imagen={products?.image_url} />
         </div>
         </CardFooter>
       </Card>

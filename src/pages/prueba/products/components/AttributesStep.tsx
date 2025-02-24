@@ -9,18 +9,11 @@ import { Plus, Tag, Trash2 } from "lucide-react"
 import * as z from "zod"
 import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { useAppSelector } from "@/hooks/useAppSelector"
-import { fetchAttributes, addAttribute } from "@/features/products/attributes/attributeSlice"
+import { fetchAttributes} from "@/features/products/attributes/attributeSlice"
 
 type ProductFormValues = z.infer<typeof productSchema>
 
-const PREDEFINED_ATTRIBUTES = [
-    { id: 1, description: "Origen" },
-    { id: 2, description: "Tostado" },
-    { id: 3, description: "Aroma" },
-    { id: 4, description: "Cuerpo" },
-    { id: 5, description: "Acidez" },
-    // ... más atributos
-  ]
+
 
 import { FieldArrayWithId, UseFieldArrayAppend, UseFormReturn } from "react-hook-form";
 import { productSchema } from "./validation"
@@ -46,7 +39,7 @@ export default function AttributesStep({ form, fields, append, remove }: Attribu
         <div className="flex justify-end items-center mb-4">
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="bg-[#6F4E37] hover:bg-[#5D3E2E] text-white">
+              <Button className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium">
                 <Plus className="mr-2 h-4 w-4" />
                 Agregar Atributo
               </Button>
@@ -84,7 +77,7 @@ export default function AttributesStep({ form, fields, append, remove }: Attribu
             </DialogContent>
           </Dialog>
         </div>
-        <ScrollArea className="h-[300px] w-full rounded-md border border-[#6F4E37] p-4">
+        <ScrollArea className="h-[300px] w-full border border-gray-200 rounded-sm p-4">
           {fields.map((field, index) => (
             <Card key={field.id} className="mb-4 last:mb-0">
               <CardContent className="p-4 flex items-center space-x-4">
@@ -113,8 +106,8 @@ export default function AttributesStep({ form, fields, append, remove }: Attribu
                     )}
                   />
                 </div>
-                <Button type="button" className="rounded-[5px]" variant="destructive" size="icon" onClick={() => remove(index)}>
-                  <Trash2 className="h-4 w-4" />
+                <Button type="button" className="rounded-[5px]" variant="outline" size="icon" onClick={() => remove(index)}>
+                  <Trash2 className="h-4 w-4 text-orange-950" />
                 </Button>
               </CardContent>
             </Card>

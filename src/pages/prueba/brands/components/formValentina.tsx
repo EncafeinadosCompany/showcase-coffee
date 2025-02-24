@@ -1,93 +1,130 @@
-"use client";
-
 import type React from "react";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { ArrowRight, Plus, Trash2 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import {Form,FormControl,FormField,FormItem,FormLabel,FormMessage} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { brandFormSchema, BrandType } from "@/types/products/brand";
+import { addBrand } from "@/features/products/brands/brandSlice";
+import { fetchSocialNetworks } from "@/features/products/socialNetworks/socialNetworkSlice";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { addImages } from "@/features/images/imageSlice";
+import toast from "react-hot-toast";
 
-const SOCIAL_NETWORKS = [
-  { id: 1, name: "Facebook" },
-  { id: 2, name: "Twitter" },
-  { id: 3, name: "Instagram" },
-  { id: 4, name: "LinkedIn" },
-  { id: 5, name: "TikTok" },
-  { id: 6, name: "YouTube" },
-];
+type BrandFormValues = z.infer<typeof brandFormSchema>;
 
-const brandSchema = z.object({
-  name: z.string().min(1, "El nombre es requerido"),
-  image_url: z.string().nullable(),
-  razon: z.string().nullable(),
-  description: z.string().min(1, "La descripción es requerida"),
-  social_networks: z.array(
-    z.object({
-      description: z.string(),
-      url: z.string().url("URL inválida"),
-      social_network_id: z.number(),
-    })
-  ),
-});
-
-type BrandFormValues = z.infer<typeof brandSchema>;
-
-export default function BrandForm() {
+export default function BrandForms() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const { socialNetworks } = useAppSelector((state) => state.socialNetworks);
+  const { brands } = useAppSelector((state) => state.brands);
+  const dispatch = useAppDispatch();
+
+useEffect(() => {
+    dispatch(fetchSocialNetworks());
+}, [dispatch]);
+
+
 
   const form = useForm<BrandFormValues>({
-    resolver: zodResolver(brandSchema),
+    resolver: zodResolver(brandFormSchema),
     defaultValues: {
       name: "",
       image_url: null,
-      razon: null,
+      purpose: null,
       description: "",
       social_networks: [],
     },
   });
+
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "social_networks",
   });
 
+  useEffect(() => {
+    const brandName = form.watch("name");
+
+    if (!brandName) return;
+
+    const exist = brands.some(
+      (brand) => brand.name.toLowerCase() === brandName.toLowerCase()
+    );
+
+    if (exist) {
+      toast.error("La marca ya existe", {id: "brand-exists"});
+      form.setValue("name", "");
+    }
+  }, [form.watch("name")]);
+
+
+  const uploadImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      const response = await dispatch(addImages(file));
+      return response.payload.image_url; 
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+      return null;
+    }
+  }
+
   const onSubmit = async (data: BrandFormValues) => {
-    console.log(data);
-    // Aquí iría la lógica para enviar los datos al servidor
+
+    let imageUrl = "https://asset.cloudinary.com/dllvnidd5/093b61e9e80f35023c060c079b1a82fc";
+
+    if (selectedFile) {
+      try {
+        imageUrl = await uploadImage(selectedFile); 
+      } catch (error) {
+        toast.error("Error al subir la imagen");
+        return; 
+      }
+    }
+  
+    form.setValue("image_url", imageUrl);
+
+    const brandData: BrandType = {
+      name: data.name,
+      image_url: imageUrl,
+      purpose: data.purpose,
+      description: data.description,
+      social_networks: data.social_networks.map(network => ({
+        id_social_network: network.social_network_id,
+        description: network.description,
+        url: network.url
+      }))
+    };
+    console.log(brandData);
+    dispatch(addBrand(brandData))
+    .unwrap()
+    .then(() => {
+      toast.success("Marca de café creada con éxito");
+    })
+    .catch((error) => {
+      toast.error(error)
+    });
+   
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-        form.setValue("image_url", reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      setSelectedFile(file);
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl);
+      form.setValue("image_url", imageUrl);
     }
   };
 
@@ -96,7 +133,7 @@ export default function BrandForm() {
   return (
     <div className="">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form className="space-y-6">
           {currentPage === 1 && (
             <div className="flex justify-center">
               <div className="text-center w-1/2 col-span-6 items-center">
@@ -168,7 +205,7 @@ export default function BrandForm() {
               <CardContent className="space-y-6">
                 <FormField
                   control={form.control}
-                  name="razon"
+                  name="purpose"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-lg font-semibold text-[#6F4E37]">
@@ -179,7 +216,7 @@ export default function BrandForm() {
                           placeholder="Cuentanos tu historia..."
                           {...field}
                           value={field.value || ""}
-                          className="border-[#6F4E37]"
+                          className="border-[#6F4E37] min-h-[100px] rounded-[5px]"
                         />
                       </FormControl>
                       <FormMessage />
@@ -198,7 +235,7 @@ export default function BrandForm() {
                         <Textarea
                           placeholder="Describa su marca de café"
                           {...field}
-                          className="border-[#6F4E37] min-h-[150px]"
+                          className="border-[#6F4E37] min-h-[100px] rounded-[5px]"
                         />
                       </FormControl>
                       <FormMessage />
@@ -221,10 +258,10 @@ export default function BrandForm() {
                     onClick={() =>
                       append({ social_network_id: 0, url: "", description: "" })
                     }
-                    className="bg-[#71be47] hover:bg-[#598342] rounded-[5px] text-white"
-                  >
+                    className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium">
+                  
                     <Plus className="mr-[1px] h-4 w-4 " />
-                    Agregar Red Social
+                    Agregar redes Sociales
                   </Button>
                 </div>
                 <ScrollArea className="w-full whitespace-nowrap rounded-md ">
@@ -249,7 +286,7 @@ export default function BrandForm() {
                                     </SelectTrigger>
                                   </FormControl>
                                   <SelectContent>
-                                    {SOCIAL_NETWORKS.map((network) => (
+                                    {socialNetworks.map((network) => (
                                       <SelectItem
                                         key={network.id}
                                         value={network.id.toString()}
@@ -320,7 +357,8 @@ export default function BrandForm() {
               type="button"
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="bg-[#6F4E37] hover:bg-[#5D3E2E] text-white"
+              variant="outline"
+              className="text-[#6F4E37] rounded-sm"
             >
               Anterior
             </Button>
@@ -337,10 +375,11 @@ export default function BrandForm() {
               </Button>
             ) : (
               <Button
-                type="submit"
-                className="bg-[#6F4E37] hover:bg-[#5D3E2E]  text-white"
+                type="button"
+                onClick={form.handleSubmit(onSubmit)}
+                className="bg-[#6F4E37] hover:bg-[#5D3E2E]  text-white rounded-[5px]"
               >
-                Guardar
+                Guardar Marca
               </Button>
             )}
           </div>

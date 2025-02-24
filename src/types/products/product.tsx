@@ -1,10 +1,10 @@
 export interface productType
 {
      
-     id: number,
+     id: number | null,
      name: string,
      id_brand?: number,
-     image_url: string,
+     image_url?: string | undefined,
      status: boolean,
 	 brand?: {
 			name: string,

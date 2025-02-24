@@ -22,7 +22,7 @@ interface VariantModalProps {
   onClose: () => void;
   variants: { grammage: string; stock: number; id_product: number | string }[];
   product_name: string;
-  imagen: string;
+  imagen?: string;
   brand?: {
     name: string;
     description: string;
