@@ -3,16 +3,25 @@ import { toast } from "react-hot-toast";
 export const ToastService = {
 
     success: (message: string) =>
-        toast(message, { icon: "✅", duration: 4000, style: { background: "#198754", color: "#fff" } }),
+        toast.success(message, {
+            duration: 4000,
+            style: {
+                background: "#fff",
+                color: "#b45309", // equivale al text-amber-700
+                borderRadius: "10px",
+                padding: "12px",
+                fontSize: "14px",
+            },
+        }),
 
     error: (message: string) =>
-        toast(message, { icon: "❌", duration: 4000, style: { background: "#dc3545", color: "#fff" } }),
+        toast.error(message, { duration: 4000, style: { background: "#fff", color: "#b45309" } }),
 
     info: (message: string) =>
-        toast(message, { icon: "ℹ️", duration: 4000, style: { background: "#0dcaf0", color: "#fff" } }),
+        toast(message, { icon: "ℹ️", duration: 4000, style: { background: "#fff", color: "#b45309" } }),
 
     warning: (message: string) =>
-        toast(message, { icon: "⚠️", duration: 4000, style: { background: "#facc15", color: "#000" } }),
+        toast(message, { icon: "⚠️", duration: 4000, style: { background: "#fff", color: "#b45309" } }),
 };
 
 

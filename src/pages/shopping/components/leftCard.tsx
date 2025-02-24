@@ -20,6 +20,8 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import { showToast } from "@/features/common/toast/toastSlice";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 
 export default function LeftCard({
   products,
@@ -33,6 +35,7 @@ export default function LeftCard({
   totalCompra: number;
 }) {
 
+  const dispatch = useAppDispatch();
   const employee = useAppSelector((state) => state.auth.employee);
   const id_store = employee ? employee.id_store : null;
 
@@ -73,14 +76,15 @@ export default function LeftCard({
 
     try {
       await createShopping(shoppingData);
-      toast.success("La consignación se ha creado correctamente.");
+      dispatch(showToast({ message: "¡Consignación registrada con éxito!", type: "success" }));
 
       setcartProducts([]);
       setUpdate(true)
 
     } catch (error: any) {
       console.error("Error al crear la consignación:", error);
-      toast.error(error.response?.data?.message || "No se pudo crear la consignación.");
+      dispatch(showToast({ message: error.response?.data?.message || "Error al registrar la consignación.", type: "error" }));
+
     }
   };
 
@@ -96,7 +100,7 @@ export default function LeftCard({
           <span className="block text-sm uppercase tracking-wider text-amber-600 font-sans opacity-80">
             Consignación
           </span>
-          <span className="relative inline-block">
+          <span className="relative inline-block text-[#4A3728]">
             Productos a consignar
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-amber-200"></span>
           </span>
