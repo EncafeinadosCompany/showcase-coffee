@@ -25,6 +25,7 @@ export default function ProductosPage() {
       (currentPage - 1) * itemsPerPage,
       currentPage * itemsPerPage
     );
+
   useEffect(()=>{
     dispatch (fetchProducts())
   },[])
@@ -49,9 +50,9 @@ export default function ProductosPage() {
    </div>
     <div>
     <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold mb-2">Nuestra Selección de Productos</h1>
+          <h1 className="text-4xl font-bold mb-2">Gestión de Productos</h1>
           <p className="text-muted-foreground">
-            Descubre nuestra selección de productos y vive la experiencia del café en su máxima expresión.
+            Administra tu selección de cafés
           </p>
         </div>
 

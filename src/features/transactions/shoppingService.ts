@@ -23,13 +23,13 @@ export const getShoppingById = async (id: unknown) => {
 
 export const getShoppingVariantById = async (id: string) => {
   const response = await axiosInstance.get(`/transactions/shopping/shopping-variants/${id}`);
-  return Array.isArray(response.data) ? response.data : [response.data]; // Convierte a array si no lo es
+  return Array.isArray(response.data) ? response.data : [response.data]; 
 };
 
 export const createShopping = async (shoppingData: ShoppingData) => {
   const response = await axiosInstance.post("/transactions/shopping", shoppingData, {
     headers: {
-      "Content-Type": "application/json", // Asegúrate de que el contenido sea JSON
+      "Content-Type": "application/json",
     },
   });
   return response.data;

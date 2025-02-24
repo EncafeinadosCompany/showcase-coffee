@@ -1,16 +1,11 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import {Tooltip,TooltipContent,TooltipProvider,TooltipTrigger} from "@/components/ui/tooltip";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { productType } from "@/types/products/product";
 import { useState } from "react";
 import { List } from "lucide-react";
 import { motion } from "framer-motion";
-import AttributeModal from "@/pages/prueba/products/attributesModal";
-import VariantModal from "@/pages/prueba/products/components/VariantModal";
+import AttributeModal from "@/pages/products/products/attributesModal";
+import VariantModal from "@/pages/products/products/components/VariantModal";
 export default function CartsProducts({ products }: { products: productType }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (

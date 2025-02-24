@@ -71,9 +71,9 @@ export default function Brands() {
           </Link>
         </div>
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold mb-2">Nuestra Selección de Marcas</h1>
+          <h1 className="text-4xl font-bold mb-2">Gestión de Marcas</h1>
           <p className="text-muted-foreground">
-            Descubre nuestras marcar aleadas y disfruta de la mejor calidad de café
+            Administra tus marcar aleadas
           </p>
         </div>
 
