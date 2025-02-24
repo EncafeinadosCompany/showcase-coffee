@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/context/AuthContext1";
 import { ProvidersPage } from "@/pages/providers/ProvidersPage";
-import { Products } from "@/pages/products/products";
 import { VariantsPage } from "@/pages/variantsPage";
 import { LoginPage } from "@/pages/LoginPage";
 import { HomePage } from "@/pages/home/home";
@@ -10,17 +9,16 @@ import Shopping from "@/pages/shopping/shopping";
 import Layout from '../layout/content/content';
 import Sales from "@/pages/sales/sales";
 import Liquidation from "@/pages/payments/liquidation";
-import Page from "@/pages/products/components/page";
+import Page from "@/pages/prueba/products/components/page";
 import CafePreview from "@/pages/store/store";
 import Dashboard from "@/pages/dashboard/dashboard";
 import Brands from "@/pages/prueba/brands/brands";
 import Details from "@/pages/prueba/page";
-import FormBrand from "@/pages/prueba/brands/components/formBrands";
 import ProductosPage from "@/pages/prueba/products/products";
 import NotFound from "@/pages/404/404";
 import ProductForm from "@/pages/prueba/products/components/productsForm";
 // import BrandForm from "@/pages/prueba/brands/components/BrandForm";
-import { BrandInfo } from "@/pages/prueba/brands/components/brandInfo";
+// import { BrandInfo } from "@/pages/prueba/brands/components/brandInfo";
 import BrandForms from "@/pages/prueba/brands/components/formValentina";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
@@ -51,10 +49,10 @@ export function AppRouter() {
           <Route path="/sales" element={<PrivateRoute><Sales /></PrivateRoute>} />
 
           <Route path="/providers" element={<PrivateRoute><ProvidersPage /></PrivateRoute>} />
-          <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} />
+          {/* <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} /> */}
           <Route path="/brands" element={<PrivateRoute><Brands /></PrivateRoute>} /> 
           <Route path="/products-page" element={<PrivateRoute><ProductosPage /></PrivateRoute>} />
-          <Route path="/form-brands" element={<PrivateRoute><FormBrand/></PrivateRoute>} />
+          <Route path="/form-brands" element={<PrivateRoute><BrandForms/></PrivateRoute>} />
           <Route path= "/form-products" element = {<PrivateRoute><ProductForm/></PrivateRoute>}/>
           <Route path="/details" element={<PrivateRoute><Details /></PrivateRoute>} />
           <Route path='/variants' element={<PrivateRoute><VariantsPage /></PrivateRoute>} />
