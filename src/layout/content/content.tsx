@@ -9,7 +9,7 @@ const Layout = () => {
       </div>
       <div className="flex-1 flex flex-col w-full overflow-hidden">
         <main className="flex-1 m-4 overflow-hidden">
-          <div className="h-full  w-full  rounded-2xl overflow-auto ">
+          <div className="h-full w-full rounded-2xl overflow-auto border">
             <Outlet />
           </div>
         </main>

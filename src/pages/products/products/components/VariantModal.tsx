@@ -1,58 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { FC, useState, useEffect } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FC, useState } from "react";
 import { Coffee, Package, Scale, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { generateProductPdf } from "./downloadPDF";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
-import { useEffect } from "react";
 import { getID } from "@/features/products/products/productSlice";
-
-interface VariantModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  variants: { grammage: string; stock: number; id_product: number | string }[];
-  product_name: string;
-  imagen?: string;
-  brand?: {
-    name: string;
-    description: string;
-  };
-  attributes?: {
-    description: string;
-    id: number;
-    attributes_products: {
-      value: string;
-    };
-  }[];
-}
-
-interface Variant {
-  grammage: string;
-  stock: number;
-  id_product: number | string;
-}
+import { Variant, VariantModalProps } from '@/types/products/variant';
 
 const VariantModal: FC<VariantModalProps> = ({
   isOpen,
   onClose,
   variants,
   product_name,
+  productId,
   imagen,
 }) => {
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector((state: any) => state.products);
   const [hoveredVariant, setHoveredVariant] = useState<Variant | null>(null);
-  const [productDetails] = useState<any>(null);
+  const [productDetails, setProductDetails] = useState<any>(null);
 
   useEffect(() => {
     if (productDetails) {
@@ -61,20 +32,25 @@ const VariantModal: FC<VariantModalProps> = ({
   }, [productDetails]);
 
   const handleDownloadPDF = async () => {
-    const productId = variants[0]?.id_product;
+    
+    const ProductId = productId;
+
     try {
-      const data = productId
-        ? await dispatch(getID(productId.toString())).unwrap()
-        : {};
-      await generateProductPdf({
+      const data = await dispatch(getID(ProductId.toString())).unwrap();
+
+
+      const pdfData = {
         product_name: data.name || product_name,
         imagen: data.image_url || imagen,
         variants: data.product || [],
-        brand: data.brand || {},
+        brand: data.brand || {}, 
         attributes: data.attributes || [],
-      });
+      };
+
+
+      setProductDetails(pdfData); 
     } catch (error) {
-      console.error("Error al generar el PDF:", error);
+      alert(`Error al generar el PDF. Por favor, inténtalo de nuevo. ${error}`);
     }
   };
 
@@ -108,7 +84,6 @@ const VariantModal: FC<VariantModalProps> = ({
         </DialogHeader>
 
         <div className="flex flex-col md:flex-row gap-6 py-4 px-7 flex-1 overflow-hidden">
-          {/* Imagen creativa */}
           <div className="flex-shrink-0 w-full md:w-1/2 relative overflow-hidden rounded-2xl shadow-xl">
             <div className="absolute inset-0 bg-gradient-to-br from-[#db8935] to-[#582f0e] opacity-20"></div>
             {imagen ? (

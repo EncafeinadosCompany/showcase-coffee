@@ -22,6 +22,7 @@ import imageReducer from "../features/images/imageSlice";
 
 import dashboardReducer from "../features/dashboard/dashboardSlice";
 import toastReducer from "../features/common/toast/toastSlice";
+import paginationReducer from "../features/common/pagination/paginationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -48,6 +49,7 @@ export const store = configureStore({
     dashboard: dashboardReducer,
 
     toast: toastReducer,
+    pagination: paginationReducer,
   },
 });
 
