@@ -159,7 +159,7 @@ export default function Products({ products = [], setCartProducts }: {
                               </div>
 
                               <Separator className="bg-coffee-100" />
-                              
+
                               <div className="flex items-center justify-between">
                                 <Badge
                                   variant="outline"

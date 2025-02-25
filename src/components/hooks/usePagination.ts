@@ -1,22 +1,5 @@
-// Archivo: src/hooks/usePagination.ts
+import { PaginationOptions, PaginationResult } from '@/types/common/pagination';
 import { useState, useEffect } from 'react';
-
-interface PaginationOptions {
-  initialPage?: number;
-  initialItemsPerPage?: number;
-  totalItems?: number;
-  onPageChange?: (page: number) => void;
-}
-
-interface PaginationResult {
-  currentPage: number;
-  itemsPerPage: number;
-  totalItems: number;
-  setTotalItems: (count: number) => void;
-  handlePageChange: (page: number) => void;
-  handleItemsPerPageChange: (itemsPerPage: number) => void;
-  paginatedData: <T>(data: T[]) => T[];
-}
 
 export function usePagination<_T>({
   initialPage = 1,
@@ -28,12 +11,10 @@ export function usePagination<_T>({
   const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
   const [total, setTotal] = useState(totalItems);
 
-  // Reset a la primera página cuando cambia el tamaño de página
   useEffect(() => {
     setCurrentPage(1);
   }, [itemsPerPage]);
 
-  // Manejar cambio de página
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     if (onPageChange) {
@@ -41,12 +22,10 @@ export function usePagination<_T>({
     }
   };
 
-  // Manejar cambio de elementos por página
   const handleItemsPerPageChange = (size: number) => {
     setItemsPerPage(size);
   };
 
-  // Función helper para paginar cualquier array de datos
   const paginatedData = <T>(data: T[]): T[] => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
