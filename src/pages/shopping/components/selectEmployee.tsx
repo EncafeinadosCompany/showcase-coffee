@@ -28,7 +28,6 @@ const useEmployees = () => {
     dispatch(fetchEmployees());
   }, [dispatch]);
 
-  // Filtrar los empleados que sean del tipo "provider"
   const filteredEmployees = employees.filter((employee) => employee.type === "provider");
 
   return { employees: filteredEmployees, isLoading, error };
@@ -89,7 +88,7 @@ export default function SelectEmployee({ onSelect , update }: SelectEmployeeProp
                         id: employee.id,
                         name: `${employee.name} ${employee.last_name}`,
                       });
-                      onSelect(employee.id);  // Llamar a la función onSelect aquí
+                      onSelect(employee.id);
                       setOpen(false);
                     }}
                   >

@@ -42,7 +42,6 @@ export default function FormShopping({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validar la fecha de tostión
     const fechaActual = new Date();
     const fechaTostionDate = new Date(roasting_date);
     if (fechaTostionDate > fechaActual) {
@@ -67,7 +66,6 @@ export default function FormShopping({
       return;
     }
 
-    // Validar cantidad
     const cantidadNum = Number(cantidad);
     if (isNaN(cantidadNum) || cantidadNum <= 0) {
       toast.error("La cantidad debe ser un número positivo y mínimo 1.", {
@@ -79,7 +77,6 @@ export default function FormShopping({
       return;
     }
 
-    // Validar precio de compra
     const shoppingPriceNum = Number(shopping_price);
     if (isNaN(shoppingPriceNum) || shoppingPriceNum <= 50) {
       toast.error("El precio de compra debe ser un número positivo y mínimo 50.", {
@@ -91,7 +88,6 @@ export default function FormShopping({
       return;
     }
 
-    // Validar porcentaje de ganancia
     const porcentajeVentaNum = Number(porcentajeVenta);
     if (isNaN(porcentajeVentaNum) || porcentajeVentaNum < 1) {
       toast.error("El porcentaje de ganancia debe ser mínimo 1.", {
