@@ -162,7 +162,7 @@ export default function Products({
                     {groupedProducts[productName]?.length > 0 ? (
                       groupedProducts[productName].map((product) => (
                         <Card
-                          key={product.variant.id}
+                          key={`${product.variant.id}-${product.sale_price}`}
                           className="group relative overflow-hidden border-2 hover:border-coffee-500 transition-all duration-200 w-full cursor-pointer bg-white"
                           onClick={() => addProduct(product)}
                         >

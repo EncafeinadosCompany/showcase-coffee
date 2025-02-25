@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Coffee, Minus, Plus, Trash2 } from "lucide-react";
+import { Coffee, Minus, Plus, Trash2} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
+
 
 interface CartProduct {
     variant: any;
@@ -40,7 +41,10 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
     };
 
     const deleteVariant = (variantId: number, price: number) => {
-        setCartProducts((prev) => prev.filter((p) => Number(p.variant.id) !== Number(variantId) && p.sale_price !== price));
+        console.log(variantId, price)
+        setCartProducts((prev) =>
+            prev.filter((p) => !(Number(p.variant.id) === Number(variantId) && Number(p.sale_price) === Number(price)))
+        );
     };
 
     const handleQuantityChange = (
@@ -129,7 +133,7 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
                         size="icon"
                         variant="outline"
                         className="h-8 w-8 border-red-200 hover:bg-red-50 hover:border-red-300"
-                        onClick={() => variant.variant.id && deleteVariant(variant.variant.id, variant.sale_price)}
+                        onClick={() => variant.variant.id  && variant.sale_price && deleteVariant(variant.variant.id, variant.sale_price)}
                     >
                         <Trash2 className="h-3 w-3 text-red-500" />
                     </Button>
@@ -165,8 +169,8 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
                                 />
                             </div>
                         ) : (
-                            cartProducts.map((variant) => (
-                                <CartItem key={variant.id} variant={variant} />
+                            cartProducts.map((variant, index) => (
+                                <CartItem key={`${variant.id}-${variant.sale_price}-${index}`} variant={variant} />
                             ))
                         )}
                     </div>
