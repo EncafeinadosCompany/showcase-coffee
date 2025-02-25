@@ -20,6 +20,11 @@ export const SalesTable = React.memo(({ sales, onSaleClick }: SalesTableProps) =
     initialItemsPerPage: 5
   });
 
+  const handleFilterChange = (filteredData: Sale[]) => {
+    setFilteredSales(filteredData);
+    pagination.handlePageChange(1);
+  };
+
   const handleSaleClick = (sale: Sale) => {
     setSelectedSale(sale);
     setIsDialogOpen(true);
@@ -32,7 +37,7 @@ export const SalesTable = React.memo(({ sales, onSaleClick }: SalesTableProps) =
 
   return (
     <div className="space-y-1 h-full flex flex-col">
-      <SalesFilters sales={sales} onFilterChange={setFilteredSales} />
+      <SalesFilters sales={sales} onFilterChange={handleFilterChange} />
 
       <Card className="bg-white/80 backdrop-blur flex-1 flex flex-col max-h-[calc(100vh-150px)]">
         <CardContent className="p-0 flex-1 flex flex-col">
