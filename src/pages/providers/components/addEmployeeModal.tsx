@@ -11,6 +11,7 @@ import { addEmployee } from "@/features/users/employees/employeeSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 
+
 type AddEmployeeModalProps = {
   providerId: number;
   onClose: () => void;
@@ -24,7 +25,7 @@ type FormData = {
   phone: string;
 };
 
-// 📌 Esquema de validación con YUP
+
 const validationSchema = yup.object().shape({
   name: yup.string().required("Su nombre es importante para nosotros"),
   lastName: yup.string().required("¿Y el apellido para cuando?"),

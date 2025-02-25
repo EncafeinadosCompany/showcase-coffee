@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { useAuth } from "@/context/AuthContext1";
@@ -31,7 +29,6 @@ export const LoginPage = () => {
   
     login(email, password);
   };  
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-pink-100 to-amber-100">

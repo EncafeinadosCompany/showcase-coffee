@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Dialog } from "@/components/ui/dialog";
 import { Provider } from "@/types/companies/provider";
 import { EmployeeListModal } from "./employeeList";
@@ -23,15 +18,15 @@ export const ProviderDetails = React.memo(({ provider, onClose }: ProviderDetail
 
   return (
     <>
-      <DialogContent className="max-w-2xl bg-white/95 ">
+      <DialogContent className="max-w-2xl bg-white/95 max-h-[95vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-amber-600">
-            Detalles del Proveedor
+        Detalles del Proveedor
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div className="grid grid-cols-2  scrollbar-thin scrollbar-thumb-amber-200 scrollbar-track-amber-50gap-4">
-            <div>
+        <div>
               <span className="font-semibold text-amber-700">Nombre:</span>
               <p className="text-gray-700">{provider.name}</p>
             </div>

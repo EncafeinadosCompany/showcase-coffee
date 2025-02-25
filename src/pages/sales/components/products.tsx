@@ -1,40 +1,19 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@radix-ui/react-accordion";
+import { formatCurrency } from "@/features/common/formatters/formatters";
+import { ProductType } from "@/types/transactions/salesModuleInterfaces";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 import { Separator } from "@radix-ui/react-select";
 import { Coffee, Search } from "lucide-react";
 import { useState } from "react";
 
-type ProductType = {
-  id: number;
-  sale_price: number;
-  quantity: number;
-  remaining_quantity: number;
-  variant: {
-    id: number;
-    grammage: string;
-    stock: number;
-    product: {
-      id: number;
-      name: string;
-    };
-  };
-};
-
-export default function Products({
-  products = [],
-  setCartProducts,
-}: {
+export default function Products({ products = [], setCartProducts }: {
   products: ProductType[];
   cartProducts: ProductType[];
   setCartProducts: React.Dispatch<React.SetStateAction<ProductType[]>>;
 }) {
+
   const [searchTerm, setSearch] = useState("");
 
   const addProduct = (producto: ProductType) => {
@@ -89,7 +68,6 @@ export default function Products({
     name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  console.log(groupedProducts);
   return (
     <Card className="bg-white shadow-lg h-[calc(100vh-120px)] overflow-hidden">
       <CardHeader className="py-3">
@@ -157,6 +135,7 @@ export default function Products({
                     <span className="font-semibold">{productName}</span>
                   </div>
                 </AccordionTrigger>
+
                 <AccordionContent className="px-4 py-2">
                   <div className="flex flex-col gap-2">
                     {groupedProducts[productName]?.length > 0 ? (
@@ -168,21 +147,19 @@ export default function Products({
                         >
                           <CardContent className="p-4">
                             <div className="flex flex-col gap-3">
-                              {/* Header con gramaje y precio */}
+
                               <div className="flex items-center justify-between">
                                 <h3 className="text-xl font-semibold text-coffee-800 flex items-center gap-2">
                                   <Coffee className="h-5 w-5 text-coffee-600" />
                                   {product.variant.grammage}
                                 </h3>
                                 <p className="text-lg font-bold text-coffee-700">
-                                  {product.sale_price.toLocaleString("es-CO", {
-                                    style: "currency",
-                                    currency: "COP",
-                                  })}
+                                  {formatCurrency(product.sale_price)}
                                 </p>
                               </div>
+
                               <Separator className="bg-coffee-100" />
-                              {/* Stock */}
+
                               <div className="flex items-center justify-between">
                                 <Badge
                                   variant="outline"

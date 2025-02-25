@@ -32,14 +32,12 @@ export default function Shopping() {
     0
   );
 
-  const toggleShoppingList = () => {
-    setShowShoppingList(!showShoppingList);
-  };
+  const toggleShoppingList = () => { setShowShoppingList(!showShoppingList) };
 
   return (
     <div className="p-2 space-y-3">
       <div className="flex justify-between items-center mb-4">
-        
+
         <h1 className="title">
           Gestión de Consignaciones
         </h1>
@@ -48,7 +46,7 @@ export default function Shopping() {
           onClick={toggleShoppingList}
           variant="outline"
           className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium"
-         
+
         >
           {showShoppingList ? (
             <>
@@ -79,13 +77,13 @@ export default function Shopping() {
           </section>
 
           <section className="w-[50%]">
-          <LeftCard
-          products={products}
-          cartProducts={cartProducts}
-          setcartProducts={setCartProducts}
-          totalCompra={totalCompra}
-        ></LeftCard> 
-        </section>
+            <LeftCard
+              products={products}
+              cartProducts={cartProducts}
+              setcartProducts={setCartProducts}
+              totalCompra={totalCompra}
+            ></LeftCard>
+          </section>
         </div>
       )}
     </div>

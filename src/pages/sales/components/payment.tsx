@@ -6,12 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { CreditCard, Banknote, AlertCircle, ChevronLeft, CircleDollarSign } from "lucide-react";
-
-interface PaymentSectionProps {
-    total: number;
-    onCompleteSale: (paymentMethod: string) => void;
-    onCancelSale: () => void;
-}
+import { formatCurrency } from '@/features/common/formatters/formatters';
+import { PaymentSectionProps } from '@/types/transactions/salesModuleInterfaces';
 
 const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionProps) => {
     const [paymentMethod, setPaymentMethod] = useState("Efectivo");
@@ -85,15 +81,19 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
                                 id="received"
                                 type="number"
                                 value={receivedAmount}
+
                                 onChange={(e) => setReceivedAmount(e.target.value)}
                                 className="mt-1 rounded-xl"
                                 placeholder="Ingrese el monto recibido"
                             />
+                            <p className="mt-2 text-sm text-gray-600 overflow-hidden text-ellipsis whitespace-nowrap max-w-[240px]">
+                                {receivedAmount !== "" ? formatCurrency(receivedAmount) : "$0"}
+                            </p>
                         </div>
                         <div className="flex justify-between items-center bg-amber-50 p-3 rounded-xl">
                             <span className="text-amber-800">Cambio:</span>
-                            <span className="text-lg font-semibold text-amber-800 ">
-                                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(Math.max(0, change))}
+                            <span className="max-w-[160px] text-lg font-semibold text-amber-800 overflow-hidden text-ellipsis whitespace-nowrap">
+                                {formatCurrency(Math.max(0, change))}
                             </span>
                         </div>
                     </div>
@@ -138,6 +138,7 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
+
             </CardFooter>
         </Card>
     );

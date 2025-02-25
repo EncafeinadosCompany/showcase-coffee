@@ -10,9 +10,9 @@ import {
   fetchTotalLiquidation,
   fetchTotalDeposits,
   fetchTotalBrands,
-  fetchTotalSalesByMonth, 
+  fetchTotalSalesByMonth,
   fetchTotalSalesByYear,
-  fetchSalesCountByMonth, 
+  fetchSalesCountByMonth,
   fetchSalesCountByYear,
 } from '../../features/dashboard/dashboardSlice';
 
@@ -26,7 +26,7 @@ import { fetchStoresID } from '@/features/companies/storeSlice';
 const Dashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
   const employee = useAppSelector((state) => state.auth.employee);
-  const [ store, setStores] = useState<{name?: string } | null>(null);
+  const [_store, setStores] = useState<{ name?: string } | null>(null);
 
   const {
     totalLiquidation,
@@ -34,7 +34,7 @@ const Dashboard = () => {
     topProducts,
     earnings,
     totalBrands,
-    totalSalesMonth, 
+    totalSalesMonth,
     totalSalesYear,
     salesCountMonth,
     salesCountYear,
@@ -59,9 +59,9 @@ const Dashboard = () => {
     dispatch(fetchTotalLiquidation());
     dispatch(fetchTotalDeposits());
     dispatch(fetchTotalBrands());
-    dispatch(fetchTotalSalesByMonth({ month: currentMonth, year: currentYear })); 
+    dispatch(fetchTotalSalesByMonth({ month: currentMonth, year: currentYear }));
     dispatch(fetchTotalSalesByYear({ year: currentYear }));
-    dispatch(fetchSalesCountByMonth({ month: currentMonth, year: currentYear })); 
+    dispatch(fetchSalesCountByMonth({ month: currentMonth, year: currentYear }));
     dispatch(fetchSalesCountByYear({ year: currentYear }));
   }, [dispatch]);
 
@@ -72,7 +72,7 @@ const Dashboard = () => {
     totalBrands: totalBrands || 0,
     totalSalesMonth: totalSalesMonth || 0,
     totalSalesYear: totalSalesYear || 0,
-    salesCountMonth: salesCountMonth || 0, 
+    salesCountMonth: salesCountMonth || 0,
     salesCountYear: salesCountYear || 0,
     historial: [
       { mes: "Ene", deudas: 800, pagos: 500 },
@@ -85,17 +85,13 @@ const Dashboard = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="rounded-3xl bg-white border border-amber-100 p-4 w-full h-full transition-all duration-700 overflow-y-auto">
+    <div className="rounded-3xl w-full h-full transition-all duration-700 mt-5">
       <div className="max-w-7xl mx-auto">
-        {/* Encabezado */}
-        <div className="flex justify-between items-center mb-2 top-0 z-10 py-4">
-          <h1 className="title">Finanzas de  {store?.name || "Cargando..."} </h1>
-        </div>
 
         {data ? (
           <>
             {/* Tarjetas principales */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 ">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <MetricCard
                 label="Deuda Actual"
                 amount={data.deudas}
@@ -114,13 +110,18 @@ const Dashboard = () => {
                 label="Total Ganancias"
                 amount={data.ganancias}
                 color="#FF7F50"
-                icon={<HandCoins />} 
+                icon={<HandCoins />}
                 isLoading={isLoading}
               />
             </div>
 
-            <FinancialSummary data={data} isLoading={isLoading} />
-            <TopProductsChart topProducts={topProducts} isLoading={isLoading} />
+            <div className='mt-5 mb-5'>
+              <FinancialSummary data={data} isLoading={isLoading} />
+            </div>
+            <div>
+              <TopProductsChart topProducts={topProducts} isLoading={isLoading} />
+
+            </div>
           </>
 
         ) : (

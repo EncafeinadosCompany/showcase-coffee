@@ -1,19 +1,7 @@
 import { useState } from "react";
 import { Plus, Search, Grid, List } from "lucide-react";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationPrevious,
-  PaginationNext,
-  PaginationLink,
-} from "@/components/ui/pagination";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -25,6 +13,8 @@ import { Provider } from "@/types/companies/provider";
 import { ProviderTable } from "./components/Table";
 import { ProviderCard } from "./components/Card";
 import { ProviderForm } from "./components/Form";
+import usePagination from "@/components/hooks/usePagination";
+import Paginator from "@/components/common/paginator";
 
 export const ProvidersPage = () => {
   const {
@@ -33,32 +23,26 @@ export const ProvidersPage = () => {
     error,
     searchTerm,
     setSearchTerm,
-    currentPage,
-    setCurrentPage,
     viewMode,
     setViewMode,
-    totalPages,
     showDialog,
     setShowDialog,
     editingId,
-    // setEditingId,
     handleSubmit,
   } = useProviders();
 
-  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(
-    null
-  );
+  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  const pagination = usePagination<Provider>({
+    initialItemsPerPage: 5
+  });
 
-  const handleProviderClick = (provider: Provider) => {
-    setSelectedProvider(provider);
-  };
+  const handleProviderClick = (provider: Provider) => { setSelectedProvider(provider) };
+
+  const currentPage = pagination.paginatedData(providers);
 
   return (
-    <div className="p-2 h-full space-y-3"> 
+    <div className="p-2 h-full space-y-3">
       <div className="flex justify-between items-center">
         <h1 className="title">
           Gestión de Proveedores
@@ -134,7 +118,7 @@ export const ProvidersPage = () => {
             <ScrollArea className="h-[400px]">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-                {providers.map((provider) => (
+                {currentPage.map((provider) => (
                   <ProviderCard
                     key={provider.id}
                     provider={provider}
@@ -146,12 +130,10 @@ export const ProvidersPage = () => {
             </ScrollArea>
           ) : (
             <ProviderTable
-              providers={providers}
+              providers={currentPage}
               onProviderClick={handleProviderClick}
             />
-
           )}
-
 
         </>
       )}
@@ -168,35 +150,16 @@ export const ProvidersPage = () => {
         </Dialog>
       )}
 
-      <Pagination >
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-              className={currentPage === 1 ? "disabled" : ""}
-            />
-          </PaginationItem>
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <PaginationItem key={index}>
-              <PaginationLink
-                onClick={() => handlePageChange(index + 1)}
-                isActive={currentPage === index + 1}
-                className="bg-amber-600 hover:bg-amber-500 rounded-full text-white"
-              >
-                {index + 1}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
-          <PaginationItem>
-            <PaginationNext
-              onClick={() =>
-                handlePageChange(Math.min(currentPage + 1, totalPages))
-              }
-              className={currentPage === totalPages ? "disabled" : ""}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      <div className="border-t">
+        <Paginator
+          totalItems={providers.length}
+          itemsPerPage={pagination.itemsPerPage}
+          currentPage={pagination.currentPage}
+          onPageChange={pagination.handlePageChange}
+          onItemsPerPageChange={pagination.handleItemsPerPageChange}
+          pageSizeOptions={[3, 9, 12, 20]}
+        />
+      </div>
     </div>
 
 

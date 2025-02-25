@@ -1,13 +1,10 @@
 import React, { useState, useCallback } from "react";
-import { Plus, Trash2, Landmark, Building2, Mail, Phone, MapPin,
-} from "lucide-react";
+import { Plus, Trash2, Landmark, Building2, Mail, Phone, MapPin, } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Provider, BankAccount } from "@/types/companies/provider";
 
@@ -53,7 +50,7 @@ const FormField = React.memo(
         type={type}
         value={value}
         onChange={onChange}
-        className={`w-full ${error ? "border-red-500" : ""}`}
+        className={`w-full text-amber-950 rounded-xl ${error ? "border-red-500" : ""}`}
       />
       {error && <span className="text-sm text-red-500">{error}</span>}
     </div>
@@ -175,15 +172,17 @@ export const ProviderForm = ({
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto shadow-lg">
+    <Card className="w-full max-w-4xl mx-auto">
+
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center text-amber-600">
           {editingId ? "Actualizar Proveedor" : "Nuevo Proveedor"}
         </CardTitle>
       </CardHeader>
+
       <CardContent>
         <form onSubmit={handleSubmitWrapper} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-amber-800">
             <FormField
               label="Nombre"
               name="name"
@@ -218,31 +217,32 @@ export const ProviderForm = ({
               onChange={handleInputChange}
             />
           </div>
-
-          <FormField
-            label="Dirección"
-            name="address"
-            icon={MapPin}
-            value={formData.address}
-            error={errors.address}
-            onChange={handleInputChange}
-          />
+          <div className="text-amber-800">
+            <FormField
+              label="Dirección"
+              name="address"
+              icon={MapPin}
+              value={formData.address}
+              error={errors.address}
+              onChange={handleInputChange}
+            />
+          </div>
 
           <Card className="bg-gray-50">
             <CardContent className="pt-6">
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center">
-                  <Landmark className="mr-2 h-5 w-5" />
-                  <span className="font-semibold">Cuentas Bancarias</span>
+                  <Landmark className="mr-2 h-5 w-5 text-amber-800" />
+                  <span className="font-semibold text-amber-800">Cuentas Bancarias</span>
                 </div>
                 <Button
                   type="button"
                   onClick={addBankAccount}
                   variant="outline"
                   size="sm"
-                  className="hover:bg-primary hover:text-white transition-colors"
+                  className="rounded-full text-amber-800 hover:text-amber-800 transition-colors"
                 >
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="h-4 w-4 mr-2 text-amber-800" />
                   Añadir Cuenta
                 </Button>
               </div>
@@ -252,26 +252,23 @@ export const ProviderForm = ({
                   {formData.bankAccounts.map((account, index) => (
                     <div
                       key={index}
-                      className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start p-4 bg-white rounded-lg shadow-sm"
+                      className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start p-4 bg-white rounded-xl shadow-sm"
                     >
                       <div className="md:col-span-4">
-                        <Label className="mb-2 block">Banco</Label>
+                        <Label className="mb-2 block text-amber-800">Banco</Label>
                         <Select
                           value={account.bank}
                           onValueChange={(value) =>
                             handleBankAccountChange(index, "bank", value)
                           }
                         >
-                          <SelectTrigger
-                            className={
-                              errors[`bank-${index}`] ? "border-red-500" : ""
-                            }
-                          >
+                          <SelectTrigger className={`rounded-xl ${errors[`bank-${index}`] ? "border-red-500" : ""}`}>
                             <SelectValue placeholder="Seleccionar banco" />
                           </SelectTrigger>
-                          <SelectContent>
+
+                          <SelectContent >
                             {BANK_OPTIONS.map((bank) => (
-                              <SelectItem key={bank} value={bank}>
+                              <SelectItem key={bank} value={bank} className="rounded-lg">
                                 {bank}
                               </SelectItem>
                             ))}
@@ -285,7 +282,7 @@ export const ProviderForm = ({
                         )}
                       </div>
                       <div className="md:col-span-3">
-                        <Label className="mb-2 block">Tipo de Cuenta</Label>
+                        <Label className="mb-2 block text-amber-800">Tipo de Cuenta</Label>
                         <Select
                           value={account.type_account}
                           onValueChange={(value) =>
@@ -296,16 +293,13 @@ export const ProviderForm = ({
                             )
                           }
                         >
-                          <SelectTrigger
-                            className={
-                              errors[`type-${index}`] ? "border-red-500" : ""
-                            }
-                          >
+
+                          <SelectTrigger className={`rounded-xl ${errors[`type-${index}`] ? "border-red-500" : ""}`}>
                             <SelectValue placeholder="Tipo" />
                           </SelectTrigger>
                           <SelectContent>
                             {ACCOUNT_TYPES.map((type) => (
-                              <SelectItem key={type} value={type}>
+                              <SelectItem key={type} value={type} >
                                 {type}
                               </SelectItem>
                             ))}
@@ -317,8 +311,8 @@ export const ProviderForm = ({
                           </span>
                         )}
                       </div>
-                      <div className="md:col-span-4">
-                        <Label className="mb-2 block">Número de Cuenta</Label>
+                      <div className="md:col-span-4 ">
+                        <Label className="mb-2 block text-amber-800">Número de Cuenta</Label>
                         <Input
                           value={account.bank_account}
                           onChange={(e) =>
@@ -329,7 +323,7 @@ export const ProviderForm = ({
                             )
                           }
                           placeholder="0000000000"
-                          className={`w-full ${errors[`account-${index}`] ? "border-red-500" : ""
+                          className={`rounded-xl w-full ${errors[`account-${index}`] ? "border-red-500" : ""
                             }`}
                         />
                         {errors[`account-${index}`] && (
@@ -356,21 +350,12 @@ export const ProviderForm = ({
             </CardContent>
           </Card>
 
-          <div className="flex items-center justify-between pt-4">
-            <div className="flex items-center space-x-2">
-              <Switch
-                checked={formData.status}
-                onCheckedChange={(checked) =>
-                  setFormData((prev) => ({ ...prev, status: checked }))
-                }
-              />
-              <Label>Activo</Label>
-            </div>
+          <div className="flex items-center justify-end pt-4">
             <Button
               type="submit"
-              className="bg-primary hover:bg-primary/90 text-white transition-colors"
+              className="bg-amber-700 rounded-full text-white transition-colors"
             >
-              {editingId ? "Actualizar Proveedor" : "Crear Proveedor"}
+              {editingId ? "Actualizar Proveedor" : "Registrar Proveedor"}
             </Button>
           </div>
         </form>

@@ -6,10 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { ArrowRight, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {Form,FormControl,FormField,FormItem,FormLabel,FormMessage} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { brandFormSchema, BrandType } from "@/types/products/brand";
@@ -32,9 +32,9 @@ export default function BrandForms() {
   const { brands } = useAppSelector((state) => state.brands);
   const dispatch = useAppDispatch();
 
-useEffect(() => {
+  useEffect(() => {
     dispatch(fetchSocialNetworks());
-}, [dispatch]);
+  }, [dispatch]);
 
 
   const form = useForm<BrandFormValues>({
@@ -64,7 +64,7 @@ useEffect(() => {
     );
 
     if (exist) {
-      toast.error("La marca ya existe", {id: "brand-exists"});
+      toast.error("La marca ya existe", { id: "brand-exists" });
       form.setValue("name", "");
     }
   }, [form.watch("name")]);
@@ -75,7 +75,7 @@ useEffect(() => {
     formData.append("image", file);
     try {
       const response = await dispatch(addImages(file));
-      return response.payload.image_url; 
+      return response.payload.image_url;
     } catch (error) {
       console.error("Error al subir la imagen:", error);
       return null;
@@ -88,13 +88,13 @@ useEffect(() => {
 
     if (selectedFile) {
       try {
-        imageUrl = await uploadImage(selectedFile); 
+        imageUrl = await uploadImage(selectedFile);
       } catch (error) {
         toast.error("Error al subir la imagen");
-        return; 
+        return;
       }
     }
-  
+
     form.setValue("image_url", imageUrl);
 
     const brandData: BrandType = {
@@ -110,18 +110,15 @@ useEffect(() => {
     };
     console.log(brandData);
     dispatch(addBrand(brandData))
-    .unwrap()
-    .then(() => {
-      confirmAction("¿Desea agregar otra marca?", () => setCurrentPage(1), () => navegate("/brands")) 
-      form.reset();
-      setImagePreview(null);
-    })
-    .catch((error) => {
-      toast.error(error)
-    });
-
-    
-   
+      .unwrap()
+      .then(() => {
+        confirmAction("¿Desea agregar otra marca?", () => setCurrentPage(1), () => navegate("/brands"))
+        form.reset();
+        setImagePreview(null);
+      })
+      .catch((error) => {
+        toast.error(error)
+      });
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,7 +136,7 @@ useEffect(() => {
   return (
     <div className="mt-8">
       <Form {...form}>
-        <form className="space-y-6">
+        <form className="space-y-4">
           {currentPage === 1 && (
             <div className="flex justify-center">
               <div className="text-center w-1/2 col-span-6 items-center">
@@ -161,7 +158,7 @@ useEffect(() => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-lg font-semibold text-[#6F4E37]">
-                          Nombre de la marca
+                          Nombre de la Marca
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -180,7 +177,7 @@ useEffect(() => {
                     render={() => (
                       <FormItem>
                         <FormLabel className="text-lg font-semibold text-[#6F4E37]">
-                          Logo de la marca 
+                          Logo de la Marca
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -265,9 +262,9 @@ useEffect(() => {
                       append({ social_network_id: 0, url: "", description: "" })
                     }
                     className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium">
-                  
+
                     <Plus className="mr-[1px] h-4 w-4 " />
-                    Agregar redes Sociales
+                    Agregar Redes Sociales
                   </Button>
                 </div>
                 <ScrollArea className="w-full whitespace-nowrap rounded-md ">
@@ -374,10 +371,10 @@ useEffect(() => {
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
-                className="bg-[#bc6c25] hover:bg-[#a35d20] rounded-[5px] text-white "  
+                className="bg-[#bc6c25] hover:bg-[#a35d20] rounded-[5px] text-white "
               >
-                 Siguiente
-               <ArrowRight className=" h-4 w-4" /> 
+                Siguiente
+                <ArrowRight className=" h-4 w-4" />
               </Button>
             ) : (
               <Button

@@ -8,4 +8,8 @@ export interface deposit {
   voucher: string
 }
 
-  
+export interface DepositsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  liquidationId: number;
+}

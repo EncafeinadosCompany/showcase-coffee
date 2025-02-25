@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { SalesPayload } from "@/types/transactions/saleModel";
 import { fetchSaleVariants, addSale, fetchSales } from "@/features/transactions/saleSlice";
-import type { SalesPayload } from "@/types/transactions/saleModel";
-import { toast } from "react-hot-toast";
+
 import { Button } from "@/components/ui/button";
 import { ListIcon, XIcon } from "lucide-react";
 
-import Products from "./components/products";
-import Payment from "./components/payment";
 import Cart from "./components/cart";
-import { SalesTable } from "./components/saleslist";
+import Payment from "./components/payment";
+import Products from "./components/products";
+import { SalesTable } from "./components/salesList";
 import { showToast } from "@/features/common/toast/toastSlice";
 
 export default function Sales() {
   const dispatch = useAppDispatch();
   const { saleVariants, sales } = useAppSelector((state) => state.sales);
 
-  const [cartProducts, setCartProducts] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
+  const [cartProducts, setCartProducts] = useState<any[]>([]);
   const [showSalesList, setShowSalesList] = useState(false);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function Sales() {
 
   const handleCompleteSale = async (paymentMethod: string) => {
     if (cartProducts.length === 0) {
-      toast.error("No hay productos en el carrito.");
+      dispatch(showToast({ message: "No hay productos en el carrito.", type: "error" }));
       return;
     }
 
@@ -47,16 +47,16 @@ export default function Sales() {
 
     try {
       await dispatch(addSale(saleData)).unwrap();
-      await dispatch(fetchSales());
-
       dispatch(showToast({ message: "¡Venta realizada con éxito!", type: "success" }));
+
+      await dispatch(fetchSales());
+      dispatch(fetchSaleVariants());
 
       setCartProducts([]);
       setTotal(0);
 
-      dispatch(fetchSaleVariants());
     } catch (error) {
-      toast.error("Error al registrar la venta.");
+      dispatch(showToast({ message: "Error al registrar la venta.", type: "error" }));
       console.error("Error al registrar la venta:", error);
     }
   };
@@ -64,7 +64,7 @@ export default function Sales() {
   const handleCancelSale = () => {
     setCartProducts([]);
     setTotal(0);
-    dispatch(showToast({ message: "Venta cancelada.", type: "error" }));
+    dispatch(showToast({ message: "Venta cancelada.", type: "info" }));
   };
 
   const toggleSalesList = () => {
@@ -78,7 +78,7 @@ export default function Sales() {
         <Button
           onClick={toggleSalesList}
           variant="outline"
-          className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium"
+          className="bg-white hover:bg-amber-100 rounded-full text-amber-800 hover:text-amber-800 text-sm font-medium"
         >
           {showSalesList ? (
             <>
@@ -86,7 +86,7 @@ export default function Sales() {
             </>
           ) : (
             <>
-              <ListIcon className="h-4 w-4" /> Ver Historial de Ventas
+              <ListIcon className="h-4 w-4 " /> Ver Historial de Ventas
             </>
           )}
         </Button>

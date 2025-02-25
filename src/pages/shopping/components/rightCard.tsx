@@ -114,7 +114,6 @@ export default function RightCard({
                               <div className="flex items-start justify-between gap-2">
                                 <div className="flex-1 min-w-0">
                                   <h3 className="text-lg font-semibold text-gray-800 truncate">
-                                    {/* {producto.name} */}
                                   </h3>
                                   <p className="text-sm text-gray-600 break-words">
                                     {variante.grammage}

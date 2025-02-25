@@ -22,7 +22,7 @@ const FeatureCard = ({ icon: Icon, title, description }: FeatureCardProps) => (
 );
 
 export const HomePage = () => {
-  const employee = useAppSelector((state) => state.auth.employee);
+  const employee = useAppSelector((state: { auth: { employee: any } }) => state.auth.employee);
   const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {

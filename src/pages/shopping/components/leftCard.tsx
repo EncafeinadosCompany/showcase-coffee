@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { productType } from "@/types/products/product";
 import { ShoppingDetail, ShoppingData } from "@/types/transactions/shoppingModel";
@@ -22,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { showToast } from "@/features/common/toast/toastSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { fetchShopping } from "@/features/transactions/shoppingSlice";
 
 export default function LeftCard({
   products,
@@ -80,6 +82,7 @@ export default function LeftCard({
 
       setcartProducts([]);
       setUpdate(true)
+      await dispatch(fetchShopping());
 
     } catch (error: any) {
       console.error("Error al crear la consignación:", error);
@@ -101,7 +104,7 @@ export default function LeftCard({
             Consignación
           </span>
           <span className="relative inline-block text-[#4A3728]">
-            Productos a consignar
+            Productos a Consignar
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-amber-200"></span>
           </span>
         </CardTitle>
@@ -115,9 +118,7 @@ export default function LeftCard({
       </ScrollArea>
       <CardFooter className="gap-20 border-t mt-auto ">
         <div className="w-[60%] flex flex-col gap-2">
-          {/* Pasar la función onSelect a SelectEmployee */}
           <SelectEmployee update={update} onSelect={(employeeId: number) => setSelectedEmployeeId(employeeId)} />
-          {/* Botón para generar la consignación */}
           <button
             onClick={handleGenerateConsignment}
             className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white  py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200"

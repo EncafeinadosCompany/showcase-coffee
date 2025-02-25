@@ -31,7 +31,7 @@ export default function CartsBrands({ brands }:{brands: brandType}) {
         </TooltipProvider>
       </CardHeader>
       <CardFooter>
-        <Button variant="outline" className="w-full rounded-2xl">
+        <Button variant="outline" className="w-full rounded-2xl border-amber-100 text-amber-800">
           Ver Detalles
         </Button>
       </CardFooter>
