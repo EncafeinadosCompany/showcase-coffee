@@ -24,12 +24,29 @@ export default function FormShopping({
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const formatPrice = (value: string) => {
+    const number = parseFloat(value.replace(/\./g, "").replace(",", "."));
+    return isNaN(number) ? "" : number.toLocaleString("es-CO", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+  };
+
+  const handleShoppingPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\./g, ""); // Elimina los puntos
+    setShopping_price(value);
+  };
+
+  const formatPorcentaje = (value: string) => {
+    return value ? `${value}%` : "";
+  };
+
   useEffect(() => {
     if (shopping_price && porcentajeVenta) {
-      const precio = Number.parseFloat(shopping_price);
-      const porcentaje = Number.parseFloat(porcentajeVenta);
+      const precio = parseFloat(shopping_price.replace(/,/g, ""));
+      const porcentaje = parseFloat(porcentajeVenta.replace(/%/g, ""));
       const nuevoPrecioVenta = precio * (1 + porcentaje / 100);
-      setSale_price(nuevoPrecioVenta.toFixed(2));
+      setSale_price(nuevoPrecioVenta.toFixed());
     }
   }, [shopping_price, porcentajeVenta]);
 
@@ -71,7 +88,7 @@ export default function FormShopping({
       return;
     }
 
-    const shoppingPriceNum = Number(shopping_price);
+    const shoppingPriceNum = parseFloat(shopping_price.replace(/,/g, ""));
     if (isNaN(shoppingPriceNum) || shoppingPriceNum <= 50) {
       toast.error("El precio de compra debe ser un número positivo y mínimo 50.", {
         id: "shopping_price-error",
@@ -82,7 +99,7 @@ export default function FormShopping({
       return;
     }
 
-    const porcentajeVentaNum = Number(porcentajeVenta);
+    const porcentajeVentaNum = parseFloat(porcentajeVenta.replace(/%/g, ""));
     if (isNaN(porcentajeVentaNum) || porcentajeVentaNum < 1) {
       toast.error("El porcentaje de ganancia debe ser mínimo 1.", {
         id: "porcentajeVenta-error",
@@ -114,7 +131,7 @@ export default function FormShopping({
             id_shopping: 0,
             id_variant_products: variant_id,
             roasting_date: roasting_date,
-            shopping_price: Number(shopping_price),
+            shopping_price: shoppingPriceNum,
             sale_price: Number(sale_price),
             status: true,
             quantity: Number(cantidad),
@@ -160,10 +177,7 @@ export default function FormShopping({
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label
-              htmlFor="fechaTostion"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="fechaTostion" className="block text-sm font-medium text-gray-700">
               Fecha de Tostión
             </label>
             <Input
@@ -172,14 +186,12 @@ export default function FormShopping({
               className="rounded-[5px]"
               value={roasting_date}
               onChange={(e) => setRoasting_date(e.target.value)}
+              max={new Date().toISOString().split("T")[0]}
               required
             />
           </div>
           <div>
-            <label
-              htmlFor="cantidad"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="cantidad" className="block text-sm font-medium text-gray-700">
               Cantidad
             </label>
             <Input
@@ -193,52 +205,37 @@ export default function FormShopping({
             />
           </div>
           <div>
-            <label
-              htmlFor="shopping_price"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="shopping_price" className="block text-sm font-medium text-gray-700">
               Precio de Compra
             </label>
             <Input
               id="shopping_price"
-              type="number"
-              step="1000"
-              className="rounded-[5px]"
-              value={shopping_price}
-              onChange={(e) => setShopping_price(e.target.value)}
+              type="text"
+              value={formatPrice(shopping_price)}
+              onChange={handleShoppingPriceChange}
               required
             />
           </div>
           <div>
-            <label
-              htmlFor="porcentajeVenta"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="porcentajeVenta" className="block text-sm font-medium text-gray-700">
               Porcentaje de Ganancia
             </label>
             <Input
               id="porcentajeVenta"
-              type="number"
-              step="10"
-              className="rounded-[5px]"
-              value={porcentajeVenta}
-              onChange={(e) => setPorcentajeVenta(e.target.value)}
+              type="text"
+              value={formatPorcentaje(porcentajeVenta)}
+              onChange={(e) => setPorcentajeVenta(e.target.value.replace(/%/g, ""))}
               required
             />
           </div>
           <div>
-            <label
-              htmlFor="sale_price"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="sale_price" className="block text-sm font-medium text-gray-700">
               Precio de Venta
             </label>
             <Input
               id="sale_price"
-              type="number"
-              step="0.01"
-              className="rounded-[5px] bg-[#faedcd57]"
-              value={sale_price}
+              type="text"
+              value={formatPrice(sale_price)}
               readOnly
             />
           </div>

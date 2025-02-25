@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { productType } from "@/types/products/product";
 import { ShoppingDetail, ShoppingData } from "@/types/transactions/shoppingModel";
@@ -22,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { showToast } from "@/features/common/toast/toastSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { fetchShopping } from "@/features/transactions/shoppingSlice";
 
 export default function LeftCard({
   products,
@@ -80,6 +82,7 @@ export default function LeftCard({
 
       setcartProducts([]);
       setUpdate(true)
+      await dispatch(fetchShopping());
 
     } catch (error: any) {
       console.error("Error al crear la consignación:", error);
