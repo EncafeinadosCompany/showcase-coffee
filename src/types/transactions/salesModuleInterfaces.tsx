@@ -27,6 +27,7 @@ export interface CartProduct {
     id: number;
     id_product: number;
     grammage: string;
+    remaining_quantity:number;
     sale_price: number;
     quantity: number;
     name: string;
