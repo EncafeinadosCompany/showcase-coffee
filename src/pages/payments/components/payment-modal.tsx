@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,7 +9,9 @@ import { addDeposit } from "@/features/payments/deposits/depositSlice"
 import { addImages } from "@/features/images/imageSlice"
 import { fetchLiquidations } from "@/features/payments/liquidations/liquidationSlice"
 import toast from "react-hot-toast"
+import { formatCurrency } from "@/features/common/formatters/formatters"
 
+//ELIMINAR INTERFAZ
 interface PaymentModalProps {
   isOpen: boolean
   onClose: () => void
@@ -66,35 +66,45 @@ export function PaymentModal({ isOpen, onClose, liquidation }: PaymentModalProps
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-amber-50">
+      <DialogContent className="bg-white">
         <DialogHeader>
           <DialogTitle className="text-amber-800">Realizar Abono</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
+            {/* Proveedor */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="provider" className="text-right text-amber-700">
                 Proveedor
               </Label>
-              <Input id="provider" value={liquidation.provider.name} disabled className="col-span-3 bg-amber-100" />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="totalDebt" className="text-right text-amber-700">
-              Deuda Total
-              </Label>
               <Input
-              id="totalDebt"
-              value={`COP $${liquidation.current_debt.toLocaleString("es-CO", { minimumFractionDigits: 2 })}`}
-              disabled
-              className="col-span-3 bg-amber-100"
+                id="provider"
+                value={liquidation.provider.name}
+                disabled
+                className="rounded-xl col-span-3 bg-amber-100"
               />
             </div>
+
+            {/* Deuda Total */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="totalDebt" className="text-right text-amber-700">
+                Deuda Total
+              </Label>
+              <Input
+                id="totalDebt"
+                value={formatCurrency(liquidation.current_debt)}
+                disabled
+                className="rounded-xl col-span-3 bg-amber-100"
+              />
+            </div>
+
+            {/* Tipo de Pago */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="paymentType" className="text-right text-amber-700">
                 Tipo de Pago
               </Label>
               <Select onValueChange={setPaymentType} required>
-                <SelectTrigger className="col-span-3 border-amber-300 focus:ring-amber-500">
+                <SelectTrigger className="rounded-xl col-span-3 border-amber-300 focus:ring-amber-500">
                   <SelectValue placeholder="Seleccione el tipo de pago" />
                 </SelectTrigger>
                 <SelectContent>
@@ -104,6 +114,8 @@ export function PaymentModal({ isOpen, onClose, liquidation }: PaymentModalProps
                 </SelectContent>
               </Select>
             </div>
+
+            {/* Referencia (si es transferencia o tarjeta) */}
             {(paymentType === "transferencia" || paymentType === "tarjeta") && (
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="reference" className="text-right text-amber-700">
@@ -115,43 +127,51 @@ export function PaymentModal({ isOpen, onClose, liquidation }: PaymentModalProps
                     type="file"
                     accept="image/*"
                     onChange={(e) => {
-                      const file = e.target.files?.[0]
+                      const file = e.target.files?.[0];
                       if (file) {
-                        // You can handle the file upload here
-                        // For now, we'll just set the file name as the reference
-                        setReference(file.name)
+                        setReference(file.name);
                       }
                     }}
-                    className="border-amber-300 focus:ring-amber-500"
+                    className="rounded-xl border-amber-300 focus:ring-amber-500"
                     required
                   />
-                  {reference && <p className="mt-2 text-sm text-amber-600">Archivo seleccionado: {reference}</p>}
+                  {reference && (
+                    <p className="mt-2 text-sm text-amber-600">Archivo seleccionado: {reference}</p>
+                  )}
                 </div>
               </div>
             )}
+
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="paymentAmount" className="text-right text-amber-700">
                 Valor a Pagar
               </Label>
-              <Input
-                id="paymentAmount"
-                type="number"
-                value={paymentAmount}
-                onChange={(e) => setPaymentAmount(e.target.value)}
-                className="col-span-3 border-amber-300 focus:ring-amber-500"
-                required
-              />
+              <div className="col-span-3 space-y-2">
+                <Input
+                  id="paymentAmount"
+                  type="number"
+                  value={paymentAmount}
+                  onChange={(e) => setPaymentAmount(e.target.value)}
+                  className="rounded-xl border-amber-300 focus:ring-amber-500"
+                  required
+                />
+                <p className="text-sm text-amber-700">
+                  <span className="font-semibold overflow-hidden text-ellipsis whitespace-nowrap block max-w-full">
+                    {paymentAmount !== "" ? formatCurrency(paymentAmount) : "$0"}
+                  </span>
+                </p>
+              </div>
             </div>
-
           </div>
+
           <DialogFooter>
-            <Button type="submit" className="bg-amber-600 hover:bg-amber-500 text-white">
+            <Button type="submit" className="rounded-full bg-amber-600 hover:bg-amber-500 text-white">
               Realizar Abono
             </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 

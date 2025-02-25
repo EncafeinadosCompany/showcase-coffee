@@ -1,24 +1,7 @@
+import { MainMetricCardProps } from "@/types/dashboard/dashboardModel";
 import * as React from "react";
 
-interface MainMetricCardProps {
-  label: string;
-  amount: number;
-  color: string;
-  icon: JSX.Element;
-  isLoading: boolean;
-  trend?: string;
-  isPositive?: boolean;
-}
-
-const MetricCard = ({ 
-  label, 
-  amount, 
-  color, 
-  icon, 
-  isLoading,
-  trend,
-  isPositive
-}: MainMetricCardProps) => {
+const MetricCard = ({  label,  amount,  color,  icon,  isLoading, trend, isPositive }: MainMetricCardProps) => {
   return (
     <div
       className={`p-6 rounded-2xl overflow-hidden relative transition-all duration-700 transform ${!isLoading ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}

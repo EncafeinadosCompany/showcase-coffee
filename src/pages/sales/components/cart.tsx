@@ -73,7 +73,7 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
                         </span>
                     </div>
                     <p className="text-amber-800 font-semibold">
-                        {variant.sale_price.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
+                        {formatCurrency(variant.sale_price)}
                     </p>
                 </div>
 

@@ -71,7 +71,7 @@ export default function AttributesStep({ form, fields, append, remove }: Attribu
                       {attr.description}
                     </SelectItem>
                   ))}
-                  <SelectItem value="new">Crear nuevo atributo</SelectItem>
+                  <SelectItem value="new">Registrar nuevo atributo</SelectItem>
                 </SelectContent>
               </Select>
             </DialogContent>

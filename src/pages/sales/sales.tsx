@@ -78,7 +78,7 @@ export default function Sales() {
         <Button
           onClick={toggleSalesList}
           variant="outline"
-          className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium"
+          className="bg-white hover:bg-amber-100 rounded-full text-amber-800 hover:text-amber-800 text-sm font-medium"
         >
           {showSalesList ? (
             <>
@@ -86,7 +86,7 @@ export default function Sales() {
             </>
           ) : (
             <>
-              <ListIcon className="h-4 w-4" /> Ver Historial de Ventas
+              <ListIcon className="h-4 w-4 " /> Ver Historial de Ventas
             </>
           )}
         </Button>

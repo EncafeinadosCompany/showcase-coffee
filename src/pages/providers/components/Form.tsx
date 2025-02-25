@@ -370,7 +370,7 @@ export const ProviderForm = ({
               type="submit"
               className="bg-primary hover:bg-primary/90 text-white transition-colors"
             >
-              {editingId ? "Actualizar Proveedor" : "Crear Proveedor"}
+              {editingId ? "Actualizar Proveedor" : "Registrar Proveedor"}
             </Button>
           </div>
         </form>

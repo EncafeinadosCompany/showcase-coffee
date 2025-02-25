@@ -10,16 +10,9 @@ import { useAppSelector } from "@/hooks/useAppSelector";
 import { fetchStoresID, editStore } from "@/features/companies/storeSlice";
 import { addImages } from "@/features/images/imageSlice";
 import toast, { Toaster } from "react-hot-toast";
-
-// ELIMINAR INTERFAZ
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  logo: string;
-}
-
+import { FormData
+  
+ } from "@/types/companies/store";
 export default function CafePreview() {
   const { stores } = useAppSelector((state) => state.stores);
   const employee = useAppSelector((state) => state.auth.employee);
@@ -131,7 +124,7 @@ export default function CafePreview() {
             <Coffee className="w-6 h-6 text-amber-700" />
           </div>
           <CardTitle className="text-xl font-bold text-amber-900">
-            Mi Cafetería
+            {formData.name}
           </CardTitle>
           <p className="text-amber-600 text-sm">
             Personaliza el perfil de tu establecimiento
@@ -218,7 +211,7 @@ export default function CafePreview() {
                     value={formData[field.id as keyof FormData] || ""}
                     onChange={handleInputChange}
                     placeholder={field.placeholder}
-                    className="mt-1 border-amber-200 focus:border-amber-400 focus:ring-amber-400 transition-all duration-300"
+                    className="mt-1 rounded-xl border-amber-200 focus:border-amber-400 focus:ring-amber-400 transition-all duration-300"
                     required
                   />
                 </div>
@@ -227,7 +220,7 @@ export default function CafePreview() {
 
             <Button
               type="submit"
-              className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-xl transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-full transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
               onClick={(e) => {
                 if (!validatePhone(formData.phone) && formData.phone) {
                   e.preventDefault();

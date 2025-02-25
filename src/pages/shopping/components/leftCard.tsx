@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { productType } from "@/types/products/product";
 import { ShoppingDetail, ShoppingData } from "@/types/transactions/shoppingModel";

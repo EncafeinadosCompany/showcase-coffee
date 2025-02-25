@@ -68,7 +68,6 @@ export default function LiquidationModule() {
     setIsDetailsModalOpen(true);
   };
 
-  // Obtener las liquidaciones de la página actual
   const currentPage = pagination.paginatedData(filteredProviders);
 
   return (
