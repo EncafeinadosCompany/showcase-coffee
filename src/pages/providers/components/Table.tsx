@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Card, CardContent } from "@/components/ui/card";
 import { Provider } from "@/types/companies/provider";
 
+// ELIMINAR INTERFAZ
 interface ProviderTableProps {
   providers: Provider[];
   onProviderClick: (provider: Provider) => void;

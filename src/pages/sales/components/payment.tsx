@@ -6,12 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { CreditCard, Banknote, AlertCircle, ChevronLeft, CircleDollarSign } from "lucide-react";
-
-interface PaymentSectionProps {
-    total: number;
-    onCompleteSale: (paymentMethod: string) => void;
-    onCancelSale: () => void;
-}
+import { formatCurrency } from '@/features/common/formatters/formatters';
+import { PaymentSectionProps } from '@/types/transactions/salesModuleInterfaces';
 
 const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionProps) => {
     const [paymentMethod, setPaymentMethod] = useState("Efectivo");
@@ -93,7 +89,7 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
                         <div className="flex justify-between items-center bg-amber-50 p-3 rounded-xl">
                             <span className="text-amber-800">Cambio:</span>
                             <span className="text-lg font-semibold text-amber-800 ">
-                                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(Math.max(0, change))}
+                                { formatCurrency(Math.max(0, change)) || 0}
                             </span>
                         </div>
                     </div>
@@ -138,6 +134,7 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
+
             </CardFooter>
         </Card>
     );

@@ -1,16 +1,15 @@
 import React, { useState, useCallback } from "react";
-import { Plus, Trash2, Landmark, Building2, Mail, Phone, MapPin,
-} from "lucide-react";
+import { Plus, Trash2, Landmark, Building2, Mail, Phone, MapPin, } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Provider, BankAccount } from "@/types/companies/provider";
 
+// DATOS DE EJEMPLO EN OTRO ARCHIVO
 const BANK_OPTIONS = [
   "Banco de Bogotá",
   "Banco Popular",
@@ -25,6 +24,7 @@ const BANK_OPTIONS = [
 
 const ACCOUNT_TYPES = ["Cuenta Corriente", "Cuenta de Ahorros"];
 
+// ELIMINAR INTERFAZ
 interface ProviderFormProps {
   editingId: number | null;
   onSubmit: (formData: Omit<Provider, "id">) => Promise<void>;

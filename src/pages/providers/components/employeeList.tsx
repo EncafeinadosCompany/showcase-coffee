@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -8,6 +8,7 @@ import { useAppSelector } from "@/hooks/useAppSelector";
 import { getByProvider } from "@/features/users/employees/employeeSlice";
 import { Users } from "lucide-react";
 
+// ELIMINAR INTERFAZ
 type EmployeeListModalProps = { 
   providerId: number;
   onClose: () => void;

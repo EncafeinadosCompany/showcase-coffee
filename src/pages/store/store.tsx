@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Camera, Coffee, Mail, Phone, MapPin } from "lucide-react";
@@ -13,6 +11,7 @@ import { fetchStoresID, editStore } from "@/features/companies/storeSlice";
 import { addImages } from "@/features/images/imageSlice";
 import toast, { Toaster } from "react-hot-toast";
 
+// ELIMINAR INTERFAZ
 interface FormData {
   name: string;
   email: string;
@@ -122,6 +121,7 @@ export default function CafePreview() {
     const phoneRegex = /^3[0-9]{9}$/;
     return phoneRegex.test(phone);
   };
+  
   return (
     <div className=" pt-4 flex items-center justify-center">
       <Toaster position="top-right" />
@@ -199,9 +199,8 @@ export default function CafePreview() {
               ].map((field) => (
                 <div
                   key={field.id}
-                  className={`relative transform transition-all duration-300 ${
-                    isHovered === field.id ? "scale-105" : ""
-                  }`}
+                  className={`relative transform transition-all duration-300 ${isHovered === field.id ? "scale-105" : ""
+                    }`}
                   onMouseEnter={() => setIsHovered(field.id)}
                   onMouseLeave={() => setIsHovered("")}
                 >
@@ -230,16 +229,16 @@ export default function CafePreview() {
               type="submit"
               className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-xl transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
               onClick={(e) => {
-              if (!validatePhone(formData.phone) && formData.phone) {
-                e.preventDefault();
-                toast.error('El número de teléfono debe tener 10 dígitos y comenzar con 3', {
-                duration: 4000,
-                style: {
-                  background: '#4A3428',
-                  color: '#fff',
+                if (!validatePhone(formData.phone) && formData.phone) {
+                  e.preventDefault();
+                  toast.error('El número de teléfono debe tener 10 dígitos y comenzar con 3', {
+                    duration: 4000,
+                    style: {
+                      background: '#4A3428',
+                      color: '#fff',
+                    }
+                  });
                 }
-                });
-              }
               }}
             >
               Guardar Cambios

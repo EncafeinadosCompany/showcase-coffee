@@ -3,6 +3,7 @@ import { Building2, Mail, Phone } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Provider } from "@/types/companies/provider";
 
+// ELIMINAR INTERFAZ
 interface ProviderCardProps {
   provider: Provider;
   onClick: (provider: Provider) => void;

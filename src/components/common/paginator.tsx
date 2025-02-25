@@ -41,7 +41,6 @@ const Paginator: React.FC<PaginatorProps> = ({
     return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
   };
   
-  const firstItemIndex = Math.min((currentPage - 1) * itemsPerPage + 1, totalItems);
   const lastItemIndex = Math.min(currentPage * itemsPerPage, totalItems);
   
   return (
@@ -132,11 +131,7 @@ const Paginator: React.FC<PaginatorProps> = ({
         {/* Información de resultados con estilo mejorado */}
         {totalItems > 0 && (
           <div className="text-sm font-medium text-amber-800 px-3 py-1 bg-amber-100 rounded-full">
-            Mostrando {firstItemIndex}
-            {' '}-{' '}
-            {lastItemIndex}
-            {' '}de{' '}
-            {totalItems} elementos
+            Mostrando {' '} {lastItemIndex}{' '} de {' '}{totalItems} elementos
           </div>
         )}
       </div>

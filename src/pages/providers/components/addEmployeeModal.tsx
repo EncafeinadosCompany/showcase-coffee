@@ -11,6 +11,7 @@ import { addEmployee } from "@/features/users/employees/employeeSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 
+// ELIMINAR INTERFACES Y TYPES
 type AddEmployeeModalProps = {
   providerId: number;
   onClose: () => void;

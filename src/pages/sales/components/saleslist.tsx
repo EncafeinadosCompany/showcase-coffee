@@ -1,24 +1,22 @@
 import React, { useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-import { format } from "date-fns";
-import { Sale, Sales1 } from "@/types/transactions/saleModel";
-import { SalesFilters } from "./saleFilters";
+import { formatDate, formatCurrency } from "@/features/common/formatters/formatters";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
+import { Sale, Sales } from "@/types/transactions/saleModel";
 import { SaleDetailsDialog } from "./saleDetailsDialog";
+import { SalesFilters } from "./saleFilters";
+
 import Paginator from "@/components/common/paginator";
 import usePagination from "@/components/hooks/usePagination";
-
-interface SalesTableProps {
-  sales: Sale[];
-  onSaleClick?: (sale: Sale) => void;
-}
+import { SalesTableProps } from "@/types/transactions/salesModuleInterfaces";
 
 export const SalesTable = React.memo(({ sales, onSaleClick }: SalesTableProps) => {
   const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [filteredSales, setFilteredSales] = useState<Sale[]>(sales);
 
-  const pagination = usePagination<Sales1>({
+  const pagination = usePagination<Sales>({
     initialItemsPerPage: 5
   });
 
@@ -30,18 +28,6 @@ export const SalesTable = React.memo(({ sales, onSaleClick }: SalesTableProps) =
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return format(new Date(dateString), "dd/MM/yyyy HH:mm");
-  };
-
-  const formatCurrency = (amount: string | null) => {
-    if (!amount) return "N/A";
-    return new Intl.NumberFormat("es-CO", {
-      style: "currency",
-      currency: "COP",
-    }).format(Number(amount));
-  };
-
   const currentPage = pagination.paginatedData(filteredSales);
 
   return (
@@ -50,7 +36,7 @@ export const SalesTable = React.memo(({ sales, onSaleClick }: SalesTableProps) =
 
       <Card className="bg-white/80 backdrop-blur flex-1 flex flex-col max-h-[calc(100vh-150px)]">
         <CardContent className="p-0 flex-1 flex flex-col">
-          {/* Contenedor de la tabla con scroll */}
+
           <div className="overflow-y-auto flex-1 max-h-[calc(100vh-250px)]">
             <Table className="">
               <TableHeader>

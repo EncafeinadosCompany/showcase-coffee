@@ -4,15 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { parse, isAfter, isBefore, isEqual } from "date-fns";
-import { Sale } from "@/types/transactions/saleModel";
 import { Search, Calendar, CreditCard, X } from "lucide-react";
-
-interface SalesFiltersProps {
-    sales: Sale[];
-    onFilterChange: (filteredSales: Sale[]) => void;
-}
+import { SalesFiltersProps } from "@/types/transactions/salesModuleInterfaces";
 
 export const SalesFilters = ({ sales, onFilterChange }: SalesFiltersProps) => {
+    
     const [searchTerm, setSearchTerm] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
@@ -79,7 +75,7 @@ export const SalesFilters = ({ sales, onFilterChange }: SalesFiltersProps) => {
         setStartDate("");
         setEndDate("");
         setHasDateFilter(false);
-        setIsPopoverOpen(false); // Cierra el popover al limpiar los filtros
+        setIsPopoverOpen(false);
     };
 
     const clearPaymentFilter = () => {

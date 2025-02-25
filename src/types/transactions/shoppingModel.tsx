@@ -18,7 +18,7 @@ export interface ShoppingData {
   details: ShoppingDetail[];
 }
 
-export interface ShoppingwitDetail {
+export interface ShoppingwhitDetail {
   id: number;
   id_store: number;
   id_employee: number;
@@ -27,7 +27,7 @@ export interface ShoppingwitDetail {
   shopping_variant: ShoppingDetail[];
 }
 
-export interface ShoppingwitDetail2 {
+export interface ShoppingwhitDetail2 {
   id_store: number;
   id_employee: number;
   date_entry: string;
