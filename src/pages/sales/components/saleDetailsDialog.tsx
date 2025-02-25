@@ -1,26 +1,8 @@
 import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { formatDate, formatCurrency } from "@/features/common/formatters/formatters";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { format } from "date-fns";
-import { Sale } from "@/types/transactions/saleModel";
-
-interface SaleDetailsDialogProps {
-  sale: Sale | null;
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const formatCurrency = (amount: string | null) => {
-  if (!amount) return "N/A";
-  return new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
-  }).format(Number(amount));
-};
-
-const formatDate = (dateString: string) => {
-  return format(new Date(dateString), "dd/MM/yyyy HH:mm");
-};
+import { SaleDetailsDialogProps } from "@/types/transactions/salesModuleInterfaces";
 
 export const SaleDetailsDialog: React.FC<SaleDetailsDialogProps> = ({ sale, isOpen, onClose }) => {
   return (

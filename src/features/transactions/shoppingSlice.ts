@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getShopping, getShoppingVariant, getShoppingVariantsByShoppingId, getShoppingById, getShoppingVariantById, createShopping } from "./shoppingService";
-import { Shopping, ShoppingwitDetail } from "../../types/transactions/shoppingModel";
+import { Shopping, ShoppingwhitDetail } from "../../types/transactions/shoppingModel";
 
 interface ShoppingState {
   shopping: Shopping[];
@@ -62,7 +62,7 @@ export const fetchShoppingVariantById = createAsyncThunk("shopping/fetchVariantB
   }
 });
 
-export const addShopping = createAsyncThunk("shopping/add", async (shopping: Omit<ShoppingwitDetail, "id">, { rejectWithValue }) => {
+export const addShopping = createAsyncThunk("shopping/add", async (shopping: Omit<ShoppingwhitDetail, "id">, { rejectWithValue }) => {
   try {
     return await createShopping(shopping);
   } catch (error: any) {

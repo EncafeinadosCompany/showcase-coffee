@@ -1,17 +1,13 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Dialog } from "@/components/ui/dialog";
 import { Provider } from "@/types/companies/provider";
 import { EmployeeListModal } from "./employeeList";
 import { AddEmployeeModal } from "./addEmployeeModal";
 import { Users, UserPlus } from "lucide-react";
 
+// ELIMINAR INTERFAZ
 interface ProviderDetailsProps {
   provider: Provider;
   onClose: () => void;

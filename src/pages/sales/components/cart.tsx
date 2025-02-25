@@ -4,29 +4,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Coffee, Minus, Plus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
-
-interface CartProduct {
-    variant: any;
-    id: number;
-    id_product: number;
-    grammage: string;
-    sale_price: number;
-    quantity: number;
-    name: string;
-}
-
-interface CartProps {
-    cartProducts: CartProduct[];
-    setCartProducts: React.Dispatch<React.SetStateAction<CartProduct[]>>;
-    setTotal: React.Dispatch<React.SetStateAction<number>>;
-}
+import { CartProduct, CartProps } from "@/types/transactions/salesModuleInterfaces";
+import { formatCurrency } from '@/features/common/formatters/formatters';
 
 export default function Cart({ cartProducts, setCartProducts, setTotal }: CartProps) {
 
     useEffect(() => {
         setTotal(calculateTotal());
     }, [cartProducts, setTotal]);
-
 
     const changeVariant = (variantId: number, quantity: number) => {
         setCartProducts((prev) =>
@@ -174,7 +159,7 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
                     <div className="flex w-full justify-between items-center">
                         <span className="text-lg font-semibold text-[#4A3728]">Total:</span>
                         <span className="text-2xl font-bold text-[#755841]">
-                            {calculateTotal().toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}
+                            {formatCurrency(calculateTotal())}
                         </span>
                     </div>
                 </CardFooter>

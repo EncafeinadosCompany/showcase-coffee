@@ -1,4 +1,4 @@
-import { ChevronLeft, BadgeDollarSign, ChevronRight, Users, LogOut, ShoppingBasket, Coffee, ScrollText, LayoutDashboard, Menu, HomeIcon } from 'lucide-react';
+import { ChevronLeft, BadgeDollarSign, ChevronRight, Users, LogOut, ShoppingBasket, Coffee, ScrollText, LayoutDashboard, Menu } from 'lucide-react';
 import { useState, useEffect, FC } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
@@ -43,7 +43,6 @@ const Sidebar: FC = () => {
 
   const sidebarItems: SidebarItem[] = [
     { icon: <LayoutDashboard />, label: 'Dashboard', path: '/dashboard' },
-    { icon: <HomeIcon />, label: 'Inicio', path: '/home' },
     { icon: <Users />, label: 'Proveedores', path: '/providers' },
     { icon: <Coffee />, label: 'Productos', path: '/details' },
     { icon: <ShoppingBasket />, label: 'Compras', path: '/shopping' },
@@ -123,26 +122,26 @@ const Sidebar: FC = () => {
           <ul className="space-y-2">
             <li>
               <button
-          onClick={() => navigate('/profile')}
-          className="flex items-center w-full p-3 rounded-xl group hover:bg-amber-50 transition-colors"
+                onClick={() => navigate('/profile')}
+                className="flex items-center w-full p-3 rounded-xl group hover:bg-blue-50 transition-colors"
               >
-          <Users className="text-gray-500 group-hover:text-amber-600 transition-colors" />
-          {!isCollapsed && (
-            <span className="ml-3 text-gray-700 group-hover:text-amber-600 transition-colors">
-              Perfil
-            </span>
-          )}
+                <Users className="text-gray-500 group-hover:text-blue-600 transition-colors" />
+                {!isCollapsed && (
+                  <span className="ml-3 text-gray-700 group-hover:text-blue-600 transition-colors">
+                    Perfil
+                  </span>
+                )}
               </button>
               <button
-          onClick={handleLogout}
-          className="flex items-center w-full p-3 rounded-xl group hover:bg-red-50 transition-colors"
+                onClick={handleLogout}
+                className="flex items-center w-full p-3 rounded-xl group hover:bg-red-50 transition-colors"
               >
-          <LogOut className="text-gray-500 group-hover:text-red-600 transition-colors" />
-          {!isCollapsed && (
-            <span className="ml-3 text-gray-700 group-hover:text-red-600 transition-colors">
-              Cerrar Sesión
-            </span>
-          )}
+                <LogOut className="text-gray-500 group-hover:text-red-600 transition-colors" />
+                {!isCollapsed && (
+                  <span className="ml-3 text-gray-700 group-hover:text-red-600 transition-colors">
+                    Cerrar Sesión
+                  </span>
+                )}
               </button>
             </li>
           </ul>

@@ -101,7 +101,7 @@ export default function LeftCard({
             Consignación
           </span>
           <span className="relative inline-block text-[#4A3728]">
-            Productos a consignar
+            Productos a Consignar
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-amber-200"></span>
           </span>
         </CardTitle>
