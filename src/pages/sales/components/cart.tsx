@@ -9,6 +9,7 @@ interface CartProduct {
     variant: any;
     id: number;
     id_product: number;
+    remaining_quantity: number;
     grammage: string;
     sale_price: number;
     quantity: number;
@@ -28,22 +29,23 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
     }, [cartProducts, setTotal]);
 
 
-    const changeVariant = (variantId: number, quantity: number) => {
+    const changeVariant = (variantId: number, quantity: number, price: number) => {
         setCartProducts((prev) =>
             prev.map((p) =>
-                Number(p.variant.id) === Number(variantId)
-                    ? { ...p, quantity: Math.min(p.variant.stock, Math.max(0, (p.quantity ?? 0) + quantity)) }
+                Number(p.variant.id) === Number(variantId) && p.sale_price === price
+                    ? { ...p, quantity: Math.min(p.remaining_quantity, Math.max(0, (p.quantity ?? 0) + quantity)) }
                     : p
             ).filter(p => p.quantity > 0)
         );
     };
 
-    const deleteVariant = (variantId: number) => {
-        setCartProducts((prev) => prev.filter((p) => Number(p.variant.id) !== Number(variantId)));
+    const deleteVariant = (variantId: number, price: number) => {
+        setCartProducts((prev) => prev.filter((p) => Number(p.variant.id) !== Number(variantId) && p.sale_price !== price));
     };
 
     const handleQuantityChange = (
         variantId: number,
+        price: number,
         value: string,
         setCartProducts: React.Dispatch<React.SetStateAction<CartProduct[]>>
     ) => {
@@ -51,8 +53,8 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
         if (!isNaN(newQuantity)) {
             setCartProducts((prev) =>
                 prev.map((p) =>
-                    p.variant.id === variantId
-                        ? { ...p, quantity: Math.min(p.variant.stock, Math.max(1, newQuantity)) }
+                    p.variant.id === variantId && p.sale_price === price
+                        ? { ...p, quantity: Math.min(p.remaining_quantity, Math.max(1, newQuantity)) }
                         : p
                 )
             );
@@ -62,12 +64,13 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
     const handleBlur = (
         variantId: number,
         value: string,
+        price: number,
         setCartProducts: React.Dispatch<React.SetStateAction<CartProduct[]>>
     ) => {
         if (!value) {
             setCartProducts((prev) =>
                 prev.map((p) =>
-                    p.variant.id === variantId ? { ...p, quantity: 1 } : p
+                    p.variant.id === variantId && p.sale_price === price ? { ...p, quantity: 1 } : p
                 )
             );
         }
@@ -97,7 +100,7 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
                         size="icon"
                         variant="outline"
                         className="h-8 w-8 border-amber-200 hover:bg-amber-100 hover:border-amber-300"
-                        onClick={() => variant.variant.id && changeVariant(variant.variant.id, -1)}
+                        onClick={() => variant.variant.id && changeVariant(variant.variant.id, -1, variant.sale_price)}
                         disabled={!variant.quantity}
                     >
                         <Minus className="h-3 w-3 text-amber-700" />
@@ -109,15 +112,15 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
                         min={1}
                         max={variant.variant.stock}
                         className="w-12 h-8 text-center p-1 border-amber-200 focus:border-amber-300"
-                        onChange={(e) => handleQuantityChange(variant.variant.id, e.target.value, setCartProducts)}
-                        onBlur={(e) => handleBlur(variant.variant.id, e.target.value, setCartProducts)}
+                        onChange={(e) => handleQuantityChange(variant.variant.id, variant.sale_price, e.target.value, setCartProducts)}
+                        onBlur={(e) => handleBlur(variant.variant.id, e.target.value, variant.sale_price, setCartProducts)}
                     />
 
                     <Button
                         size="icon"
                         variant="outline"
                         className="h-8 w-8 border-amber-200 hover:bg-amber-100 hover:border-amber-300"
-                        onClick={() => variant.variant.id && changeVariant(variant.variant.id, 1)}
+                        onClick={() => variant.variant.id && changeVariant(variant.variant.id, 1, variant.sale_price)}
                     >
                         <Plus className="h-3 w-3 text-amber-700" />
                     </Button>
@@ -126,7 +129,7 @@ export default function Cart({ cartProducts, setCartProducts, setTotal }: CartPr
                         size="icon"
                         variant="outline"
                         className="h-8 w-8 border-red-200 hover:bg-red-50 hover:border-red-300"
-                        onClick={() => variant.variant.id && deleteVariant(variant.variant.id)}
+                        onClick={() => variant.variant.id && deleteVariant(variant.variant.id, variant.sale_price)}
                     >
                         <Trash2 className="h-3 w-3 text-red-500" />
                     </Button>

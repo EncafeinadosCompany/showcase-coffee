@@ -41,13 +41,13 @@ export default function Products({
     setCartProducts((prev) => {
       const nuevoCarrito = structuredClone(prev);
       const productoEnCarrito = nuevoCarrito.find(
-        (p) => Number(p.variant.id) === Number(producto.variant.id)
+        (p) => Number(p.variant.id) === Number(producto.variant.id) && producto.sale_price === p.sale_price
       );
 
       if (productoEnCarrito) {
-        if (productoEnCarrito.quantity < producto.variant.stock) {
+        if (productoEnCarrito.quantity < producto.remaining_quantity) {
           return nuevoCarrito.map((p) =>
-            Number(p.variant.id) === Number(producto.variant.id)
+            Number(p.variant.id)  === Number(producto.variant.id) && producto.sale_price === p.sale_price
               ? { ...p, quantity: (p.quantity || 0) + 1 }
               : p
           );
@@ -55,7 +55,7 @@ export default function Products({
           return nuevoCarrito;
         }
       } else {
-        if (producto.variant.stock > 0) {
+        if (producto.quantity > 0) {
           return [
             ...nuevoCarrito,
             {

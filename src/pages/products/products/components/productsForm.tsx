@@ -21,6 +21,7 @@ import { addImages } from "@/features/images/imageSlice"
 import toast from "react-hot-toast"
 import { productType } from "@/types/products/product"
 import confirmAction from "../../components/confirmation"
+import { fetchBrands } from "@/features/products/brands/brandSlice"
 type ProductFormValues = z.infer<typeof productSchema>
 
 export default function ProductForm() {
@@ -29,18 +30,20 @@ export default function ProductForm() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const { attributes } = useAppSelector((state) => state.attributes)
+  const {brands} = useAppSelector((state)=> state.brands)
   const navegate = useNavigate()
 
 
   useEffect(() => {
     dispatch(fetchAttributes())
+    dispatch(fetchBrands())
   },[dispatch])
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: "",
-      id_brand: 0,
+      name: "", 
+      id_brand: brands.length > 0 ? brands[0].id :  undefined,
       image_url: "",
       status: true,
       attributes: [],
@@ -75,7 +78,7 @@ export default function ProductForm() {
         })
     }
 
-    let imageUrl = "https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png"; // Imagen por defecto
+    let imageUrl = "https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png"; 
 
     if (selectedFile) {
       try {
@@ -135,12 +138,12 @@ export default function ProductForm() {
   const CurrentStepComponent = steps[currentStep - 1].component
 
   return (
-    <div className="max-w-4xl mx-auto p-2 ">
+    <div className="max-w-full h-full bg-[#F5E6D3]  mx-auto p-2 ">
        <Link to="/products-page">
       <Button variant="ghost" className="mb-4">
         <ArrowLeft className="mr-2 h-4 w-4" /> Volver
       </Button>
-    </Link>
+     </Link>
    
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
