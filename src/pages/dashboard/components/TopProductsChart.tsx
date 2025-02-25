@@ -89,7 +89,7 @@ const TopProductsChart = ({ topProducts, isLoading }: TopProductsChartProps) => 
     >
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <div className="p-2 bg-purple-100 rounded-lg mr-3">
+          <div className="p-2 bg-purple-100 rounded-2xl mr-3">
             <Coffee size={20} className="text-purple-600" />
           </div>
           <h2 className="text-xl font-semibold text-gray-800">Productos Más Vendidos</h2>
