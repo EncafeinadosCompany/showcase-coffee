@@ -1,4 +1,4 @@
-import { ChevronLeft, BadgeDollarSign, ChevronRight, Users, LogOut, ShoppingBasket, Coffee, ScrollText, LayoutDashboard, Menu } from 'lucide-react';
+import { ChevronLeft, BadgeDollarSign, ChevronRight, Users, LogOut, ShoppingBasket, Coffee, ScrollText, LayoutDashboard, Menu, HomeIcon } from 'lucide-react';
 import { useState, useEffect, FC } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
@@ -43,6 +43,7 @@ const Sidebar: FC = () => {
 
   const sidebarItems: SidebarItem[] = [
     { icon: <LayoutDashboard />, label: 'Dashboard', path: '/dashboard' },
+    { icon: <HomeIcon />, label: 'Inicio', path: '/home' },
     { icon: <Users />, label: 'Proveedores', path: '/providers' },
     { icon: <Coffee />, label: 'Productos', path: '/details' },
     { icon: <ShoppingBasket />, label: 'Compras', path: '/shopping' },

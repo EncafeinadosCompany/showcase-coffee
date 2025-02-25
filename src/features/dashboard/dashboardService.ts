@@ -24,3 +24,28 @@ export const getTotalDeposits = async () => {
   const response = await axiosInstance.get("/dashboard/total-deposits");
   return response.data;
 };
+
+export const getTotalBrands = async () => {
+  const response = await axiosInstance.get("/dashboard/total-brands");
+  return response.data;
+};
+
+export const getTotalSalesByMonth = async (month: number, year: number) => {
+  const response = await axiosInstance.post("/dashboard/total-sales-month", { month, year });
+  return response.data;
+};
+
+export const getTotalSalesByYear = async (year: number) => {
+  const response = await axiosInstance.post("/dashboard/total-sales-year", { year });
+  return response.data;
+};
+
+export const getSalesCountByMonth = async (month: number, year: number) => {
+  const response = await axiosInstance.post("/dashboard/sales-count-month", { month, year });
+  return response.data;
+};
+
+export const getSalesCountByYear = async (year: number) => {
+  const response = await axiosInstance.post("/dashboard/sales-count-year", { year });
+  return response.data;
+};

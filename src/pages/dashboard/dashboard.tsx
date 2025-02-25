@@ -9,6 +9,11 @@ import {
   fetchEarnings,
   fetchTotalLiquidation,
   fetchTotalDeposits,
+  fetchTotalBrands,
+  fetchTotalSalesByMonth, 
+  fetchTotalSalesByYear,
+  fetchSalesCountByMonth, 
+  fetchSalesCountByYear,
 } from '../../features/dashboard/dashboardSlice';
 
 import MetricCard from './components/MetricCard';
@@ -28,6 +33,11 @@ const Dashboard = () => {
     totalDeposits,
     topProducts,
     earnings,
+    totalBrands,
+    totalSalesMonth, 
+    totalSalesYear,
+    salesCountMonth,
+    salesCountYear,
     isLoading,
     error,
   } = useAppSelector((state) => state.dashboard);
@@ -48,12 +58,22 @@ const Dashboard = () => {
     dispatch(fetchEarnings({ month: currentMonth, year: currentYear }));
     dispatch(fetchTotalLiquidation());
     dispatch(fetchTotalDeposits());
+    dispatch(fetchTotalBrands());
+    dispatch(fetchTotalSalesByMonth({ month: currentMonth, year: currentYear })); 
+    dispatch(fetchTotalSalesByYear({ year: currentYear }));
+    dispatch(fetchSalesCountByMonth({ month: currentMonth, year: currentYear })); 
+    dispatch(fetchSalesCountByYear({ year: currentYear }));
   }, [dispatch]);
 
   const data = {
     deudas: totalLiquidation || 0,
     pagos: totalDeposits || 0,
     ganancias: earnings || 0,
+    totalBrands: totalBrands || 0,
+    totalSalesMonth: totalSalesMonth || 0,
+    totalSalesYear: totalSalesYear || 0,
+    salesCountMonth: salesCountMonth || 0, 
+    salesCountYear: salesCountYear || 0,
     historial: [
       { mes: "Ene", deudas: 800, pagos: 500 },
       { mes: "Feb", deudas: 900, pagos: 600 },
@@ -99,12 +119,10 @@ const Dashboard = () => {
               />
             </div>
 
-            {/* Resumen Financiero */}
             <FinancialSummary data={data} isLoading={isLoading} />
-
-            {/* Gráfica de Top 5 Productos */}
             <TopProductsChart topProducts={topProducts} isLoading={isLoading} />
           </>
+
         ) : (
           <NoData />
         )}

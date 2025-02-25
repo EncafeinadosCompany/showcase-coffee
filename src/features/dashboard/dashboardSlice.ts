@@ -5,6 +5,11 @@ import {
   getEarnings,
   getTotalLiquidation,
   getTotalDeposits,
+  getTotalBrands,
+  getTotalSalesByMonth,
+  getTotalSalesByYear,
+  getSalesCountByMonth,
+  getSalesCountByYear,
 } from "./dashboardService";
 
 interface DashboardState {
@@ -13,6 +18,11 @@ interface DashboardState {
   earnings: any | null;
   totalLiquidation: number | null;
   totalDeposits: number | null;
+  totalBrands: number | null;
+  totalSalesMonth: number | null; 
+  totalSalesYear: number | null;
+  salesCountMonth: number | null; 
+  salesCountYear: number | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -23,6 +33,11 @@ const initialState: DashboardState = {
   earnings: null,
   totalLiquidation: null,
   totalDeposits: null,
+  totalBrands: null,
+  totalSalesMonth: null, 
+  totalSalesYear: null,
+  salesCountMonth: null,
+  salesCountYear: null,
   isLoading: false,
   error: null,
 };
@@ -78,6 +93,62 @@ export const fetchTotalDeposits = createAsyncThunk(
       return await getTotalDeposits();
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Error fetching total deposits.");
+    }
+  }
+);
+
+export const fetchTotalBrands = createAsyncThunk(
+  "dashboard/fetchTotalBrands",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getTotalBrands();
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error fetching total brands.");
+    }
+  }
+);
+
+export const fetchTotalSalesByMonth = createAsyncThunk(
+  "dashboard/fetchTotalSalesByMonth",
+  async ({ month, year }: { month: number; year: number }, { rejectWithValue }) => {
+    try {
+      return await getTotalSalesByMonth(month, year);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error fetching total sales by month.");
+    }
+  }
+);
+
+export const fetchTotalSalesByYear = createAsyncThunk(
+  "dashboard/fetchTotalSalesByYear",
+  async ({ year }: { year: number }, { rejectWithValue }) => {
+    try {
+      return await getTotalSalesByYear(year);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error fetching total sales by year.");
+    }
+  }
+);
+
+export const fetchSalesCountByMonth = createAsyncThunk(
+  "dashboard/fetchSalesCountByMonth",
+  async ({ month, year }: { month: number; year: number }, { rejectWithValue }) => {
+    try {
+      return await getSalesCountByMonth(month, year);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error fetching sales count by month.");
+    }
+  }
+);
+
+
+export const fetchSalesCountByYear = createAsyncThunk(
+  "dashboard/fetchSalesCountByYear",
+  async ({ year }: { year: number }, { rejectWithValue }) => {
+    try {
+      return await getSalesCountByYear(year);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error fetching sales count by year.");
     }
   }
 );
@@ -154,6 +225,72 @@ const dashboardSlice = createSlice({
         state.totalDeposits = action.payload.totalDeposits;
       })
       .addCase(fetchTotalDeposits.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+       // Total Brands
+       .addCase(fetchTotalBrands.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchTotalBrands.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.totalBrands = action.payload.totalBrands
+      })
+      .addCase(fetchTotalBrands.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+       // Total Sales by Month
+       .addCase(fetchTotalSalesByMonth.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchTotalSalesByMonth.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.totalSalesMonth = action.payload.totalSales;
+      })
+      .addCase(fetchTotalSalesByMonth.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Total Sales by Year
+      .addCase(fetchTotalSalesByYear.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchTotalSalesByYear.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.totalSalesYear = action.payload.totalSales;
+      })
+      .addCase(fetchTotalSalesByYear.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+       // Sales Count by Month
+       .addCase(fetchSalesCountByMonth.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchSalesCountByMonth.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.salesCountMonth = action.payload.salesCount;
+      })
+      .addCase(fetchSalesCountByMonth.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      // Sales Count by Year
+      .addCase(fetchSalesCountByYear.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchSalesCountByYear.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.salesCountYear = action.payload.salesCount;
+      })
+      .addCase(fetchSalesCountByYear.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });
