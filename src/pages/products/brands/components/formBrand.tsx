@@ -1,5 +1,6 @@
 import type React from "react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -18,6 +19,7 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { addImages } from "@/features/images/imageSlice";
 import toast from "react-hot-toast";
+import confirmAction from "../../components/confirmation";
 
 type BrandFormValues = z.infer<typeof brandFormSchema>;
 
@@ -26,6 +28,7 @@ export default function BrandForms() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const { socialNetworks } = useAppSelector((state) => state.socialNetworks);
+  const navegate = useNavigate()
   const { brands } = useAppSelector((state) => state.brands);
   const dispatch = useAppDispatch();
 
@@ -81,7 +84,7 @@ useEffect(() => {
 
   const onSubmit = async (data: BrandFormValues) => {
 
-    let imageUrl = "https://asset.cloudinary.com/dllvnidd5/093b61e9e80f35023c060c079b1a82fc";
+    let imageUrl = "https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png"; // Imagen por defecto
 
     if (selectedFile) {
       try {
@@ -109,11 +112,9 @@ useEffect(() => {
     dispatch(addBrand(brandData))
     .unwrap()
     .then(() => {
-      toast.success("Marca de café creada con éxito");
+      confirmAction("¿Desea agregar otra marca?", () => setCurrentPage(1), () => navegate("/brands")) 
       form.reset();
       setImagePreview(null);
-      
-      setCurrentPage(1);
     })
     .catch((error) => {
       toast.error(error)

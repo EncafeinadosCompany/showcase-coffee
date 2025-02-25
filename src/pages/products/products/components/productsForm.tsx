@@ -15,11 +15,12 @@ import { productSchema } from "./validation"
 import { addAttribute, fetchAttributes } from "@/features/products/attributes/attributeSlice"
 import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { useAppSelector } from "@/hooks/useAppSelector"
-import { Link } from "react-router-dom"
+import { Link, useNavigate} from "react-router-dom"
 import { addProducts} from "@/features/products/products/productSlice"
 import { addImages } from "@/features/images/imageSlice"
 import toast from "react-hot-toast"
 import { productType } from "@/types/products/product"
+import confirmAction from "../../components/confirmation"
 type ProductFormValues = z.infer<typeof productSchema>
 
 export default function ProductForm() {
@@ -28,6 +29,7 @@ export default function ProductForm() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const { attributes } = useAppSelector((state) => state.attributes)
+  const navegate = useNavigate()
 
 
   useEffect(() => {
@@ -98,10 +100,9 @@ export default function ProductForm() {
     dispatch(addProducts(productData))
     .unwrap()
     .then(() => {
-      toast.success("Producto creado")
+      confirmAction("¿Desea agregar otro producto?", () => setCurrentStep(1), () => navegate("/products-page")) 
       form.reset()
       setImagePreview(null);
-      setCurrentStep(1)
     })
     .catch((error) => {
       toast.error(error)

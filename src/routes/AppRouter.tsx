@@ -17,7 +17,7 @@ import Details from "@/pages/products/page";
 import ProductosPage from "@/pages/products/products/products";
 import NotFound from "@/pages/404/404";
 import ProductForm from "@/pages/products/products/components/productsForm";
-import BrandForms from "@/pages/products/brands/components/formBrand";
+import FormBrand from "@/pages/products/brands/components/formBrands";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -101,7 +101,6 @@ export function AppRouter() {
               </PrivateRoute>
             }
           />
-          {/* <Route path='/products' element={<PrivateRoute><Products /></PrivateRoute>} /> */}
           <Route
             path="/brands"
             element={
@@ -122,7 +121,7 @@ export function AppRouter() {
             path="/form-brands"
             element={
               <PrivateRoute>
-                <BrandForms />
+                <FormBrand/>
               </PrivateRoute>
             }
           />

@@ -10,7 +10,6 @@ import { Separator } from "@/components/ui/separator";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { fetchBrands } from "@/features/products/brands/brandSlice";
-
 import CartsBrands from "./components/cartsBrands";
 
 const getSocialIcon = (name: string) => {
@@ -32,10 +31,10 @@ export default function Brands() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useAppDispatch();
-  const { brands } = useAppSelector((state) => state.brands);
+  const brands = useAppSelector((state) => state.brands?.brands ?? []);
   const itemsPerPage = 4;
 
-  const filteredCoffee = brands.filter((coffee) =>
+  const filteredCoffee = (brands ?? []).filter((coffee) =>
     coffee.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const pageCount = Math.ceil(filteredCoffee.length / itemsPerPage);
@@ -118,9 +117,7 @@ export default function Brands() {
                     <div className="space-y-6">
                       <div className="relative w-full h-64">
                         <img
-                          src={
-                            coffee.image_url || "/placeholder.svg"
-                          }
+                          src = {coffee.image_url || "/public/undraw_coffee_7r49.svg"}
                           alt={coffee.name}
                           className="object-cover w-full h-full"
                         />
