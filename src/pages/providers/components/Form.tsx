@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Provider, BankAccount } from "@/types/companies/provider";
 
-// DATOS DE EJEMPLO EN OTRO ARCHIVO
 const BANK_OPTIONS = [
   "Banco de Bogotá",
   "Banco Popular",
@@ -24,7 +23,6 @@ const BANK_OPTIONS = [
 
 const ACCOUNT_TYPES = ["Cuenta Corriente", "Cuenta de Ahorros"];
 
-// ELIMINAR INTERFAZ
 interface ProviderFormProps {
   editingId: number | null;
   onSubmit: (formData: Omit<Provider, "id">) => Promise<void>;

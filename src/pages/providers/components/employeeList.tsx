@@ -8,7 +8,6 @@ import { useAppSelector } from "@/hooks/useAppSelector";
 import { getByProvider } from "@/features/users/employees/employeeSlice";
 import { Users } from "lucide-react";
 
-// ELIMINAR INTERFAZ
 type EmployeeListModalProps = { 
   providerId: number;
   onClose: () => void;
