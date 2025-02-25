@@ -14,11 +14,11 @@ interface FinancialSummaryProps {
 const FinancialSummary = ({ data, isLoading }: FinancialSummaryProps) => {
   const { totalBrands, totalSalesMonth, totalSalesYear, salesCountMonth, salesCountYear } = data;
   
-  // Estados para controlar qué período mostrar
+
   const [showMonthlySales, setShowMonthlySales] = useState(true);
   const [showMonthlySalesCount, setShowMonthlySalesCount] = useState(true);
 
-  // Función para formatear números grandes
+
   const formatCurrency = (value: number) => {
     if (value >= 1000000) {
       return `$${(value / 1000000).toFixed(1)}M`;
@@ -57,7 +57,7 @@ const FinancialSummary = ({ data, isLoading }: FinancialSummaryProps) => {
         {/* Total de Marcas */}
         <div className="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100">
           <div className="flex items-start space-x-4">
-            <div className="p-3 bg-indigo-100 rounded-lg">
+            <div className="p-3 bg-indigo-100 rounded-2xl">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 className="h-6 w-6 text-indigo-600" 
@@ -88,7 +88,7 @@ const FinancialSummary = ({ data, isLoading }: FinancialSummaryProps) => {
         {/* Ventas (Mes/Año) */}
         <div className="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100">
           <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-emerald-100 rounded-lg">
+            <div className="p-3 bg-emerald-100 rounded-2xl">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 className="h-6 w-6 text-emerald-600" 
@@ -107,13 +107,13 @@ const FinancialSummary = ({ data, isLoading }: FinancialSummaryProps) => {
             
             <div className="flex space-x-1 rounded-lg overflow-hidden">
               <button 
-                className={`px-3 py-1 text-xs font-medium ${showMonthlySales ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-600'} transition-colors duration-200`}
+                className={`px-3 py-1 text-xs font-medium ${showMonthlySales ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-600'} transition-colors duration-200 rounded-full`}
                 onClick={() => setShowMonthlySales(true)}
               >
                 Mes
               </button>
               <button 
-                className={`px-3 py-1 text-xs font-medium ${!showMonthlySales ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-600'} transition-colors duration-200`}
+                className={`px-3 py-1 text-xs font-medium ${!showMonthlySales ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-600'} transition-colors duration-200 rounded-full`}
                 onClick={() => setShowMonthlySales(false)}
               >
                 Año
@@ -122,18 +122,18 @@ const FinancialSummary = ({ data, isLoading }: FinancialSummaryProps) => {
           </div>
           
           <div className="flex-1">
-            <p className="text-sm font-medium text-gray-500 mb-1">
+            <p className="text-sm font-medium text-gray-500 mb-1 rounded-full">
               Ventas {showMonthlySales ? 'del Mes' : 'del Año'}
             </p>
             <div className="relative h-16">
               <div className={`absolute w-full transition-all duration-500 transform ${showMonthlySales ? 'translate-y-0 opacity-100' : '-translate-y-8 opacity-0'}`}>
                 <p className="text-4xl font-bold text-gray-800">
-                  {formatCurrency(totalSalesMonth)}
+                    {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(totalSalesMonth)}
                 </p>
               </div>
               <div className={`absolute w-full transition-all duration-500 transform ${!showMonthlySales ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
                 <p className="text-4xl font-bold text-gray-800">
-                  {formatCurrency(totalSalesYear)}
+                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(totalSalesYear)}
                 </p>
               </div>
             </div>
@@ -143,10 +143,10 @@ const FinancialSummary = ({ data, isLoading }: FinancialSummaryProps) => {
         {/* Conteo de Ventas (Mes/Año) */}
         <div className="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100">
           <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-purple-100 rounded-lg">
+            <div className="p-3 bg-purple-100 rounded-2xl">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                className="h-6 w-6 text-purple-600" 
+                className="h-6 w-6 text-purple-600 " 
                 fill="none" 
                 viewBox="0 0 24 24" 
                 stroke="currentColor"
@@ -162,13 +162,13 @@ const FinancialSummary = ({ data, isLoading }: FinancialSummaryProps) => {
             
             <div className="flex space-x-1 rounded-lg overflow-hidden">
               <button 
-                className={`px-3 py-1 text-xs font-medium ${showMonthlySalesCount ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-600'} transition-colors duration-200`}
+                className={`px-3 py-1 text-xs font-medium ${showMonthlySalesCount ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-600'} transition-colors duration-200 rounded-full`}
                 onClick={() => setShowMonthlySalesCount(true)}
               >
                 Mes
               </button>
               <button 
-                className={`px-3 py-1 text-xs font-medium ${!showMonthlySalesCount ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-600'} transition-colors duration-200`}
+                className={`px-3 py-1 text-xs font-medium ${!showMonthlySalesCount ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-600'} transition-colors duration-200 rounded-full`}
                 onClick={() => setShowMonthlySalesCount(false)}
               >
                 Año
