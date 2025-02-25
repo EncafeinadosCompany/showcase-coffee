@@ -10,36 +10,7 @@ import { Search } from "lucide-react"
 import { formatDate, formatCurrency } from "@/features/common/formatters/formatters";
 import { usePagination } from "@/components/hooks/usePagination"
 import Paginator from "@/components/common/paginator"
-
-// ELIMINAR INTERFACES
-interface ShoppingDetail {
-  id_shopping: number
-  sale_price: number
-  quantity: number
-  variant: {
-    id: number
-    grammage: string
-    stock: number
-    product: {
-      id: number
-      name: string
-    }
-  }
-}
-
-interface ShoppingwhitDetail {
-  id: number
-  id_store: number
-  id_employee: number
-  date_entry: string
-  status: boolean
-  shopping_variant: ShoppingDetail[]
-}
-
-interface ShoppingTableProps {
-  shopping: ShoppingwhitDetail[]
-  onShoppingClick?: (shopping: ShoppingwhitDetail) => void
-}
+import {ShoppingTableProps, ShoppingwhitDetail} from "@/types/transactions/shoppingModel"
 
 export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: ShoppingTableProps) => {
 
@@ -140,7 +111,6 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
             </Table>
           </div>
 
-          {/* Paginador */}
           <div className="border-t">
             <Paginator
               totalItems={filteredShopping.length}
