@@ -4,7 +4,7 @@ import { productType } from "@/types/products/product";
 import { useState } from "react";
 import { List } from "lucide-react";
 import { motion } from "framer-motion";
-import AttributeModal from "@/pages/products/products/attributesModal";
+import AttributeModal from "@/pages/products/products/components/attributesModal";
 import VariantModal from "@/pages/products/products/components/VariantModal";
 export default function CartsProducts({ products }: { products: productType }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,6 +47,7 @@ export default function CartsProducts({ products }: { products: productType }) {
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             variants={products.product ?? []}
+            productId={products.id}
             product_name={products.name}
             imagen={products?.image_url}
           />

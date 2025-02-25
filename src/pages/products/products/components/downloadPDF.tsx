@@ -8,13 +8,14 @@ export const generateProductPdf = async (product: Product) => {
     format: "a4"
   });
 
+
   const colors = {
     primary: "#582f0e",
     secondary: "#db8935",
     text: "#333333",
     lightGray: "#f5f5f5",
     white: "#ffffff",
-    error: "#FFA07A" // Color suave para mensajes de datos faltantes
+    error: "#FFA07A" 
   };
 
   const fonts = {
@@ -35,7 +36,6 @@ export const generateProductPdf = async (product: Product) => {
   const pageWidth = doc.internal.pageSize.width;
   const contentWidth = pageWidth - (spacing.margin * 2);
 
-  // Helper functions
   const addNewPage = () => {
     doc.addPage();
     currentY = spacing.margin;
@@ -84,11 +84,9 @@ export const generateProductPdf = async (product: Product) => {
     currentY += 25;
   };
 
-  // Start PDF Generation
   addHeaderToPage();
   currentY = 50;
 
-  // Product name and brand section
   if (!product.product_name && !product.brand?.name) {
     doc.setTextColor(colors.primary);
     doc.setFontSize(fonts.subtitle);
@@ -110,7 +108,6 @@ export const generateProductPdf = async (product: Product) => {
     }
   }
 
-  // Image and Description section
   currentY += spacing.sectionGap;
   const imageSize = 75;
   
@@ -144,11 +141,9 @@ export const generateProductPdf = async (product: Product) => {
     throw new Error(`Error: ${error}`);
   }
 
-  // Description
   const descriptionX = spacing.margin + imageSize + 10;
   const descriptionWidth = contentWidth - imageSize - 7;
 
-  // Brand Description Title
   doc.setTextColor(colors.primary);
   doc.setFontSize(fonts.heading);
   doc.setFont("helvetica", "bold");
@@ -171,7 +166,6 @@ export const generateProductPdf = async (product: Product) => {
 
   currentY += 70;
 
-  // Attributes section
   addSectionTitle("CARACTERÍSTICAS DEL PRODUCTO");
   
   if (!product.attributes || product.attributes.length === 0) {
@@ -198,14 +192,12 @@ export const generateProductPdf = async (product: Product) => {
     });
   }
 
-  // Variants section
   checkPageBreak(40);
   addSectionTitle("PRESENTACIONES DISPONIBLES");
 
   if (!product.variants || product.variants.length === 0) {
     addEmptyStateMessage("No hay presentaciones disponibles para este producto");
   } else {
-    // Table header
     const columns = ["Presentación", "Stock", "Código"];
     const columnWidths = [80, 40, 60];
     
@@ -224,7 +216,6 @@ export const generateProductPdf = async (product: Product) => {
     
     currentY += 10;
 
-    // Table content
     product.variants.forEach((variant, index) => {
       if (checkPageBreak(15)) return;
 
@@ -247,7 +238,6 @@ export const generateProductPdf = async (product: Product) => {
     });
   }
 
-  // Footer
   const addFooter = (pageNumber: number) => {
     const totalPages = doc.getNumberOfPages();
     const pageHeight = doc.internal.pageSize.height;
@@ -263,7 +253,6 @@ export const generateProductPdf = async (product: Product) => {
     doc.text(footerText, pageWidth / 2, pageHeight - 8, { align: "center" });
   };
 
-  // Add footer to all pages
   const totalPages = doc.getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
