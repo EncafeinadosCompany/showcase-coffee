@@ -7,7 +7,6 @@ import { EmployeeListModal } from "./employeeList";
 import { AddEmployeeModal } from "./addEmployeeModal";
 import { Users, UserPlus } from "lucide-react";
 
-// ELIMINAR INTERFAZ
 interface ProviderDetailsProps {
   provider: Provider;
   onClose: () => void;
@@ -19,15 +18,15 @@ export const ProviderDetails = React.memo(({ provider, onClose }: ProviderDetail
 
   return (
     <>
-      <DialogContent className="max-w-2xl bg-white/95 ">
+      <DialogContent className="max-w-2xl bg-white/95 max-h-[95vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-amber-600">
-            Detalles del Proveedor
+        Detalles del Proveedor
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div className="grid grid-cols-2  scrollbar-thin scrollbar-thumb-amber-200 scrollbar-track-amber-50gap-4">
-            <div>
+        <div>
               <span className="font-semibold text-amber-700">Nombre:</span>
               <p className="text-gray-700">{provider.name}</p>
             </div>
