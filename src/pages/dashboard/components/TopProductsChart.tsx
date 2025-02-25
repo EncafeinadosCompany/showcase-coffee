@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BarChart, Bar, CartesianGrid, Tooltip, ResponsiveContainer, XAxis, YAxis, Cell } from 'recharts';
-import { Coffee, ShoppingCart, ArrowUpDown, Info } from 'lucide-react';
+import { Coffee, ShoppingCart, Info } from 'lucide-react';
 
 interface ProductData {
   total: string;
@@ -21,8 +21,8 @@ interface TopProductsChartProps {
 
 const TopProductsChart = ({ topProducts, isLoading }: TopProductsChartProps) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [sortMethod, setSortMethod] = useState<'value' | 'name'>('value');
-  const [displayCount, setDisplayCount] = useState<number>(5);
+  const [sortMethod] = useState<'value' | 'name'>('value');
+  const [displayCount] = useState<number>(5);
 
   const processedData = topProducts 
     ? topProducts
@@ -93,32 +93,6 @@ const TopProductsChart = ({ topProducts, isLoading }: TopProductsChartProps) => 
             <Coffee size={20} className="text-purple-600" />
           </div>
           <h2 className="text-xl font-semibold text-gray-800">Productos Más Vendidos</h2>
-        </div>
-        
-        <div className="flex space-x-2">
-          <div className="bg-gray-100 rounded-lg p-1 flex items-center text-sm">
-            <button 
-              className={`px-3 py-1 rounded-md transition-colors ${displayCount === 5 ? 'bg-white shadow-sm text-purple-700' : 'text-gray-600'}`}
-              onClick={() => setDisplayCount(5)}
-            >
-              Top 5
-            </button>
-            <button 
-              className={`px-3 py-1 rounded-md transition-colors ${displayCount === 10 ? 'bg-white shadow-sm text-purple-700' : 'text-gray-600'}`}
-              onClick={() => setDisplayCount(10)}
-            >
-              Top 10
-            </button>
-          </div>
-          
-          <button 
-            className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-gray-600 flex items-center tooltip-container"
-            onClick={() => setSortMethod(sortMethod === 'value' ? 'name' : 'value')}
-            title={`Ordenar por ${sortMethod === 'value' ? 'nombre' : 'valor'}`}
-          >
-            <ArrowUpDown size={16} />
-            <span className="sr-only">Cambiar orden</span>
-          </button>
         </div>
       </div>
 
