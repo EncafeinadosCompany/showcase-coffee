@@ -1,18 +1,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useEffect } from "react";
@@ -38,7 +27,7 @@ type SelectEmployeeProps = {
   update: boolean;
 };
 
-export default function SelectEmployee({ onSelect , update }: SelectEmployeeProps) {
+export default function SelectEmployee({ onSelect, update }: SelectEmployeeProps) {
   const [open, setOpen] = React.useState(false);
   const { employees, isLoading, error } = useEmployees();
   const [selectedEmployee, setSelectedEmployee] = React.useState<{
@@ -51,8 +40,6 @@ export default function SelectEmployee({ onSelect , update }: SelectEmployeeProp
       setSelectedEmployee(null);
     }
   }, [update]);
-
-  
 
   return (
     <div className="flex items-center space-x-4 mt-6">
@@ -75,8 +62,8 @@ export default function SelectEmployee({ onSelect , update }: SelectEmployeeProp
                 {error
                   ? "Error al cargar los empleados."
                   : isLoading
-                  ? "Cargando..."
-                  : "No se encontraron empleados."}
+                    ? "Cargando..."
+                    : "No se encontraron empleados."}
               </CommandEmpty>
               <CommandGroup>
                 {employees.map((employee) => (

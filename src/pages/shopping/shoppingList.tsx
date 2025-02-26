@@ -10,7 +10,7 @@ import { Search } from "lucide-react"
 import { formatDate, formatCurrency } from "@/features/common/formatters/formatters";
 import { usePagination } from "@/components/hooks/usePagination"
 import Paginator from "@/components/common/paginator"
-import {ShoppingTableProps, ShoppingwhitDetail} from "@/types/transactions/shoppingModel"
+import { ShoppingTableProps, ShoppingwhitDetail } from "@/types/transactions/shoppingModel"
 
 export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: ShoppingTableProps) => {
 

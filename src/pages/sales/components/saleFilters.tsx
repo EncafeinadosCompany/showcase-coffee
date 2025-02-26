@@ -87,7 +87,7 @@ export const SalesFilters = ({ sales, onFilterChange }: SalesFiltersProps) => {
     };
 
     return (
-        <div className="flex flex-wrap gap-2 items-center">
+        <div className="flex flex-wrap gap-2 items-center text-amber-900">
             <div className="relative flex-1 max-w-md">
                 <Input
                     className="rounded-full pl-10"
@@ -112,7 +112,7 @@ export const SalesFilters = ({ sales, onFilterChange }: SalesFiltersProps) => {
                 <PopoverTrigger asChild>
                     <Button
                         variant={hasDateFilter ? "default" : "outline"}
-                        className={`flex items-center gap-2 rounded-full ${hasDateFilter ? "bg-amber-100 text-amber-800 hover:bg-amber-200" : ""}`}
+                        className={`flex items-center gap-2 rounded-full ${hasDateFilter ? "bg-amber-100 text-amber-800 hover:text-amber-800" : ""}`}
                     >
                         <Calendar size={16} />
                         <span>{hasDateFilter ? "Filtro de fecha activo" : "Filtrar por fecha"}</span>
@@ -171,14 +171,14 @@ export const SalesFilters = ({ sales, onFilterChange }: SalesFiltersProps) => {
             <div className="flex items-center gap-2">
                 <Select value={paymentMethod} onValueChange={setPaymentMethod}>
                     <SelectTrigger
-                        className={`rounded-full bg-white w-[200px] ${hasPaymentFilter ? "bg-amber-100 border-amber-300" : ""}`}
+                        className={`font-semibold rounded-full bg-white w-[200px] ${hasPaymentFilter ? "bg-amber-100 border-amber-300" : ""}`}
                     >
                         <div className="flex items-center gap-2">
                             <CreditCard size={16} />
                             <SelectValue placeholder="Método de pago" />
                         </div>
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="rounded-xl">
                         <SelectItem value="all">Tipos de Pago</SelectItem>
                         {uniquePaymentMethods.map((method) => (
                             <SelectItem key={method} value={method}>{method}</SelectItem>
@@ -203,7 +203,7 @@ export const SalesFilters = ({ sales, onFilterChange }: SalesFiltersProps) => {
                     variant="outline"
                     size="sm"
                     onClick={clearAllFilters}
-                    className="ml-auto text-gray-600 rounded-full"
+                    className="ml-auto text-amber-900 hover:text-amber-900 rounded-full"
                 >
                     Limpiar todos los filtros
                 </Button>

@@ -81,15 +81,19 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
                                 id="received"
                                 type="number"
                                 value={receivedAmount}
+
                                 onChange={(e) => setReceivedAmount(e.target.value)}
                                 className="mt-1 rounded-xl"
                                 placeholder="Ingrese el monto recibido"
                             />
+                            <p className="mt-2 text-sm text-gray-600 overflow-hidden text-ellipsis whitespace-nowrap max-w-[240px]">
+                                {receivedAmount !== "" ? formatCurrency(receivedAmount) : "$0"}
+                            </p>
                         </div>
                         <div className="flex justify-between items-center bg-amber-50 p-3 rounded-xl">
                             <span className="text-amber-800">Cambio:</span>
-                            <span className="text-lg font-semibold text-amber-800 ">
-                                { formatCurrency(Math.max(0, change)) || 0}
+                            <span className="max-w-[160px] text-lg font-semibold text-amber-800 overflow-hidden text-ellipsis whitespace-nowrap">
+                                {formatCurrency(Math.max(0, change))}
                             </span>
                         </div>
                     </div>

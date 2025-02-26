@@ -1,19 +1,11 @@
-"use client";
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { FC, useState, useEffect } from "react";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { motion } from "framer-motion";
 import { getDepositByLiquidations } from "@/features/payments/deposits/depositService";
-import { deposit } from "@/types/payments/deposit";
+import { deposit, DepositsModalProps } from "@/types/payments/deposit";
 import { Calendar, Clock, CreditCard, Wallet } from "lucide-react";
-
-interface DepositsModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  liquidationId: number;
-}
 
 const DepositsModal: FC<DepositsModalProps> = ({ isOpen, onClose, liquidationId }) => {
   const [deposits, setDeposits] = useState<deposit[]>([]);

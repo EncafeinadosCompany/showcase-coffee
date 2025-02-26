@@ -15,12 +15,13 @@ import { productSchema } from "./validation"
 import { addAttribute, fetchAttributes } from "@/features/products/attributes/attributeSlice"
 import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { useAppSelector } from "@/hooks/useAppSelector"
-import { Link, useNavigate} from "react-router-dom"
-import { addProducts} from "@/features/products/products/productSlice"
+import { Link, useNavigate } from "react-router-dom"
+import { addProducts } from "@/features/products/products/productSlice"
 import { addImages } from "@/features/images/imageSlice"
 import toast from "react-hot-toast"
 import { productType } from "@/types/products/product"
 import confirmAction from "../../components/confirmation"
+import { fetchBrands } from "@/features/products/brands/brandSlice"
 type ProductFormValues = z.infer<typeof productSchema>
 
 export default function ProductForm() {
@@ -29,18 +30,19 @@ export default function ProductForm() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const { attributes } = useAppSelector((state) => state.attributes)
+  const {brands} = useAppSelector((state)=> state.brands)
   const navegate = useNavigate()
-
 
   useEffect(() => {
     dispatch(fetchAttributes())
+    dispatch(fetchBrands())
   },[dispatch])
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: "",
-      id_brand: 0,
+      name: "", 
+      id_brand: brands.length > 0 ? brands[0].id :  undefined,
       image_url: "",
       status: true,
       attributes: [],
@@ -52,7 +54,6 @@ export default function ProductForm() {
     name: "attributes",
   })
 
-
   const uploadImage = async (file: File) => {
     const formData = new FormData()
     formData.append("image", file)
@@ -60,57 +61,52 @@ export default function ProductForm() {
     return response.payload.image_url
   }
 
-
-
-
   const onSubmit = async (data: ProductFormValues) => {
     console.log(data)
-    
-    if(data.attributes.length > 0) {
-        data.attributes.map((attr) => {
-            const exists = attributes.find((a) => a.description === attr.description)
-            if (!exists) {
-              dispatch(addAttribute(attr))
-            }
-        })
+
+    if (data.attributes.length > 0) {
+      data.attributes.map((attr) => {
+        const exists = attributes.find((a) => a.description === attr.description)
+        if (!exists) {
+          dispatch(addAttribute(attr))
+        }
+      })
     }
 
-    let imageUrl = "https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png"; // Imagen por defecto
+    let imageUrl = "https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png"; 
 
     if (selectedFile) {
       try {
-        imageUrl = await uploadImage(selectedFile); 
+        imageUrl = await uploadImage(selectedFile);
       } catch (error) {
         toast.error("Error al subir la imagen");
-        return; 
+        return;
       }
     }
-  
+
     form.setValue("image_url", imageUrl);
 
     const productData: productType = {
-      id: 0, 
+      id: 0,
       name: data.name,
       id_brand: data.id_brand,
       image_url: imageUrl,
       status: data.status,
       attributes: data.attributes,
     }
- 
+
     dispatch(addProducts(productData))
-    .unwrap()
-    .then(() => {
-      confirmAction("¿Desea agregar otro producto?", () => setCurrentStep(1), () => navegate("/products-page")) 
-      form.reset()
-      setImagePreview(null);
-    })
-    .catch((error) => {
-      toast.error(error)
-    })
+      .unwrap()
+      .then(() => {
+        confirmAction("¿Desea agregar otro producto?", () => setCurrentStep(1), () => navegate("/products-page"))
+        form.reset()
+        setImagePreview(null);
+      })
+      .catch((error) => {
+        toast.error(error)
+      })
 
   }
-
-
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -119,32 +115,29 @@ export default function ProductForm() {
       const imageUrl = URL.createObjectURL(file)
       setImagePreview(imageUrl)
       form.setValue("image_url", imageUrl)
-      
+
     }
   }
 
-
-
-
   const steps = [
     { title: "Información Básica", component: BasicInfoStep },
-    { title: "Atributos", component: AttributesStep},
+    { title: "Atributos", component: AttributesStep },
     { title: "Revisión", component: ReviewStep },
   ]
 
   const CurrentStepComponent = steps[currentStep - 1].component
 
   return (
-    <div className="max-w-4xl mx-auto p-2 ">
-       <Link to="/products-page">
-      <Button variant="ghost" className="mb-4">
-        <ArrowLeft className="mr-2 h-4 w-4" /> Volver
-      </Button>
-    </Link>
-   
+    <div className="w-full h-full p-2 ">
+      <Link to="/products-page">
+        <Button variant="ghost" className="bg-none hover:bg-white rounded-xl text-amber-800 hover:text-amber-800">
+          <ArrowLeft className="mr-2 h-4 w-4 text-amber-800 " /> Volver
+        </Button>
+      </Link>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <Card className="w-full">
+          <Card className="mt-4 w-full">
             <CardHeader>
               <CardTitle className="text-[#6F4E37]">{steps[currentStep - 1].title}</CardTitle>
             </CardHeader>
@@ -173,7 +166,7 @@ export default function ProductForm() {
                 <Button
                   type="button"
                   onClick={() => setCurrentStep((prev) => prev + 1)}
-                    className="bg-[#bc6c25] hover:bg-[#a35d20] rounded-[5px] text-white"
+                  className="bg-[#bc6c25] hover:bg-[#a35d20] rounded-[5px] text-white"
                 >
                   Siguiente <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>

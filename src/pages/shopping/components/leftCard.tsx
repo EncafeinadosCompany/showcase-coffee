@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { showToast } from "@/features/common/toast/toastSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { fetchShopping } from "@/features/transactions/shoppingSlice";
 
 export default function LeftCard({
   products,
@@ -81,6 +82,7 @@ export default function LeftCard({
 
       setcartProducts([]);
       setUpdate(true)
+      await dispatch(fetchShopping());
 
     } catch (error: any) {
       console.error("Error al crear la consignación:", error);

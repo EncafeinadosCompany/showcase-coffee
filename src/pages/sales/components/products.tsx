@@ -20,13 +20,13 @@ export default function Products({ products = [], setCartProducts }: {
     setCartProducts((prev) => {
       const nuevoCarrito = structuredClone(prev);
       const productoEnCarrito = nuevoCarrito.find(
-        (p) => Number(p.variant.id) === Number(producto.variant.id)
+        (p) => Number(p.variant.id) === Number(producto.variant.id) && producto.sale_price === p.sale_price
       );
 
       if (productoEnCarrito) {
-        if (productoEnCarrito.quantity < producto.variant.stock) {
+        if (productoEnCarrito.quantity < producto.remaining_quantity) {
           return nuevoCarrito.map((p) =>
-            Number(p.variant.id) === Number(producto.variant.id)
+            Number(p.variant.id)  === Number(producto.variant.id) && producto.sale_price === p.sale_price
               ? { ...p, quantity: (p.quantity || 0) + 1 }
               : p
           );
@@ -34,7 +34,7 @@ export default function Products({ products = [], setCartProducts }: {
           return nuevoCarrito;
         }
       } else {
-        if (producto.variant.stock > 0) {
+        if (producto.quantity > 0) {
           return [
             ...nuevoCarrito,
             {
@@ -141,7 +141,7 @@ export default function Products({ products = [], setCartProducts }: {
                     {groupedProducts[productName]?.length > 0 ? (
                       groupedProducts[productName].map((product) => (
                         <Card
-                          key={product.variant.id}
+                          key={`${product.variant.id}-${product.sale_price}`}
                           className="group relative overflow-hidden border-2 hover:border-coffee-500 transition-all duration-200 w-full cursor-pointer bg-white"
                           onClick={() => addProduct(product)}
                         >
@@ -159,7 +159,7 @@ export default function Products({ products = [], setCartProducts }: {
                               </div>
 
                               <Separator className="bg-coffee-100" />
-                              
+
                               <div className="flex items-center justify-between">
                                 <Badge
                                   variant="outline"

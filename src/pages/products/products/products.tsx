@@ -69,7 +69,7 @@ export default function ProductosPage() {
               size="lg"
               className="bg-white hover:bg-amber-100 rounded-full text-amber-800 hover:text-amber-800 text-sm font-medium"
             >
-              <Plus className="mr-1 h-4 w-4 text-amber-800"/> Crear Producto
+              <Plus className="mr-1 h-4 w-4 text-amber-800"/> Registrar Producto
             </Button>
           </Link>
         </div>
