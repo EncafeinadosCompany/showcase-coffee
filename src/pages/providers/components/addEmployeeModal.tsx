@@ -41,11 +41,9 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose }: AddEmployee
   const dispatch = useAppDispatch();
   const employee = useAppSelector((state) => state.auth.employee);
 
-  // 📌 useForm con validaciones
   const { register, handleSubmit, formState: { errors }} = useForm<FormData>({ resolver: yupResolver(validationSchema),
   });
 
-  // 📌 Función que se ejecuta al enviar el formulario
   const onSubmit = async (data: FormData) => {
     const newEmployee = {
       ...data,
@@ -74,7 +72,6 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose }: AddEmployee
       </DialogHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4 py-4">
-          {/* Nombre */}
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
               Nombre
@@ -85,7 +82,6 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose }: AddEmployee
             </div>
           </div>
 
-          {/* Apellido */}
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="lastName" className="text-right">
               Apellido
@@ -96,7 +92,6 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose }: AddEmployee
             </div>
           </div>
 
-          {/* Identificación */}
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="identification" className="text-right">
               Número de Documento
@@ -117,8 +112,6 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose }: AddEmployee
             </div>
           </div>
 
-
-          {/* Teléfono */}
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="phone" className="text-right">
               Teléfono
