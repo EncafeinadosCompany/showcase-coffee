@@ -83,50 +83,62 @@ export const useProviders = (itemsPerPage: number = 6) => {
     );
 
     const handleSubmit = useCallback(
-        async (providerData: Omit<Provider, "id">) => {
+      async (providerData: Omit<Provider, "id">) => {
           if (!validateForm(providerData)) {
-            return;
+              return;
           }
-      
+  
           if (!employee?.id_store) {
-            toast.error("No se encontró el ID de la tienda");
-            return;
+              toast.error("No se encontró el ID de la tienda");
+              return;
           }
-      
+  
           try {
-            if (editingId !== null) {
-                await dispatch(
-                    editProvider({ id: editingId.toString(), provider: providerData })
+              if (editingId !== null) {
+                
+                  await dispatch(
+                      editProvider({ id: editingId.toString(), provider: providerData })
                   ).unwrap();
                   toast.success("Proveedor actualizado correctamente");
-                        setEditingId(null);
-            } else {
-              const newProvider = await dispatch(addProvider(providerData)).unwrap();
-              
-              if (newProvider?.id) {
-                try {
-                  await dispatch(
-                    associateProvider({
-                      storeId: employee.id_store,
-                      providerId: newProvider.id,
-                    })
-                  ).unwrap();
-                } catch (error) {
-                  console.error("Error creating alliance:", error);
-                  toast.error("Error al asociar el proveedor con la tienda");
-                  return;
-                }
+                  setEditingId(null);
+              } else {
+            
+                  const newProvider = await dispatch(addProvider(providerData)).unwrap();
+  
+                  if (newProvider?.id) {
+                      try {
+                        
+                          await dispatch(
+                              associateProvider({
+                                  storeId: employee.id_store,
+                                  providerId: newProvider.id,
+                              })
+                          ).unwrap();
+                      } catch (error) {
+                          console.error("Error creating alliance:", error);
+                          toast.error("Error al asociar el proveedor con la tienda");
+                          return;
+                      }
+                  }
+                  dispatch(showToast({ message: "¡Proveedor creado con éxito!", type: "success" }));
               }
-              dispatch(showToast({ message: "¡Proveedor creado con éxito!", type: "success" }));
-            }
-            setShowDialog(false);
+  
+        
+              setShowDialog(false);
+  
+     
+              dispatch(fetchProvidersByStore(employee.id_store))
+                  .unwrap()
+                  .catch((error) => {
+                      console.error(error);
+                      dispatch(showToast({ message: "Error al recargar los proveedores", type: "error" }));
+                  });
           } catch (error) {
-            dispatch(showToast({ message: "Error al guardar el proveedor", type: "error" }));
-
+              dispatch(showToast({ message: "Error al guardar el proveedor", type: "error" }));
           }
-        },
-        [dispatch, employee?.id_store, editingId, validateForm]
-      );
+      },
+      [dispatch, employee?.id_store, editingId, validateForm]
+  );
 
     return {
         providers: currentItems,
