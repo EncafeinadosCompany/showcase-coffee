@@ -50,7 +50,7 @@ export default function ProductosPage() {
         <p className="text-muted-foreground">Administra tu selección de cafés</p>
       </div>
 
-      <div className="flex-grow overflow-auto max-h-[calc(100vh-200px)]">
+      <div className="flex-grow overflow-auto md:max-h-[calc(100vh-200px)]">
 
         <div className="flex justify-between items-center gap-4 mb-4">
           <div className="relative flex-1 max-w-md">
@@ -81,7 +81,7 @@ export default function ProductosPage() {
             <p className="text-muted-foreground mt-4">Intenta con una búsqueda diferente</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
             {currentPage.map((coffee) => (
               <CartsProducts key={coffee.id} products={coffee} />
             ))}
@@ -97,7 +97,7 @@ export default function ProductosPage() {
             currentPage={pagination.currentPage}
             onPageChange={pagination.handlePageChange}
             onItemsPerPageChange={pagination.handleItemsPerPageChange}
-            pageSizeOptions={[4, 8, 16, 20]}
+            pageSizeOptions={[3, 4, 8, 16, 20]}
           />
         </div>
       )}

@@ -24,7 +24,7 @@ const AttributeModal = ({ attributes }: VariantModalProps) => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="mx-auto h-19 py-2 px-6 bg-gradient-to-r bg-white text-amber-950 border-gray-300 border-[0.01px] text-xs font-medium hover:from-gray-100 hover:to-gray-200 flex items-center gap-2 rounded-xl shadow-lg transition-all"
+          className="mx-auto w-full sm:w-3/4 md:w-2/3 lg:w-3/4 xl:w-full h-19 py-2 px-6 bg-gradient-to-r bg-white text-amber-950 justify-center border-gray-300 border-[0.01px] text-xs font-medium hover:from-gray-100 hover:to-gray-200 flex items-center gap-2 rounded-xl shadow-lg transition-all"
         >
           <Star className="h-4 w-4 text-yellow-700" />
           Ver Atributos

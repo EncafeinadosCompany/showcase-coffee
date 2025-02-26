@@ -76,8 +76,8 @@ export default function BasicInfoStep({
       );
 
       if (exist) {
-        toast.error("El producto ya existe");
-        form.setValue("name", "");
+        toast.error("El producto ya existe", {id: "product-exists"});
+        form.setValue("name", productName || "");
       }
     });
 

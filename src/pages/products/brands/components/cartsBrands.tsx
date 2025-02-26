@@ -9,7 +9,9 @@ export default function CartsBrands({ brands }:{brands: brandType}) {
   return (
     <DialogTrigger asChild>
       <Card className="cursor-pointer hover:shadow-lg transition-shadow overflow-hidden px-2">
-      <div className="relative w-full h-28 mt-2">
+      <div className="relative w-full min-w-[200px] max-w-full 
+              h-auto sm:h-40 md:h-44 lg:h-[13rem] xl:h-[10rem] 2xl:h-[13rem] 
+              min-h-[10rem] max-h-[30rem] p-2 mt-2 ">
         <img
           src={brands.image_url || "/public/undraw_coffee_7r49.svg"}
           alt={brands.name}

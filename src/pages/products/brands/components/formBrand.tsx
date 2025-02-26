@@ -65,7 +65,7 @@ export default function BrandForms() {
 
     if (exist) {
       toast.error("La marca ya existe", { id: "brand-exists" });
-      form.setValue("name", "");
+      form.setValue("name", brandName || "");
     }
   }, [form.watch("name")]);
 
@@ -80,6 +80,13 @@ export default function BrandForms() {
       console.error("Error al subir la imagen:", error);
       return null;
     }
+  }
+
+  const reset = () =>{
+    form.reset()
+    setImagePreview(null)
+    setSelectedFile(null)
+    setCurrentPage(1)
   }
 
   const onSubmit = async (data: BrandFormValues) => {
@@ -112,9 +119,7 @@ export default function BrandForms() {
     dispatch(addBrand(brandData))
       .unwrap()
       .then(() => {
-        confirmAction("¿Desea agregar otra marca?", () => setCurrentPage(1), () => navegate("/brands"))
-        form.reset();
-        setImagePreview(null);
+        confirmAction("¿Desea agregar otra marca?", "¡La marca fue creada con éxito!", () => reset(), () => navegate("/brands"))
       })
       .catch((error) => {
         toast.error(error)

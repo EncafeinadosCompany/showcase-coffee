@@ -95,7 +95,7 @@ export default function Brands() {
             <p className="text-muted-foreground">Intenta con una búsqueda diferente</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-6">
             {currentPage.map((coffee) => (
               <Dialog key={coffee.id}>
                 <CartsBrands brands={coffee}></CartsBrands>

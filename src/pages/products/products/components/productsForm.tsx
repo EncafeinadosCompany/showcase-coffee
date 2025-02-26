@@ -61,6 +61,13 @@ export default function ProductForm() {
     return response.payload.image_url
   }
 
+  const reset = ()=>{
+    form.reset()
+    setImagePreview(null)
+    setSelectedFile(null)
+    setCurrentStep(1)
+  }
+
   const onSubmit = async (data: ProductFormValues) => {
     console.log(data)
 
@@ -98,15 +105,17 @@ export default function ProductForm() {
     dispatch(addProducts(productData))
       .unwrap()
       .then(() => {
-        confirmAction("¿Desea agregar otro producto?", () => setCurrentStep(1), () => navegate("/products-page"))
-        form.reset()
-        setImagePreview(null);
+        confirmAction("¿Desea agregar otro producto?", "¡El producto fue creado con éxito!", () => reset(), () => navegate("/products-page"))
+        
       })
       .catch((error) => {
         toast.error(error)
       })
 
   }
+
+
+
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
