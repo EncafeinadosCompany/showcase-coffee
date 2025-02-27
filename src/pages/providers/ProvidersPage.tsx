@@ -51,6 +51,15 @@ export const ProvidersPage = () => {
 
   const handleProviderClick = (provider: Provider) => { setSelectedProvider(provider) };
 
+  // Add this new function to handle opening the dialog for a new provider
+  const handleNewProviderClick = () => {
+    // Reset editing state
+    setEditingId(null);
+    setEditingProvider(null);
+    // Open the dialog
+    setShowDialog(true);
+  };
+
   const currentPage = pagination.paginatedData(providers);
 
   return (
@@ -61,16 +70,16 @@ export const ProvidersPage = () => {
         </h1>
 
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
-          <DialogTrigger asChild>
-            <Button
-              size="lg"
-              className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium"
-            >
-              <Plus className="mr-2 h-5 w-5" /> Registrar proveedor
-            </Button>
-          </DialogTrigger>
+          {/* Modified the DialogTrigger to use our new handler function */}
+          <Button
+            onClick={handleNewProviderClick}
+            size="lg"
+            className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium"
+          >
+            <Plus className="mr-2 h-5 w-5" /> Registrar proveedor
+          </Button>
+          
           <DialogContent className="max-w-full sm:max-w-2xl mx-1 sm:mx-auto bg-white/90">
-
             <ScrollArea className="h-[470px]">
               <ProviderForm
                 editingId={editingId}
