@@ -3,7 +3,7 @@ export type EmployeeType = "store" | "provider";
 export interface Employee {
   id: number;
   id_user?: number | null;
-  identification: string;
+  identification?: string | null;
   name: string;
   last_name: string;
   phone: string;
