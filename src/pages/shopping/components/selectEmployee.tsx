@@ -80,7 +80,7 @@ export default function SelectEmployee({ onSelect, update, onAddEmployee }: Sele
                     ? "Cargando..."
                     : "No se encontraron empleados."}
               </CommandEmpty>
-              <ScrollArea className="h-20">
+              <ScrollArea className="h-24">
                 <CommandGroup>
                   {employees.map((employee) => (
                     <CommandItem
