@@ -49,7 +49,7 @@ export default function SelectEmployee({ onSelect, update, onAddEmployee }: Sele
       <p className="text-sm text-muted-foreground">Empleados:</p>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="w-[80%] justify-start rounded-sm">
+          <Button variant="outline" className="w-[80%] justify-start rounded-xl">
             {selectedEmployee ? (
               <>{selectedEmployee.name}</>
             ) : (
@@ -104,6 +104,13 @@ export default function SelectEmployee({ onSelect, update, onAddEmployee }: Sele
           </Command>
         </PopoverContent>
       </Popover>
+      <Button
+        title="Agregar empleado"
+        onClick={onAddEmployee}
+        className="bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-sm font-medium transition-colors duration-200 px-3 py-2"
+      >
+        <Plus className="w-4 h-4" />
+      </Button>
     </div>
   );
 }
