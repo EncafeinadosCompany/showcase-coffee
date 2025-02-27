@@ -1,10 +1,5 @@
 import { Sale } from "./saleModel";
 
-export interface SalesTableProps {
-  sales: Sale[];
-  onSaleClick?: (sale: Sale) => void;
-}
-
 export interface SaleDetailsDialogProps {
   sale: Sale | null;
   isOpen: boolean;

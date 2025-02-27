@@ -38,7 +38,7 @@ export default function ProductForm() {
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: "", 
+      name: "",
       id_brand: undefined,
       image_url: "",
       status: true,
@@ -58,7 +58,7 @@ export default function ProductForm() {
     return response.payload.image_url
   }
 
-  const reset = ()=>{
+  const reset = () => {
     form.reset()
     setImagePreview(null)
     setSelectedFile(null)
@@ -77,7 +77,7 @@ export default function ProductForm() {
       })
     }
 
-    let imageUrl = "https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png"; 
+    let imageUrl = "https://res.cloudinary.com/dllvnidd5/image/upload/v1740162681/images-coffee/1740162774098-coffee%20bean-pana.png.png";
 
     if (selectedFile) {
       try {
@@ -102,17 +102,14 @@ export default function ProductForm() {
     dispatch(addProducts(productData))
       .unwrap()
       .then(() => {
-        confirmAction("¿Desea agregar otro producto?", "¡El producto fue creado con éxito!", () => reset(), () => navegate("/products-page"))
-        
+        confirmAction("¿Desea agregar otro producto?", "¡El producto fue creado con éxito!", () => reset(), () => navegate("/products"))
+
       })
       .catch((error) => {
         toast.error(error)
       })
 
   }
-
-
-
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -135,11 +132,11 @@ export default function ProductForm() {
 
   return (
     <div className="w-full h-full p-2 ">
-      <Link to="/products-page">
+      <Link to="/products">
         <Button variant="ghost" className="bg-none hover:bg-white rounded-xl text-amber-800 hover:text-amber-800"
-          onClick={()=>form.reset()}>
+          onClick={() => form.reset()}>
           <ArrowLeft className="mr-2 h-4 w-4 text-amber-800 " /> Volver
-      
+
         </Button>
       </Link>
 
@@ -181,34 +178,34 @@ export default function ProductForm() {
                         "name",
                       ];
                       const isValid1 = await form.trigger(fieldsToValidateStep1);
-                
+
                       if (!isValid1) {
-                        toast.error("Complete los campos requeridos", {id: "basic"});
+                        toast.error("Complete los campos requeridos", { id: "basic" });
                         return;
                       }
                     }
-                
+
                     if (currentStep === 2) {
                       // Validar cada atributo individualmente
                       const attributes = form.getValues("attributes");
 
                       if (attributes.length === 0) {
-                        toast.error("Debe agregar al menos un atributo", {id: "attributes"});
+                        toast.error("Debe agregar al menos un atributo", { id: "attributes" });
                         return;
                       }
                       const attributeFields = attributes.flatMap((_, index) => [
                         `attributes.${index}.description`,
                         `attributes.${index}.value`,
                       ]);
-                
+
                       const isValid2 = await form.trigger(attributeFields as any);
-                
+
                       if (!isValid2) {
-                        toast.error("Complete los atributos correctamente",{id: "attributesValidation"});
+                        toast.error("Complete los atributos correctamente", { id: "attributesValidation" });
                         return;
                       }
                     }
-                
+
                     setCurrentStep((prev) => prev + 1);
                   }}
                   className="bg-[#bc6c25] hover:bg-[#a35d20] rounded-[5px] text-white"

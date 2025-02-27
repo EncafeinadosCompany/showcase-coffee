@@ -36,7 +36,6 @@ export default function BrandForms() {
     dispatch(fetchSocialNetworks());
   }, [dispatch]);
 
-
   const form = useForm<BrandFormValues>({
     resolver: zodResolver(brandFormSchema),
     defaultValues: {
@@ -47,7 +46,6 @@ export default function BrandForms() {
       social_networks: [],
     },
   });
-
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -82,7 +80,7 @@ export default function BrandForms() {
     }
   }
 
-  const reset = () =>{
+  const reset = () => {
     form.reset()
     setImagePreview(null)
     setSelectedFile(null)
@@ -331,7 +329,7 @@ export default function BrandForms() {
                               <FormItem className="mb-2">
                                 <FormControl>
                                   <Input
-                                    placeholder="Descripción"
+                                    placeholder="Ejemplo: Nuestro Instagram"
                                     {...field}
                                     className="border-[#6F4E37] rounded-sm"
                                   />

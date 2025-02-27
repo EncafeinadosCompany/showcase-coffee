@@ -39,7 +39,7 @@ export default function Productos() {
           </Link>
 
           <Link
-            to="/products-page"
+            to="/products"
             className="md:w-[420px] xl:w-[600px] transform transition-all hover:scale-105"
           >
             <Card className="bg-[#D4A574] text-white h-[250px] flex flex-col justify-center items-center cursor-pointer">

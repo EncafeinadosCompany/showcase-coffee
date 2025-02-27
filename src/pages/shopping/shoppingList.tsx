@@ -51,6 +51,12 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
     initialItemsPerPage: 5
   });
 
+  const totalShoppingValue = useMemo(() => {
+    if (!selectedShopping || !selectedShopping.shopping_variant) return 0;
+    return selectedShopping.shopping_variant.reduce((total, variant) => total + (variant.shopping_price * variant.quantity), 0);
+  }, [selectedShopping]);
+  
+
   const currentPage = pagination.paginatedData(filteredShopping);
 
   return (
@@ -111,7 +117,7 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
             </Table>
           </div>
 
-          <div className="border-t">
+          <div className="">
             <Paginator
               totalItems={filteredShopping.length}
               itemsPerPage={pagination.itemsPerPage}
@@ -129,9 +135,9 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent aria-describedby="shopping-details-description" className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-coffee-800">Detalles de la Compra #{selectedShopping?.id}</DialogTitle>
+            <DialogTitle className="text-coffee-800">Detalles de la Consignación #{selectedShopping?.id}</DialogTitle>
             <DialogDescription id="shopping-details-description" className="text-coffee-600">
-              Información detallada sobre la compra seleccionada.
+              Información detallada sobre la consignación seleccionada.
             </DialogDescription>
           </DialogHeader>
 
@@ -153,6 +159,8 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
                       <TableHead className="text-coffee-700">Gramaje</TableHead>
                       <TableHead className="text-coffee-700">Cantidad</TableHead>
                       <TableHead className="text-coffee-700">Precio de Compra</TableHead>
+                      <TableHead className="text-coffee-700">Precio de Venta</TableHead>
+
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -163,11 +171,16 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
                           <TableCell className="text-coffee-700">{variant.variant.grammage || "N/A"}</TableCell>
                           <TableCell className="text-coffee-700">{variant.quantity || "N/A"}</TableCell>
                           <TableCell className="text-coffee-700">{formatCurrency(variant.shopping_price)}</TableCell>
+                          <TableCell className="text-coffee-700">{formatCurrency(variant.sale_price)}</TableCell>
                         </TableRow>
+                        
                       ))}
                   </TableBody>
                 </Table>
               )}
+            </div>
+            <div className="mt-6 text-right font-semibold text-sl text-coffee-800">
+              Total consignado: {formatCurrency(totalShoppingValue)}
             </div>
           </div>
         </DialogContent>

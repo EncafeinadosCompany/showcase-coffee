@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Search, Grid, List } from "lucide-react";
 
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -36,10 +36,9 @@ export const ProvidersPage = () => {
   const [editingProvider, setEditingProvider] = useState<Provider | null>(null);
 
   const pagination = usePagination<Provider>({
-    initialItemsPerPage: 5
+    initialItemsPerPage: 3
   });
 
-  // Find the provider being edited whenever editingId changes
   useEffect(() => {
     if (editingId) {
       const providerToEdit = providers.find(p => p.id === editingId) || null;
@@ -52,26 +51,35 @@ export const ProvidersPage = () => {
 
   const handleProviderClick = (provider: Provider) => { setSelectedProvider(provider) };
 
+  // Add this new function to handle opening the dialog for a new provider
+  const handleNewProviderClick = () => {
+    // Reset editing state
+    setEditingId(null);
+    setEditingProvider(null);
+    // Open the dialog
+    setShowDialog(true);
+  };
+
   const currentPage = pagination.paginatedData(providers);
 
   return (
-    <div className="p-2 h-full space-y-3">
+    <div className="p-2 h-full space-y-2">
       <div className="flex justify-between items-center">
         <h1 className="title">
           Gestión de Proveedores
         </h1>
 
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
-          <DialogTrigger asChild>
-            <Button
-              size="lg"
-              className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium"
-            >
-              <Plus className="mr-2 h-5 w-5" /> Registrar proveedor
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-full sm:max-w-2xl mx-1 sm:mx-auto bg-white/90">
 
+          <Button
+            onClick={handleNewProviderClick}
+            size="lg"
+            className="bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium"
+          >
+            <Plus className="mr-2 h-5 w-5" /> Registrar proveedor
+          </Button>
+          
+          <DialogContent className="max-w-full sm:max-w-2xl mx-1 sm:mx-auto bg-white/90">
             <ScrollArea className="h-[470px]">
               <ProviderForm
                 editingId={editingId}
@@ -107,7 +115,7 @@ export const ProvidersPage = () => {
             onClick={() => setViewMode("list")}
             variant={viewMode === "list" ? "default" : "outline"}
             size="sm"
-            className={`bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium`}
+            className={`bg-white hover:bg-amber-100 hover:text-amber-800 rounded-full text-amber-800 text-sm font-medium`}
           >
             <List className="mr-2 h-4 w-4" /> Lista
           </Button>
@@ -157,7 +165,6 @@ export const ProvidersPage = () => {
             onClose={() => setSelectedProvider(null)}
             onEdit={(providerId) => {
               setEditingId(providerId);
-              // Find provider by ID and set it for editing
               const providerToEdit = providers.find(p => p.id === providerId) || null;
               setEditingProvider(providerToEdit);
               setShowDialog(true);
@@ -166,14 +173,14 @@ export const ProvidersPage = () => {
         </Dialog>
       )}
 
-      <div className="border-t">
+      <div className="">
         <Paginator
           totalItems={providers.length}
           itemsPerPage={pagination.itemsPerPage}
           currentPage={pagination.currentPage}
           onPageChange={pagination.handlePageChange}
           onItemsPerPageChange={pagination.handleItemsPerPageChange}
-          pageSizeOptions={[3, 9, 12, 20]}
+          pageSizeOptions={[3, 9, 20]}
         />
       </div>
     </div>

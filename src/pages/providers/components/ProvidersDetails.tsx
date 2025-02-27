@@ -145,7 +145,7 @@ export const ProviderDetails = React.memo(({ provider, onClose, onEdit }: Provid
         <AddEmployeeModal
           providerId={provider.id}
           onClose={() => setShowAddEmployee(false)}
-          isOpen={showAddEmployee} // Pasa el estado de apertura como prop
+          isOpen={showAddEmployee} 
         />
       </Dialog>
     </>
