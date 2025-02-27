@@ -101,6 +101,7 @@ export const useProviders = (itemsPerPage: number = 6) => {
                   ).unwrap();
                   toast.success("Proveedor actualizado correctamente");
                   setEditingId(null);
+                  setShowDialog(false);
               } else {
             
                   const newProvider = await dispatch(addProvider(providerData)).unwrap();
