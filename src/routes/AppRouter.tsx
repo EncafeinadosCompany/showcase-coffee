@@ -16,7 +16,7 @@ import Brands from "@/pages/products/brands/brands";
 import ProductosPage from "@/pages/products/products/products";
 import NotFound from "@/pages/404/404";
 import ProductForm from "@/pages/products/products/components/productsForm";
-import FormBrand from "@/pages/products/brands/components/formBrands";
+import BrandFormContainer from "@/pages/products/brands/components/brandFormContainer";
 import SalesHistory from "@/pages/sales/salesHistory";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
