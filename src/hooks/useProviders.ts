@@ -83,64 +83,64 @@ export const useProviders = (itemsPerPage: number = 6) => {
     );
 
     const handleSubmit = useCallback(
-      async (providerData: Omit<Provider, "id">) => {
+        async (providerData: Omit<Provider, "id">) => {
           if (!validateForm(providerData)) {
-              return;
+            return; // Validación fallida, no continuar
           }
-  
+      
           if (!employee?.id_store) {
-              toast.error("No se encontró el ID de la tienda");
-              return;
+            toast.error("No se encontró el ID de la tienda");
+            return; // No hay ID de tienda, no continuar
           }
-  
+      
           try {
-              if (editingId !== null) {
-                
+            if (editingId !== null) {
+              // Editar proveedor existente
+              await dispatch(
+                editProvider({ id: editingId.toString(), provider: providerData })
+              ).unwrap();
+              toast.success("Proveedor actualizado correctamente");
+            } else {
+              // Crear nuevo proveedor
+              const newProvider = await dispatch(addProvider(providerData)).unwrap();
+      
+              if (newProvider?.id) {
+                try {
+                  // Asociar proveedor con la tienda
                   await dispatch(
-                      editProvider({ id: editingId.toString(), provider: providerData })
+                    associateProvider({
+                      storeId: employee.id_store,
+                      providerId: newProvider.id,
+                    })
                   ).unwrap();
-                  toast.success("Proveedor actualizado correctamente");
-                  setEditingId(null);
-                  setShowDialog(false);
-              } else {
-            
-                  const newProvider = await dispatch(addProvider(providerData)).unwrap();
-  
-                  if (newProvider?.id) {
-                      try {
-                        
-                          await dispatch(
-                              associateProvider({
-                                  storeId: employee.id_store,
-                                  providerId: newProvider.id,
-                              })
-                          ).unwrap();
-                      } catch (error) {
-                          console.error("Error creating alliance:", error);
-                          toast.error("Error al asociar el proveedor con la tienda");
-                          return;
-                      }
-                  }
-                  dispatch(showToast({ message: "¡Proveedor creado con éxito!", type: "success" }));
+                } catch (error) {
+                  console.error("Error asociando proveedor con la tienda:", error);
+                  toast.error("Error al asociar el proveedor con la tienda");
+                  return; // Detener el flujo si hay un error en la asociación
+                }
               }
-  
-        
-              setShowDialog(false);
-  
-     
-              dispatch(fetchProvidersByStore(employee.id_store))
-                  .unwrap()
-                  .catch((error) => {
-                      console.error(error);
-                      dispatch(showToast({ message: "Error al recargar los proveedores", type: "error" }));
-                  });
+              toast.success("¡Proveedor creado con éxito!");
+            }
+      
+            // Reiniciar estados y cerrar el diálogo
+            setEditingId(null);
+            setShowDialog(false);
+      
+            // Recargar la lista de proveedores
+            await dispatch(fetchProvidersByStore(employee.id_store)).unwrap();
           } catch (error) {
-              dispatch(showToast({ message: "Error al guardar el proveedor", type: "error" }));
+            console.error("Error en handleSubmit:", error);
+      
+            // Mostrar un toast con el mensaje de error del backend
+            if (typeof error === "object" && error !== null && "message" in error) {
+              toast.error(`Error: ${error.message}`); // Mostrar el mensaje de error del backend
+            } else {
+              toast.error("Error al guardar el proveedor"); // Mensaje genérico si no hay detalles
+            }
           }
-      },
-      [dispatch, employee?.id_store, editingId, validateForm]
-  );
-
+        },
+        [dispatch, employee?.id_store, editingId, validateForm]
+      );
     return {
         providers: currentItems,
         isLoading,
