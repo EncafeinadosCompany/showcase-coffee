@@ -5,14 +5,14 @@ import { Dialog } from "@/components/ui/dialog";
 import { Provider } from "@/types/companies/provider";
 import { EmployeeListModal } from "./employeeList";
 import { AddEmployeeModal } from "./addEmployeeModal";
-import { Users, UserPlus } from "lucide-react";
+import { Users, UserPlus, Edit } from "lucide-react";
 
 interface ProviderDetailsProps {
   provider: Provider;
   onClose: () => void;
+  onEdit: (providerId: number) => void; 
 }
-
-export const ProviderDetails = React.memo(({ provider, onClose }: ProviderDetailsProps) => {
+export const ProviderDetails = React.memo(({ provider, onClose, onEdit }: ProviderDetailsProps) => {
   const [showEmployeeList, setShowEmployeeList] = useState(false);
   const [showAddEmployee, setShowAddEmployee] = useState(false);
 
@@ -74,6 +74,16 @@ export const ProviderDetails = React.memo(({ provider, onClose }: ProviderDetail
               <UserPlus size={20} />
               Agregar Empleado
             </Button>
+            <Button
+              onClick={() => {
+              onEdit(provider.id); 
+              onClose(); 
+              }}
+              className="bg-amber-600 hover:bg-amber-700 text-white rounded-full flex items-center gap-2"
+            >
+              <Edit size={20} />
+              Editar Proveedor
+            </Button>
           </div>
 
           <div className="mt-3">
@@ -122,7 +132,7 @@ export const ProviderDetails = React.memo(({ provider, onClose }: ProviderDetail
         </DialogFooter>
       </DialogContent>
 
-      {/* Employee List Dialog */}
+      
       <Dialog open={showEmployeeList} onOpenChange={setShowEmployeeList}>
         <EmployeeListModal
           providerId={provider.id}

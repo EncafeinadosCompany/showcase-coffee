@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Search, Grid, List } from "lucide-react";
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -28,14 +28,27 @@ export const ProvidersPage = () => {
     showDialog,
     setShowDialog,
     editingId,
+    setEditingId,
     handleSubmit,
   } = useProviders();
 
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null);
+  const [editingProvider, setEditingProvider] = useState<Provider | null>(null);
 
   const pagination = usePagination<Provider>({
     initialItemsPerPage: 5
   });
+
+  // Find the provider being edited whenever editingId changes
+  useEffect(() => {
+    if (editingId) {
+      const providerToEdit = providers.find(p => p.id === editingId) || null;
+      setEditingProvider(providerToEdit);
+      console.log("Setting editing provider:", providerToEdit);
+    } else {
+      setEditingProvider(null);
+    }
+  }, [editingId, providers]);
 
   const handleProviderClick = (provider: Provider) => { setSelectedProvider(provider) };
 
@@ -63,7 +76,7 @@ export const ProvidersPage = () => {
               <ProviderForm
                 editingId={editingId}
                 onSubmit={handleSubmit}
-                initialData={selectedProvider || undefined}
+                initialData={editingProvider || undefined}
               />
             </ScrollArea>
           </DialogContent>
@@ -88,7 +101,7 @@ export const ProvidersPage = () => {
             size="sm"
             className={`bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium`}
           >
-            <Grid className="mr-2 h-4 w-4" /> Cards
+            <Grid className="mr-2 h-4 w-4" /> Tarjetas
           </Button>
           <Button
             onClick={() => setViewMode("list")}
@@ -98,7 +111,6 @@ export const ProvidersPage = () => {
           >
             <List className="mr-2 h-4 w-4" /> Lista
           </Button>
-
         </div>
       </div>
 
@@ -117,7 +129,6 @@ export const ProvidersPage = () => {
           {viewMode === "cards" ? (
             <ScrollArea className="h-[400px]">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-
                 {currentPage.map((provider) => (
                   <ProviderCard
                     key={provider.id}
@@ -126,7 +137,6 @@ export const ProvidersPage = () => {
                   />
                 ))}
               </div>
-
             </ScrollArea>
           ) : (
             <ProviderTable
@@ -134,7 +144,6 @@ export const ProvidersPage = () => {
               onProviderClick={handleProviderClick}
             />
           )}
-
         </>
       )}
 
@@ -146,6 +155,13 @@ export const ProvidersPage = () => {
           <ProviderDetails
             provider={selectedProvider}
             onClose={() => setSelectedProvider(null)}
+            onEdit={(providerId) => {
+              setEditingId(providerId);
+              // Find provider by ID and set it for editing
+              const providerToEdit = providers.find(p => p.id === providerId) || null;
+              setEditingProvider(providerToEdit);
+              setShowDialog(true);
+            }}
           />
         </Dialog>
       )}
@@ -161,10 +177,7 @@ export const ProvidersPage = () => {
         />
       </div>
     </div>
-
-
   );
-
 };
 
 export default ProvidersPage;

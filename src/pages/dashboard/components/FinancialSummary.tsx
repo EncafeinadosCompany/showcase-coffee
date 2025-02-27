@@ -152,7 +152,7 @@ const FinancialSummary = ({ data, isLoading }: FinancialSummaryProps) => {
           </div>
 
           <div className="flex-1">
-            <p className="text-sm font-medium text-gray-500 mb-1">Transacciones {showMonthlySalesCount ? 'del Mes' : 'del Año'}</p>
+            <p className="text-sm font-medium text-gray-500 mb-1">Cantidad de Ventas {showMonthlySalesCount ? 'del Mes' : 'del Año'}</p>
             <div className="relative h-16">
               <div className={`absolute w-full transition-all duration-500 transform ${showMonthlySalesCount ? 'translate-y-0 opacity-100' : '-translate-y-8 opacity-0'}`}>
                 <p className="text-4xl font-bold text-gray-800">{salesCountMonth.toLocaleString()}</p>
