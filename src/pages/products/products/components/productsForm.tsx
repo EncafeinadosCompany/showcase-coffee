@@ -21,7 +21,6 @@ import { addImages } from "@/features/images/imageSlice"
 import toast from "react-hot-toast"
 import { productType } from "@/types/products/product"
 import confirmAction from "../../components/confirmation"
-import { fetchBrands } from "@/features/products/brands/brandSlice"
 type ProductFormValues = z.infer<typeof productSchema>
 
 export default function ProductForm() {
@@ -30,12 +29,10 @@ export default function ProductForm() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const { attributes } = useAppSelector((state) => state.attributes)
-  const {brands} = useAppSelector((state)=> state.brands)
   const navegate = useNavigate()
 
   useEffect(() => {
     dispatch(fetchAttributes())
-    dispatch(fetchBrands())
   },[dispatch])
 
   const form = useForm<ProductFormValues>({
