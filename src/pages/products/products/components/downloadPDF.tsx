@@ -300,7 +300,7 @@ export const generateProductPdf = async (product: Product) => {
         doc.setTextColor(colors.secondary);
         doc.setFontSize(fonts.title - 4); // Tamaño grande pero no excesivo
         doc.setFont("helvetica", "bold");
-        const gramaje = variant.grammage ? `${variant.grammage}g` : "N/A";
+        const gramaje = variant.grammage ? `${variant.grammage}` : "N/A";
         doc.text(gramaje, x + (cardWidth / 2), y + 25, {
           align: "center",
           baseline: "middle"
