@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { ArrowLeft, Plus, Search } from "lucide-react"
+import { Plus, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 import CartsProducts from "./components/cartsProducts"
@@ -37,17 +37,8 @@ export default function ProductosPage() {
     // last background: bg-[#F5E6D3]
     <div className="placeholder:space-y-1 px-2 h-full flex flex-col">
 
-      <div className="flex items-center justify-between mt-2">
-        <Link to="/details">
-        <Button variant="ghost" className="bg-none hover:bg-white rounded-xl text-amber-800 hover:text-amber-800">
-            <ArrowLeft className="mr-2 h-4 w-4 text-amber-800 " /> Volver
-          </Button>
-        </Link>
-      </div>
-
-      <div className="mb-5 text-center">
+      <div className="mb-3 flex justify-between items-center">
         <h1 className="title">Gestión de Productos</h1>
-        <p className="text-muted-foreground">Administra tu selección de cafés</p>
       </div>
 
       <div className="flex-grow overflow-auto md:max-h-[calc(100vh-200px)]">
@@ -69,7 +60,7 @@ export default function ProductosPage() {
               size="lg"
               className="bg-white hover:bg-amber-100 rounded-full text-amber-800 hover:text-amber-800 text-sm font-medium"
             >
-              <Plus className="mr-1 h-4 w-4 text-amber-800"/> Registrar Producto
+              <Plus className="mr-1 h-4 w-4 text-amber-800" /> Registrar Producto
             </Button>
           </Link>
         </div>
@@ -97,7 +88,7 @@ export default function ProductosPage() {
             currentPage={pagination.currentPage}
             onPageChange={pagination.handlePageChange}
             onItemsPerPageChange={pagination.handleItemsPerPageChange}
-            pageSizeOptions={[3, 4, 8, 16, 20]}
+            pageSizeOptions={[4, 12, 20]}
           />
         </div>
       )}

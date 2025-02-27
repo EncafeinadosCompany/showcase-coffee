@@ -90,7 +90,7 @@ export default function LiquidationModule() {
 
       <Card className="bg-white/80 backdrop-blur flex-1 flex flex-col max-h-[calc(100vh-150px)]">
         <CardContent className="p-0">
-          <div className="overflow-y-auto flex-1 max-h-[calc(100vh-250px)]">
+          <div className="overflow-y-auto flex-1 max-h-[calc(100vh-240px)]">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -166,7 +166,7 @@ export default function LiquidationModule() {
             </Table>
           </div>
           {/* Paginador */}
-          <div className="">
+          <div className="border-t">
             <Paginator
               totalItems={filteredProviders.length}
               itemsPerPage={pagination.itemsPerPage}
