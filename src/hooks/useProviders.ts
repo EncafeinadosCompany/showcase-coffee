@@ -85,28 +85,26 @@ export const useProviders = (itemsPerPage: number = 6) => {
     const handleSubmit = useCallback(
         async (providerData: Omit<Provider, "id">) => {
           if (!validateForm(providerData)) {
-            return; // Validación fallida, no continuar
+            return;
           }
       
           if (!employee?.id_store) {
             toast.error("No se encontró el ID de la tienda");
-            return; // No hay ID de tienda, no continuar
+            return; 
           }
       
           try {
             if (editingId !== null) {
-              // Editar proveedor existente
               await dispatch(
                 editProvider({ id: editingId.toString(), provider: providerData })
               ).unwrap();
               toast.success("Proveedor actualizado correctamente");
             } else {
-              // Crear nuevo proveedor
+            
               const newProvider = await dispatch(addProvider(providerData)).unwrap();
       
               if (newProvider?.id) {
                 try {
-                  // Asociar proveedor con la tienda
                   await dispatch(
                     associateProvider({
                       storeId: employee.id_store,
@@ -116,26 +114,23 @@ export const useProviders = (itemsPerPage: number = 6) => {
                 } catch (error) {
                   console.error("Error asociando proveedor con la tienda:", error);
                   toast.error("Error al asociar el proveedor con la tienda");
-                  return; // Detener el flujo si hay un error en la asociación
+                  return;
                 }
               }
               toast.success("¡Proveedor creado con éxito!");
             }
-      
-            // Reiniciar estados y cerrar el diálogo
+
             setEditingId(null);
             setShowDialog(false);
       
-            // Recargar la lista de proveedores
             await dispatch(fetchProvidersByStore(employee.id_store)).unwrap();
           } catch (error) {
             console.error("Error en handleSubmit:", error);
-      
-            // Mostrar un toast con el mensaje de error del backend
+
             if (typeof error === "object" && error !== null && "message" in error) {
-              toast.error(`Error: ${error.message}`); // Mostrar el mensaje de error del backend
+              toast.error(`Error: ${error.message}`); 
             } else {
-              toast.error("Error al guardar el proveedor"); // Mensaje genérico si no hay detalles
+              toast.error("Error al guardar el proveedor"); 
             }
           }
         },
