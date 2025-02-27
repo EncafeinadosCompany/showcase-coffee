@@ -41,6 +41,7 @@ export const HomePage = () => {
             <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900">
               <span className="block text-amber-800">Bienvenido a</span>
               <span className="block text-amber-600 mt-2">Encafeinados</span>
+              <span className="block text-amber-700 mt-1 text-5xl md:text-5xl font-semibold">vitrina</span>
             </h1>
             
             {employee && (

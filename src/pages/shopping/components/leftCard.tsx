@@ -24,6 +24,7 @@ import {
 import { showToast } from "@/features/common/toast/toastSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { fetchShopping } from "@/features/transactions/shoppingSlice";
+import {AddEmployeeModal} from "@/pages/providers/components/addEmployeeModal"; 
 
 export default function LeftCard({
   products,
@@ -37,12 +38,22 @@ export default function LeftCard({
   totalCompra: number;
 }) {
 
+  const [showAddEmployeeModal, setShowAddEmployeeModal] = useState(false); 
   const dispatch = useAppDispatch();
   const employee = useAppSelector((state) => state.auth.employee);
   const id_store = employee ? employee.id_store : null;
 
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(null);
   const [update, setUpdate] = useState(false);
+
+  const handleOpenAddEmployeeModal = () => {
+    setShowAddEmployeeModal(true);
+  };
+
+  // Función para cerrar la modal
+  const handleCloseAddEmployeeModal = () => {
+    setShowAddEmployeeModal(false);
+  };
 
   const handleGenerateConsignment = async () => {
     if (!id_store) {
@@ -118,12 +129,17 @@ export default function LeftCard({
       </ScrollArea>
       <CardFooter className="gap-20 border-t mt-auto ">
         <div className="w-[60%] flex flex-col gap-2">
-          <SelectEmployee update={update} onSelect={(employeeId: number) => setSelectedEmployeeId(employeeId)} />
+          {/* Pasar la función onAddEmployee al SelectEmployee */}
+          <SelectEmployee
+            update={update}
+            onSelect={(employeeId: number) => setSelectedEmployeeId(employeeId)}
+            onAddEmployee={handleOpenAddEmployeeModal} // Pasar la función para abrir la modal
+          />
           <button
             onClick={handleGenerateConsignment}
             className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white  py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200"
           >
-            Generar consignación
+            Agregar café a la vitrina
           </button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -158,6 +174,13 @@ export default function LeftCard({
           </span>
         </div>
       </CardFooter>
+
+      {/* Modal de agregar empleado */}
+      <AddEmployeeModal
+        providerId={undefined} // No se pasa providerId desde compras
+        onClose={handleCloseAddEmployeeModal}
+        isOpen={showAddEmployeeModal}
+      />
     </Card>
   );
 }

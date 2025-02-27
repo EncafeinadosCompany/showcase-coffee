@@ -33,7 +33,7 @@ export default function NewVariantDialog({ productoId }: { productoId: number; }
       dispatch(addVariant(nuevaVariante))
       .unwrap()
       .then(() => {
-        dispatch(showToast({ message: `La variante de ${gramaje}g ha sido agregada`, type: "success" }));
+        dispatch(showToast({ message: `La variante de ${gramaje} ha sido agregada`, type: "success" }));
         dispatch(fetchProducts());
       })
       .catch(() => {
@@ -50,7 +50,7 @@ export default function NewVariantDialog({ productoId }: { productoId: number; }
     <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
       <DialogTrigger asChild>
         <Button className="mt-4 bg-[#6F4E37] hover:bg-[#5A3E2B] text-white">
-          <Coffee className="mr-2 h-4 w-4" /> Agregar Variante
+          <Coffee className="mr-2 h-4 w-4" /> Agregar Gramaje
         </Button>
       </DialogTrigger>
       <DialogContent aria-describedby="dialog-description">

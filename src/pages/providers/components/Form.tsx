@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react";
-import { Plus, Trash2, Landmark, Building2, Mail, Phone, MapPin, } from "lucide-react";
+import React, { useState, useCallback, useEffect } from "react";
+import { Plus, Trash2, Landmark, Building2, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,8 +29,7 @@ interface ProviderFormProps {
 }
 
 const FormField = React.memo(
-  ({ label, name, icon: Icon, type = "text", value, error, onChange,
-  }: {
+  ({ label, name, icon: Icon, type = "text", value, error, onChange }: {
     label: string;
     name: string;
     icon: React.ElementType;
@@ -64,6 +63,7 @@ export const ProviderForm = ({
   onSubmit,
   initialData,
 }: ProviderFormProps) => {
+  // Inicializa el estado con los datos existentes si está en modo edición
   const [formData, setFormData] = useState<Omit<Provider, "id">>(
     initialData || {
       name: "",
@@ -77,6 +77,37 @@ export const ProviderForm = ({
   );
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Add this after your useState declarations
+  useEffect(() => {
+    // Log for debugging
+    console.log("Editing ID changed:", editingId);
+    console.log("Initial data received:", initialData);
+
+    // Reset form when switching between add/edit modes
+    if (!editingId && !initialData) {
+      setFormData({
+        name: "",
+        nit: "",
+        email: "",
+        phone: "",
+        address: "",
+        bankAccounts: [],
+        status: true,
+      });
+    } else if (initialData) {
+      // Ensure all expected fields are present
+      setFormData({
+        name: initialData.name || "",
+        nit: initialData.nit || "",
+        email: initialData.email || "",
+        phone: initialData.phone || "",
+        address: initialData.address || "",
+        bankAccounts: initialData.bankAccounts || [],
+        status: initialData.status ?? true,
+      });
+    }
+  }, [editingId, initialData]);
 
   const validateForm = useCallback(() => {
     const newErrors: Record<string, string> = {};
@@ -173,7 +204,6 @@ export const ProviderForm = ({
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
-
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center text-amber-600">
           {editingId ? "Actualizar Proveedor" : "Nuevo Proveedor"}
@@ -265,8 +295,7 @@ export const ProviderForm = ({
                           <SelectTrigger className={`rounded-xl ${errors[`bank-${index}`] ? "border-red-500" : ""}`}>
                             <SelectValue placeholder="Seleccionar banco" />
                           </SelectTrigger>
-
-                          <SelectContent >
+                          <SelectContent>
                             {BANK_OPTIONS.map((bank) => (
                               <SelectItem key={bank} value={bank} className="rounded-lg">
                                 {bank}
@@ -286,20 +315,15 @@ export const ProviderForm = ({
                         <Select
                           value={account.type_account}
                           onValueChange={(value) =>
-                            handleBankAccountChange(
-                              index,
-                              "type_account",
-                              value
-                            )
+                            handleBankAccountChange(index, "type_account", value)
                           }
                         >
-
                           <SelectTrigger className={`rounded-xl ${errors[`type-${index}`] ? "border-red-500" : ""}`}>
                             <SelectValue placeholder="Tipo" />
                           </SelectTrigger>
                           <SelectContent>
                             {ACCOUNT_TYPES.map((type) => (
-                              <SelectItem key={type} value={type} >
+                              <SelectItem key={type} value={type}>
                                 {type}
                               </SelectItem>
                             ))}
@@ -311,7 +335,7 @@ export const ProviderForm = ({
                           </span>
                         )}
                       </div>
-                      <div className="md:col-span-4 ">
+                      <div className="md:col-span-4">
                         <Label className="mb-2 block text-amber-800">Número de Cuenta</Label>
                         <Input
                           value={account.bank_account}
@@ -323,8 +347,7 @@ export const ProviderForm = ({
                             )
                           }
                           placeholder="0000000000"
-                          className={`rounded-xl w-full ${errors[`account-${index}`] ? "border-red-500" : ""
-                            }`}
+                          className={`rounded-xl w-full ${errors[`account-${index}`] ? "border-red-500" : ""}`}
                         />
                         {errors[`account-${index}`] && (
                           <span className="text-sm text-red-500">

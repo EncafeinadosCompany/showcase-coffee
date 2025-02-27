@@ -5,14 +5,14 @@ import { Dialog } from "@/components/ui/dialog";
 import { Provider } from "@/types/companies/provider";
 import { EmployeeListModal } from "./employeeList";
 import { AddEmployeeModal } from "./addEmployeeModal";
-import { Users, UserPlus } from "lucide-react";
+import { Users, UserPlus, Edit } from "lucide-react";
 
 interface ProviderDetailsProps {
   provider: Provider;
   onClose: () => void;
+  onEdit: (providerId: number) => void; 
 }
-
-export const ProviderDetails = React.memo(({ provider, onClose }: ProviderDetailsProps) => {
+export const ProviderDetails = React.memo(({ provider, onClose, onEdit }: ProviderDetailsProps) => {
   const [showEmployeeList, setShowEmployeeList] = useState(false);
   const [showAddEmployee, setShowAddEmployee] = useState(false);
 
@@ -21,12 +21,12 @@ export const ProviderDetails = React.memo(({ provider, onClose }: ProviderDetail
       <DialogContent className="max-w-2xl bg-white/95 max-h-[95vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-amber-600">
-        Detalles del Proveedor
+            Detalles del Proveedor
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div className="grid grid-cols-2  scrollbar-thin scrollbar-thumb-amber-200 scrollbar-track-amber-50gap-4">
-        <div>
+            <div>
               <span className="font-semibold text-amber-700">Nombre:</span>
               <p className="text-gray-700">{provider.name}</p>
             </div>
@@ -49,11 +49,10 @@ export const ProviderDetails = React.memo(({ provider, onClose }: ProviderDetail
             <div>
               <span className="font-semibold text-amber-700">Estado:</span>
               <span
-                className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
-                  provider.status
+                className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${provider.status
                     ? "bg-green-100 text-green-700"
                     : "bg-red-100 text-red-700"
-                }`}
+                  }`}
               >
                 {provider.status ? "Activo" : "Inactivo"}
               </span>
@@ -74,6 +73,16 @@ export const ProviderDetails = React.memo(({ provider, onClose }: ProviderDetail
             >
               <UserPlus size={20} />
               Agregar Empleado
+            </Button>
+            <Button
+              onClick={() => {
+              onEdit(provider.id); 
+              onClose(); 
+              }}
+              className="bg-amber-600 hover:bg-amber-700 text-white rounded-full flex items-center gap-2"
+            >
+              <Edit size={20} />
+              Editar Proveedor
             </Button>
           </div>
 
@@ -123,7 +132,7 @@ export const ProviderDetails = React.memo(({ provider, onClose }: ProviderDetail
         </DialogFooter>
       </DialogContent>
 
-      {/* Employee List Dialog */}
+      
       <Dialog open={showEmployeeList} onOpenChange={setShowEmployeeList}>
         <EmployeeListModal
           providerId={provider.id}
@@ -131,11 +140,12 @@ export const ProviderDetails = React.memo(({ provider, onClose }: ProviderDetail
         />
       </Dialog>
 
-    
-      <Dialog open={showAddEmployee} onOpenChange={setShowAddEmployee}>
+
+      <Dialog >
         <AddEmployeeModal
           providerId={provider.id}
           onClose={() => setShowAddEmployee(false)}
+          isOpen={showAddEmployee} // Pasa el estado de apertura como prop
         />
       </Dialog>
     </>
