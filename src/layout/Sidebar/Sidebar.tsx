@@ -44,7 +44,8 @@ const Sidebar: FC = () => {
   const sidebarItems: SidebarItem[] = [
     { icon: <LayoutDashboard />, label: 'Dashboard', path: '/dashboard' },
     { icon: <Users />, label: 'Proveedores', path: '/providers' },
-    { icon: <Coffee />, label: 'Productos', path: '/details' },
+    { icon: <Coffee />, label: 'Marcas', path: '/brands' },
+    { icon: <Coffee />, label: 'Productos', path: '/products' },
     { icon: <ShoppingBasket />, label: 'Compras', path: '/shopping' },
     { icon: <BadgeDollarSign />, label: 'Ventas', path: '/sales' },
     { icon: <ScrollText />, label: 'Liquidaciones', path: '/liquidations' },

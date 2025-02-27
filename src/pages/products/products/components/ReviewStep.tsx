@@ -1,24 +1,33 @@
-const BRANDS = [
-    { id: 1, name: "Café Delicioso", description: "Una marca premium de café" },
-    { id: 2, name: "Aroma Intenso", description: "Café de origen único" }
-]
+
 
 import * as z from "zod"
 import { UseFormReturn} from "react-hook-form";
 import { productSchema } from "./validation";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-
+import { fetchBrands } from "@/features/products/brands/brandSlice";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { useEffect } from "react";
 
 type ProductFormValues = z.infer<typeof productSchema>
 interface ReviewStepProps {
   form: UseFormReturn<ProductFormValues>;
 }
 
+
+
 export default function ReviewStep({ form }: ReviewStepProps) {
     const { watch } = form
     const values = watch()
-    const selectedBrand = BRANDS.find((brand) => brand.id === values.id_brand)
-  
+
+
+    const dispatch = useAppDispatch();
+const {brands} = useAppSelector((state) => state.brands) || {brands: []}
+
+useEffect(() => {
+  dispatch(fetchBrands())
+},[dispatch])
+    
     return (
       <div className="space-y-4 flex gap-5 ">
         <div className="space-y-4 w-[50%]">
@@ -27,7 +36,7 @@ export default function ReviewStep({ form }: ReviewStepProps) {
             <strong className="text-gray-700 font-medium">Nombre:</strong> {values.name}
           </p>
           <p>
-            <strong className="text-gray-700 font-medium">Marca:</strong> {selectedBrand?.name}
+            <strong className="text-gray-700 font-medium">Marca:</strong> {values.id_brand ? brands.find((brand) => brand.id === values.id_brand)?.name : "No seleccionaste ninguna marca"}
           </p>
           <p>
             <strong className="text-gray-700 font-medium">Estado:</strong> {values.status ? "Activo" : "Inactivo"}

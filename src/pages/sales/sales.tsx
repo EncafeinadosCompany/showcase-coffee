@@ -10,7 +10,7 @@ import { ListIcon, XIcon } from "lucide-react";
 import Cart from "./components/cart";
 import Payment from "./components/payment";
 import Products from "./components/products";
-import { SalesTable } from "./components/salesList";
+import { SalesTable } from "./components/saleslist";
 import { showToast } from "@/features/common/toast/toastSlice";
 
 export default function Sales() {

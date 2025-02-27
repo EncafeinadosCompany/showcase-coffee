@@ -36,10 +36,9 @@ export const ProvidersPage = () => {
   const [editingProvider, setEditingProvider] = useState<Provider | null>(null);
 
   const pagination = usePagination<Provider>({
-    initialItemsPerPage: 5
+    initialItemsPerPage: 3
   });
 
-  // Find the provider being edited whenever editingId changes
   useEffect(() => {
     if (editingId) {
       const providerToEdit = providers.find(p => p.id === editingId) || null;
@@ -55,7 +54,7 @@ export const ProvidersPage = () => {
   const currentPage = pagination.paginatedData(providers);
 
   return (
-    <div className="p-2 h-full space-y-3">
+    <div className="p-2 h-full space-y-2">
       <div className="flex justify-between items-center">
         <h1 className="title">
           Gestión de Proveedores
@@ -107,7 +106,7 @@ export const ProvidersPage = () => {
             onClick={() => setViewMode("list")}
             variant={viewMode === "list" ? "default" : "outline"}
             size="sm"
-            className={`bg-white hover:bg-amber-100 rounded-full text-amber-800 text-sm font-medium`}
+            className={`bg-white hover:bg-amber-100 hover:text-amber-800 rounded-full text-amber-800 text-sm font-medium`}
           >
             <List className="mr-2 h-4 w-4" /> Lista
           </Button>
@@ -173,7 +172,7 @@ export const ProvidersPage = () => {
           currentPage={pagination.currentPage}
           onPageChange={pagination.handlePageChange}
           onItemsPerPageChange={pagination.handleItemsPerPageChange}
-          pageSizeOptions={[3, 9, 12, 20]}
+          pageSizeOptions={[3, 9, 20]}
         />
       </div>
     </div>
