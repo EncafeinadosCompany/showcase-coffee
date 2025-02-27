@@ -7,7 +7,7 @@ const confirmAction = (
   yes: string,
   onProceed: () => void,
   onCancel: () => void,
-  timeoutSeconds: number = 10
+  timeoutSeconds: number = 5
 ) => {
   toast(
     (t) => {
@@ -30,7 +30,7 @@ const confirmAction = (
       }, []);
       
       return (
-        <div className="flex flex-col gap-4 items-center max-w-md w-full">
+        <div className="flex flex-col gap-4 items-center rounded-lg max-w-md w-full">
           <p className="text-xl font-bold text-[#b45309] text-center">{yes}</p>
           <p className="text-sm text-gray-700 text-center">{message}</p>
           <div className="w-full bg-gray-200 h-2 rounded-full mt-2">
@@ -49,7 +49,7 @@ const confirmAction = (
                 toast.dismiss(t.id);
                 onProceed();
               }}
-              className="bg-amber-700 text-white px-6 py-3 rounded-md hover:bg-amber-600 font-medium text-lg"
+              className="bg-amber-700 text-white px-6 py-3 rounded-xl hover:bg-amber-600 font-medium text-lg"
             >
               Sí
             </Button>
@@ -59,7 +59,7 @@ const confirmAction = (
                 toast.dismiss(t.id);
                 onCancel();
               }}
-              className="bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 font-medium text-lg"
+              className="bg-black text-white px-6 py-3 rounded-xl hover:bg-gray-800 font-medium text-lg"
             >
               No
             </Button>

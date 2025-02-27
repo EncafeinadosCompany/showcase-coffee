@@ -16,7 +16,7 @@ import Brands from "@/pages/products/brands/brands";
 import ProductosPage from "@/pages/products/products/products";
 import NotFound from "@/pages/404/404";
 import ProductForm from "@/pages/products/products/components/productsForm";
-import FormBrand from "@/pages/products/brands/components/formBrands";
+import BrandFormContainer from "@/pages/products/brands/components/brandFormContainer";
 import SalesHistory from "@/pages/sales/salesHistory";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
@@ -54,7 +54,7 @@ export function AppRouter() {
           <Route path="/form-products" element={<PrivateRoute><ProductForm /></PrivateRoute>} />
 
           <Route path="/brands" element={<PrivateRoute><Brands /></PrivateRoute>} />
-          <Route path="/form-brands" element={<PrivateRoute><FormBrand /></PrivateRoute>} />
+          <Route path="/form-brands" element={<PrivateRoute><BrandFormContainer/></PrivateRoute>} />
 
           <Route path="/variants" element={<PrivateRoute><VariantsPage /></PrivateRoute>} />
 
