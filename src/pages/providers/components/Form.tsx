@@ -63,7 +63,6 @@ export const ProviderForm = ({
   onSubmit,
   initialData,
 }: ProviderFormProps) => {
-  // Inicializa el estado con los datos existentes si está en modo edición
   const [formData, setFormData] = useState<Omit<Provider, "id">>(
     initialData || {
       name: "",
@@ -77,14 +76,7 @@ export const ProviderForm = ({
   );
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // Add this after your useState declarations
   useEffect(() => {
-    // Log for debugging
-    console.log("Editing ID changed:", editingId);
-    console.log("Initial data received:", initialData);
-
-    // Reset form when switching between add/edit modes
     if (!editingId && !initialData) {
       setFormData({
         name: "",
@@ -96,7 +88,6 @@ export const ProviderForm = ({
         status: true,
       });
     } else if (initialData) {
-      // Ensure all expected fields are present
       setFormData({
         name: initialData.name || "",
         nit: initialData.nit || "",
@@ -212,7 +203,7 @@ export const ProviderForm = ({
 
       <CardContent>
         <form onSubmit={handleSubmitWrapper} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-amber-800">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-amber-800">
             <FormField
               label="Nombre"
               name="name"
@@ -227,7 +218,11 @@ export const ProviderForm = ({
               icon={Building2}
               value={formData.nit}
               error={errors.nit}
-              onChange={handleInputChange}
+              onChange={(e) => {
+              const numericValue = e.target.value.replace(/\D/g, '');
+              const event = { ...e, target: { ...e.target, name: 'nit', value: numericValue } };
+              handleInputChange(event);
+              }}
             />
             <FormField
               label="Correo Electrónico"
@@ -244,9 +239,13 @@ export const ProviderForm = ({
               icon={Phone}
               value={formData.phone}
               error={errors.phone}
-              onChange={handleInputChange}
+              onChange={(e) => {
+              const numericValue = e.target.value.replace(/\D/g, '');
+              const event = { ...e, target: { ...e.target, name: 'phone', value: numericValue } };
+              handleInputChange(event);
+              }}
             />
-          </div>
+            </div>
           <div className="text-amber-800">
             <FormField
               label="Dirección"
