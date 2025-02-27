@@ -31,7 +31,7 @@ type FormData = {
 
 const validationSchema = yup.object().shape({
   name: yup.string().required("Su nombre es importante para nosotros"),
-  lastName: yup.string().required("¿Y el apellido para cuando?"),
+  lastName: yup.string().required("El apellido es necesario"),
   identification: yup.string(),
   email: yup.string().email("Ingrese un email válido").required("El email es obligatorio"),
   phone: yup
@@ -107,7 +107,7 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose, isOpen }: Add
                     control={control}
                     render={({ field }) => (
                       <Select onValueChange={field.onChange} value={field.value?.toString()}>
-                        <SelectTrigger>
+                        <SelectTrigger className="rounded-xl">
                           <SelectValue placeholder="Seleccione un proveedor" />
                         </SelectTrigger>
                         <SelectContent>
@@ -132,7 +132,7 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose, isOpen }: Add
                 Nombre
               </Label>
               <div className="col-span-3">
-                <Input id="name" {...register("name")} />
+                <Input className="rounded-xl" id="name" {...register("name")} />
                 {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
               </div>
             </div>
@@ -143,7 +143,7 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose, isOpen }: Add
                 Apellido
               </Label>
               <div className="col-span-3">
-                <Input id="lastName" {...register("lastName")} />
+                <Input className="rounded-xl" id="lastName" {...register("lastName")} />
                 {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
               </div>
             </div>
@@ -154,7 +154,7 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose, isOpen }: Add
                 Número de Documento
               </Label>
               <div className="col-span-3">
-                <Input id="identification" {...register("identification")} />
+                <Input className="rounded-xl" id="identification" {...register("identification")} />
                 {errors.identification && <p className="text-red-500 text-sm">{errors.identification.message}</p>}
               </div>
             </div>
@@ -165,7 +165,7 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose, isOpen }: Add
                 Correo electrónico
               </Label>
               <div className="col-span-3">
-                <Input id="email" {...register("email")} />
+                <Input className="rounded-xl" id="email" {...register("email")} />
                 {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
               </div>
             </div>
@@ -177,6 +177,7 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose, isOpen }: Add
               </Label>
               <div className="col-span-3">
                 <Input
+                className="rounded-xl"
                   id="phone"
                   type="tel"
                   {...register("phone")}
