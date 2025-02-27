@@ -70,7 +70,7 @@ export const ProvidersPage = () => {
         </h1>
 
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
-          {/* Modified the DialogTrigger to use our new handler function */}
+
           <Button
             onClick={handleNewProviderClick}
             size="lg"
@@ -165,7 +165,6 @@ export const ProvidersPage = () => {
             onClose={() => setSelectedProvider(null)}
             onEdit={(providerId) => {
               setEditingId(providerId);
-              // Find provider by ID and set it for editing
               const providerToEdit = providers.find(p => p.id === providerId) || null;
               setEditingProvider(providerToEdit);
               setShowDialog(true);

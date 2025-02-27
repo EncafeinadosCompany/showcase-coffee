@@ -204,47 +204,49 @@ export const ProviderForm = ({
       <CardContent>
         <form onSubmit={handleSubmitWrapper} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-amber-800">
-            <FormField
-              label="Nombre"
-              name="name"
-              icon={Building2}
-              value={formData.name}
-              error={errors.name}
-              onChange={handleInputChange}
-            />
-            <FormField
-              label="NIT"
-              name="nit"
-              icon={Building2}
-              value={formData.nit}
-              error={errors.nit}
-              onChange={(e) => {
-              const numericValue = e.target.value.replace(/\D/g, '');
-              const event = { ...e, target: { ...e.target, name: 'nit', value: numericValue } };
-              handleInputChange(event);
-              }}
-            />
-            <FormField
-              label="Correo Electrónico"
-              name="email"
-              icon={Mail}
-              type="email"
-              value={formData.email}
-              error={errors.email}
-              onChange={handleInputChange}
-            />
-            <FormField
-              label="Teléfono"
-              name="phone"
-              icon={Phone}
-              value={formData.phone}
-              error={errors.phone}
-              onChange={(e) => {
-              const numericValue = e.target.value.replace(/\D/g, '');
-              const event = { ...e, target: { ...e.target, name: 'phone', value: numericValue } };
-              handleInputChange(event);
-              }}
-            />
+              <FormField
+                label="Nombre"
+                name="name"
+                icon={Building2}
+                value={formData.name}
+                error={errors.name}
+                onChange={handleInputChange}
+              />
+              <FormField
+                label="NIT"
+                name="nit"
+                icon={Building2}
+                value={formData.nit}
+                error={errors.nit}
+                onChange={(e) => {
+                  // Only allow numbers and dashes
+                  const validValue = e.target.value.replace(/[^\d-]/g, '');
+                  const event = { ...e, target: { ...e.target, name: 'nit', value: validValue } };
+                  handleInputChange(event);
+                }}
+              />
+              <FormField
+                label="Correo Electrónico"
+                name="email"
+                icon={Mail}
+                type="email"
+                value={formData.email}
+                error={errors.email}
+                onChange={handleInputChange}
+              />
+              <FormField
+                label="Teléfono"
+                name="phone"
+                icon={Phone}
+                value={formData.phone}
+                error={errors.phone}
+                onChange={(e) => {
+                  // Only allow numbers and dashes
+                  const validValue = e.target.value.replace(/[^\d-]/g, '');
+                  const event = { ...e, target: { ...e.target, name: 'phone', value: validValue } };
+                  handleInputChange(event);
+                }}
+              />
             </div>
           <div className="text-amber-800">
             <FormField

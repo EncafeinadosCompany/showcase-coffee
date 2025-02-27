@@ -63,7 +63,7 @@ export const useProviders = (itemsPerPage: number = 6) => {
                 return false;
             }
             if (!formData.nit?.trim() || !/^[\d-]+$/.test(formData.nit)) {
-                toast("El NIT debe ser un valor numérico o contener guiones", { icon: "⚠️" });
+                toast("El  NIT debe ser un valor numérico o contener guiones", { icon: "⚠️" });
                 return false;
             }
             if (
