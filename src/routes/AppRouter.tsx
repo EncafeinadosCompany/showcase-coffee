@@ -54,7 +54,7 @@ export function AppRouter() {
           <Route path="/form-products" element={<PrivateRoute><ProductForm /></PrivateRoute>} />
 
           <Route path="/brands" element={<PrivateRoute><Brands /></PrivateRoute>} />
-          <Route path="/form-brands/:id?" element={<PrivateRoute><FormBrand/></PrivateRoute>} />
+          <Route path="/form-brands" element={<PrivateRoute><BrandFormContainer/></PrivateRoute>} />
 
           <Route path="/variants" element={<PrivateRoute><VariantsPage /></PrivateRoute>} />
 
