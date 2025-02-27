@@ -17,6 +17,7 @@ import ProductosPage from "@/pages/products/products/products";
 import NotFound from "@/pages/404/404";
 import ProductForm from "@/pages/products/products/components/productsForm";
 import FormBrand from "@/pages/products/brands/components/formBrands";
+import SalesHistory from "@/pages/sales/salesHistory";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -59,6 +60,7 @@ export function AppRouter() {
 
           <Route path="/shopping" element={<PrivateRoute><Shopping /></PrivateRoute>} />
           <Route path="/sales" element={<PrivateRoute><Sales /></PrivateRoute>} />
+          <Route path="/salesHistory" element={<PrivateRoute><SalesHistory /></PrivateRoute>} />
           <Route path="/liquidations" element={<PrivateRoute><Liquidation /></PrivateRoute>} />
 
         </Route>
