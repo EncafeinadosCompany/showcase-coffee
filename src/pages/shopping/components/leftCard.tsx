@@ -139,7 +139,7 @@ export default function LeftCard({
             onClick={handleGenerateConsignment}
             className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white  py-2 px-4 rounded-xl text-sm font-medium transition-colors duration-200"
           >
-            Generar consignación
+            Agregar café a la vitrina
           </button>
           <AlertDialog>
             <AlertDialogTrigger asChild>

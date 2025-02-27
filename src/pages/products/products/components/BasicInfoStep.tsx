@@ -56,7 +56,8 @@ export default function BasicInfoStep({
   const { brands = [] } = useAppSelector((state) => state.brands) || {
     brands: [],
   };
-    const [open, setOpen] = React.useState(false);
+  
+  const [open, setOpen] = React.useState(false);
   
 
   const dispatch = useAppDispatch();
@@ -76,7 +77,7 @@ export default function BasicInfoStep({
       );
 
       if (exist) {
-        toast.error("El producto ya existe", {id: "product-exists"});
+        toast.error("El producto ya existe", {id: "product-exists", duration: 1000});
         form.setValue("name", productName || "");
       }
     });

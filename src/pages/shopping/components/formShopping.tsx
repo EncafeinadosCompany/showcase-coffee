@@ -164,7 +164,7 @@ export default function FormShopping({
     <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
       <DialogTrigger asChild>
         <Button className="w-full mt-2 bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 text-sm font-medium  transition-colors duration-200 rounded-sm">
-          Agregar
+          Consignar
         </Button>
       </DialogTrigger>
       <DialogContent aria-describedby="dialog-description">

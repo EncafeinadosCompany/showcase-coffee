@@ -36,6 +36,7 @@ const validationSchema = yup.object().shape({
   email: yup.string().email("Ingrese un email válido").required("El email es obligatorio"),
   phone: yup
     .string()
+    .matches(/^[0-9]*$/, "El teléfono solo puede contener números") // Evita letras completamente
     .matches(/^3[0-9]{9}$/, "El teléfono debe tener 10 dígitos y comenzar con 3")
     .required("El teléfono es obligatorio"),
   id_provider: yup.number().when('providerId', (providerId, schema) => {
@@ -56,7 +57,7 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose, isOpen }: Add
     }
   }, [isOpen, dispatch]);
 
-  const { register, handleSubmit, control, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, control, formState: { errors }, setValue  } = useForm<FormData>({
     resolver: yupResolver(validationSchema),
     defaultValues: {
       id_provider: providerId || undefined,
@@ -175,8 +176,25 @@ export const AddEmployeeModal = React.memo(({ providerId, onClose, isOpen }: Add
                 Teléfono
               </Label>
               <div className="col-span-3">
-                <Input id="phone" type="tel" {...register("phone")} />
-                {errors.phone && <p className="text-red-500 text-sm">{errors.phone.message}</p>}
+                <Input
+                  id="phone"
+                  type="tel"
+                  {...register("phone")}
+                  maxLength={10}
+                  onInput={(e) => {
+                    const input = e.currentTarget;
+                    input.value = input.value.replace(/\D/g, ""); // Elimina caracteres no numéricos
+                    setValue("phone", input.value);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key.match(/[^0-9]/) && e.key !== "Backspace") {
+                      e.preventDefault(); // Bloquea letras en el teclado
+                    }
+                  }}
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm">{errors.phone.message}</p>
+                )}
               </div>
             </div>
 
