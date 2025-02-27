@@ -6,6 +6,8 @@ import { useAppSelector } from "@/hooks/useAppSelector";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useEffect } from "react";
 import { fetchEmployees } from "@/features/users/employees/employeeSlice";
+import { Plus } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const useEmployees = () => {
   const dispatch = useAppDispatch();
@@ -25,9 +27,10 @@ const useEmployees = () => {
 type SelectEmployeeProps = {
   onSelect: (employeeId: number) => void;
   update: boolean;
+  onAddEmployee?: () => void;
 };
 
-export default function SelectEmployee({ onSelect, update }: SelectEmployeeProps) {
+export default function SelectEmployee({ onSelect, update, onAddEmployee }: SelectEmployeeProps) {
   const [open, setOpen] = React.useState(false);
   const { employees, isLoading, error } = useEmployees();
   const [selectedEmployee, setSelectedEmployee] = React.useState<{
@@ -54,7 +57,19 @@ export default function SelectEmployee({ onSelect, update }: SelectEmployeeProps
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0" side="right" align="start">
+        <PopoverContent className="p-0 relative" side="right" align="start">
+          {/* Botón de agregar empleado */}
+          <div className="absolute p-1 right-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              title="Agregar empleado"
+              onClick={onAddEmployee} // Abrir la modal de agregar empleados
+            >
+              <Plus className="w-4 h-4" />
+            </Button>
+          </div>
+
           <Command>
             <CommandInput placeholder="Buscar empleado..." />
             <CommandList>
@@ -65,24 +80,26 @@ export default function SelectEmployee({ onSelect, update }: SelectEmployeeProps
                     ? "Cargando..."
                     : "No se encontraron empleados."}
               </CommandEmpty>
-              <CommandGroup>
-                {employees.map((employee) => (
-                  <CommandItem
-                    key={employee.id}
-                    value={employee.name}
-                    onSelect={() => {
-                      setSelectedEmployee({
-                        id: employee.id,
-                        name: `${employee.name} ${employee.last_name}`,
-                      });
-                      onSelect(employee.id);
-                      setOpen(false);
-                    }}
-                  >
-                    {`${employee.name} ${employee.last_name}`}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
+              <ScrollArea className="h-20">
+                <CommandGroup>
+                  {employees.map((employee) => (
+                    <CommandItem
+                      key={employee.id}
+                      value={employee.name}
+                      onSelect={() => {
+                        setSelectedEmployee({
+                          id: employee.id,
+                          name: `${employee.name} ${employee.last_name}`,
+                        });
+                        onSelect(employee.id);
+                        setOpen(false);
+                      }}
+                    >
+                      {`${employee.name} ${employee.last_name}`}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </ScrollArea>
             </CommandList>
           </Command>
         </PopoverContent>

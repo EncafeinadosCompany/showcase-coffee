@@ -33,7 +33,7 @@ export default function NewVariantDialog({ productoId }: { productoId: number; }
       dispatch(addVariant(nuevaVariante))
       .unwrap()
       .then(() => {
-        dispatch(showToast({ message: `La variante de ${gramaje}g ha sido agregada`, type: "success" }));
+        dispatch(showToast({ message: `La variante de ${gramaje} ha sido agregada`, type: "success" }));
         dispatch(fetchProducts());
       })
       .catch(() => {
