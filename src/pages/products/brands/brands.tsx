@@ -15,6 +15,7 @@ import { Brand } from "@/types/products/PDF";
 import usePagination from "@/components/hooks/usePagination";
 import Paginator from "@/components/common/paginator";
 import { CardContent } from "@/components/ui/card";
+import BrandForms from "./components/formBrand";
 
 const getSocialIcon = (name: string) => {
   switch (name.toLowerCase()) {
@@ -100,6 +101,11 @@ export default function Brands() {
                         <DialogHeader>
                           <DialogTitle className="text-2xl font-bold">
                             {coffee.name}
+                            <Link to= {`/form-brands/${coffee.id}`}>
+                            <Button variant="outline" className="bg-white hover:bg-amber-100 rounded-full text-amber-800 hover:text-amber-800 text-sm font-medium">
+                            Editar
+                            </Button>
+                            </Link>
                           </DialogTitle>
                         </DialogHeader>
                         <ScrollArea className="mt-4 max-h-[60vh] overflow-auto pr-4">

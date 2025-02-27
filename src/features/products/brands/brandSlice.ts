@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getBrandById, getBrands, createBrand, updateBrand, deleteBrand } from "./brandService";
+import { getBrandById, getBrands, createBrand, deleteBrand, editBrand } from "./brandService";
 import { BrandType, brandType } from "@/types/products/brand";
 
 interface BrandState {
@@ -40,13 +40,16 @@ export const addBrand = createAsyncThunk("brands/add", async (brand: Omit<BrandT
   }
 });
 
-export const updateBrandById = createAsyncThunk("brands/update", async ({ id, brand }: { id: string | number; brand: Partial<brandType> }, { rejectWithValue }) => {
-  try {
-    return await updateBrand(id, brand);
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Error al actualizar marca");
+export const editBrandById = createAsyncThunk(
+  "brands/edit",
+  async ({ id, brand }: { id: string | number; brand: Partial<BrandType> }, { rejectWithValue }) => {
+    try {
+      return await editBrand(id, brand);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error al editar marca");
+    }
   }
-});
+);
 
 export const deleteBrandById = createAsyncThunk("brands/delete", async (id: string | number, { rejectWithValue }) => {
   try {
@@ -104,6 +107,21 @@ const brandSlice = createSlice({
 
       .addCase(deleteBrandById.fulfilled, (state, action) => {
         state.brands = state.brands.filter((brand) => brand.id !== action.payload);
+      })
+
+      .addCase(editBrandById.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(editBrandById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.brands = state.brands.map((brand) =>
+          brand.id === action.payload.id ? action.payload : brand
+        )
+      })
+      .addCase(editBrandById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       });
   },
 });

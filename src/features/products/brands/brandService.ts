@@ -16,7 +16,7 @@ export const createBrand = async (brand: Omit<BrandType, "id">) => {
   return response.data;
 };
 
-export const updateBrand = async (id: string | number, brand: Partial<brandType>) => {
+export const editBrand = async (id: string | number, brand: Partial<BrandType>) => {
   const response = await axiosInstance.put(`/products/brands/${id}`, brand);
   return response.data;
 };

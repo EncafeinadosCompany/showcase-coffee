@@ -2,10 +2,10 @@ import { BrandSocialNetworkType } from "./socialNetwork";
 import * as z from "zod";
 
 export type brandType = {
-    id: number;
+    id?: number;
     name: string;
     image_url: string | null;
-    razon: string | null;
+    purpose: string | null;
     description: string;
     created_at: string;
     updated_at: string;
@@ -21,6 +21,7 @@ export type brandType = {
   };
 
 export type BrandType = {
+  id?: number;
   name: string;
   image_url: string | null;
   purpose: string | null;
