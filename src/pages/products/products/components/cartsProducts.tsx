@@ -6,7 +6,7 @@ import { List } from "lucide-react";
 import { motion } from "framer-motion";
 import AttributeModal from "@/pages/products/products/components/attributesModal";
 import VariantModal from "@/pages/products/products/components/VariantModal";
-import ProductPage from "./example-usage";
+// import ProductPage from "./example-usage";
 export default function CartsProducts({ products }: { products: productType }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
@@ -53,7 +53,6 @@ export default function CartsProducts({ products }: { products: productType }) {
             product_name={products.name}
             imagen={products?.image_url}
           />
-          <ProductPage />
         </div>
       </CardFooter>
     </Card>

@@ -21,7 +21,6 @@ import { addImages } from "@/features/images/imageSlice"
 import toast from "react-hot-toast"
 import { productType } from "@/types/products/product"
 import confirmAction from "../../components/confirmation"
-import { fetchBrands } from "@/features/products/brands/brandSlice"
 type ProductFormValues = z.infer<typeof productSchema>
 
 export default function ProductForm() {
@@ -34,8 +33,7 @@ export default function ProductForm() {
 
   useEffect(() => {
     dispatch(fetchAttributes())
-    dispatch(fetchBrands())
-  }, [dispatch])
+  },[dispatch])
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
