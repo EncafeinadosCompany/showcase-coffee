@@ -117,7 +117,7 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
             </Table>
           </div>
 
-          <div className="border-t">
+          <div className="">
             <Paginator
               totalItems={filteredShopping.length}
               itemsPerPage={pagination.itemsPerPage}

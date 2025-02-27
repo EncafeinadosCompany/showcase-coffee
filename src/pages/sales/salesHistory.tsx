@@ -45,16 +45,17 @@ export default function SalesHistory() {
 
   return (
     <div className="h-full w-full p-2 space-y-3 overflow-hidden">
-      <div className="flex justify-between items-center mb-4">
+
+      <div className="flex justify-between items-center">
         <h1 className="title">Historial de Ventas</h1>
       </div>
 
-      <div className="space-y-1 h-full flex flex-col">
+      <div className="space-y-3 h-full flex flex-col">
         <SalesFilters sales={sales} onFilterChange={setFilteredSales} />
 
         <Card className="bg-white/80 backdrop-blur flex-1 flex flex-col max-h-[calc(100vh-150px)]">
           <CardContent className="p-0 flex-1 flex flex-col">
-            <div className="overflow-y-auto flex-1 max-h-[calc(100vh-240px)]">
+            <div className="overflow-y-auto flex-1 max-h-[calc(100vh-200px)]">
               <Table>
                 <TableHeader>
                   <TableRow className="hover:bg-amber-50">
@@ -101,7 +102,7 @@ export default function SalesHistory() {
             </div>
 
             {/* Paginador (siempre visible) */}
-            <div className="border-t">
+            <div className="">
               <Paginator
                 totalItems={filteredSales.length}
                 itemsPerPage={pagination.itemsPerPage}

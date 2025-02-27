@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Search, Grid, List } from "lucide-react";
 
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -173,7 +173,7 @@ export const ProvidersPage = () => {
         </Dialog>
       )}
 
-      <div className="border-t">
+      <div className="">
         <Paginator
           totalItems={providers.length}
           itemsPerPage={pagination.itemsPerPage}
