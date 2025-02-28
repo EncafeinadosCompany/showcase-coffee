@@ -15,7 +15,7 @@ import Dashboard from "@/pages/dashboard/dashboard";
 import Brands from "@/pages/products/brands/brands";
 import ProductosPage from "@/pages/products/products/products";
 import NotFound from "@/pages/404/404";
-import ProductForm from "@/pages/products/products/components/productsForm";
+import ProductForm from "@/pages/products/products/components/form/productsForm";
 import BrandFormContainer from "@/pages/products/brands/components/brandFormContainer";
 import SalesHistory from "@/pages/sales/salesHistory";
 import ShoppingTable  from "@/pages/shopping/shoppingList";

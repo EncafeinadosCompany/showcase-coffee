@@ -7,7 +7,7 @@ import * as z from "zod"
 import { ChevronRight, ChevronLeft, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import BasicInfoStep from "./BasicInfoStep"
 import AttributesStep from "./AttributesStep"
 import ReviewStep from "./ReviewStep"
@@ -20,7 +20,7 @@ import { addProducts } from "@/features/products/products/productSlice"
 import { addImages } from "@/features/images/imageSlice"
 import toast from "react-hot-toast"
 import { productType } from "@/types/products/product"
-import confirmAction from "../../components/confirmation"
+import confirmAction from "../../../components/confirmation"
 type ProductFormValues = z.infer<typeof productSchema>
 
 export default function ProductForm() {
@@ -33,7 +33,7 @@ export default function ProductForm() {
 
   useEffect(() => {
     dispatch(fetchAttributes())
-  },[dispatch])
+  }, [dispatch])
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -131,97 +131,97 @@ export default function ProductForm() {
   const CurrentStepComponent = steps[currentStep - 1].component
 
   return (
-    <div className="w-full h-full p-2 ">
+    <div className="h-full w-full overflow-hidden">
+
       <Link to="/products">
         <Button variant="ghost" className="bg-none hover:bg-white rounded-xl text-amber-800 hover:text-amber-800"
           onClick={() => form.reset()}>
           <ArrowLeft className="mr-2 h-4 w-4 text-amber-800 " /> Volver
-
         </Button>
       </Link>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <Card className="mt-4 w-full">
-            <CardHeader>
-              <CardTitle className="text-[#6F4E37]">{steps[currentStep - 1].title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CurrentStepComponent
-                form={form}
-                imagePreview={imagePreview}
-                handleImageChange={handleImageChange}
-                fields={fields}
-                append={append}
-                remove={remove}
-              />
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              {currentStep > 1 && (
-                <Button
-                  type="button"
-                  onClick={() => setCurrentStep((prev) => prev - 1)}
-                  variant="outline"
-                  className="text-[#6F4E37] rounded-sm"
-                >
-                  <ChevronLeft className="mr-2 h-4 w-4" /> Anterior
-                </Button>
-              )}
-              {currentStep < steps.length && (
-                <Button
-                  type="button"
-                  onClick={async () => {
-                    if (currentStep === 1) {
-                      const fieldsToValidateStep1: (keyof ProductFormValues)[] = [
-                        "id_brand",
-                        "image_url",
-                        "name",
-                      ];
-                      const isValid1 = await form.trigger(fieldsToValidateStep1);
+      <div className="space-y-3 h-full flex flex-col">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 w-full ">
+          <Card className="h-full flex flex-col">
 
-                      if (!isValid1) {
-                        toast.error("Complete los campos requeridos", { id: "basic" });
-                        return;
+              <CardContent className="flex-1 overflow-auto">
+                <CurrentStepComponent
+                  form={form}
+                  imagePreview={imagePreview}
+                  handleImageChange={handleImageChange}
+                  fields={fields}
+                  append={append}
+                  remove={remove}
+                />
+              </CardContent>
+              <CardFooter className="shrink-0">
+                {currentStep > 1 && (
+                  <Button
+                    type="button"
+                    onClick={() => setCurrentStep((prev) => prev - 1)}
+                    variant="outline"
+                    className="text-[#6F4E37] rounded-xl"
+                  >
+                    <ChevronLeft className="mr-2 h-4 w-4" /> Anterior
+                  </Button>
+                )}
+                {currentStep < steps.length && (
+                  <Button
+                    type="button"
+                    onClick={async () => {
+                      if (currentStep === 1) {
+                        const fieldsToValidateStep1: (keyof ProductFormValues)[] = [
+                          "id_brand",
+                          "image_url",
+                          "name",
+                        ];
+                        const isValid1 = await form.trigger(fieldsToValidateStep1);
+
+                        if (!isValid1) {
+                          toast.error("Complete los campos requeridos", { id: "basic" });
+                          return;
+                        }
                       }
-                    }
 
-                    if (currentStep === 2) {
-                      // Validar cada atributo individualmente
-                      const attributes = form.getValues("attributes");
+                      if (currentStep === 2) {
+                        const attributes = form.getValues("attributes");
 
-                      if (attributes.length === 0) {
-                        toast.error("Debe agregar al menos un atributo", { id: "attributes" });
-                        return;
+                        if (attributes.length === 0) {
+                          toast.error("Debe agregar al menos un atributo", { id: "attributes" });
+                          return;
+                        }
+                        const attributeFields = attributes.flatMap((_, index) => [
+                          `attributes.${index}.description`,
+                          `attributes.${index}.value`,
+                        ]);
+
+                        const isValid2 = await form.trigger(attributeFields as any);
+
+                        if (!isValid2) {
+                          toast.error("Complete los atributos correctamente", { id: "attributesValidation" });
+                          return;
+                        }
                       }
-                      const attributeFields = attributes.flatMap((_, index) => [
-                        `attributes.${index}.description`,
-                        `attributes.${index}.value`,
-                      ]);
 
-                      const isValid2 = await form.trigger(attributeFields as any);
+                      setCurrentStep((prev) => prev + 1);
+                    }}
+                    className="bg-[#bc6c25] hover:bg-[#a35d20] rounded-xl text-white ml-auto"
+                  >
+                    Siguiente <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                )}
+                {currentStep === steps.length && (
+                  <Button type="submit" className="bg-[#6F4E37] text-white ml-auto rounded-xl">
+                    Guardar Producto
+                  </Button>
+                )}
+              </CardFooter>
+            </Card>
+          </form>
+        </Form>
+      </div>
 
-                      if (!isValid2) {
-                        toast.error("Complete los atributos correctamente", { id: "attributesValidation" });
-                        return;
-                      }
-                    }
-
-                    setCurrentStep((prev) => prev + 1);
-                  }}
-                  className="bg-[#bc6c25] hover:bg-[#a35d20] rounded-[5px] text-white"
-                >
-                  Siguiente <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
-              )}
-              {currentStep === steps.length && (
-                <Button type="submit" className="bg-[#6F4E37] text-white ml-auto rounded-[5px]">
-                  Guardar Producto
-                </Button>
-              )}
-            </CardFooter>
-          </Card>
-        </form>
-      </Form>
     </div>
   )
 }
