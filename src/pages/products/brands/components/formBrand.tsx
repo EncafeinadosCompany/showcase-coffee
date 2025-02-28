@@ -34,9 +34,14 @@ export default function BrandForms() {
   const { id } = useParams<{ id?: string }>();
   const isEdit = Boolean(id);
 
+  
+
+
+
   useEffect(() => {
     dispatch(fetchSocialNetworks());
   }, [dispatch]);
+
 
   useEffect(() => {
     if (isEdit) {
@@ -56,6 +61,7 @@ export default function BrandForms() {
     }
   }, [isEdit, id, brands]);
 
+  
   const form = useForm<BrandFormValues>({
     resolver: zodResolver(brandFormSchema),
     defaultValues: {
@@ -66,6 +72,8 @@ export default function BrandForms() {
       social_networks: [],
     },
   });
+
+ 
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,

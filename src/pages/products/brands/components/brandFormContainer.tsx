@@ -9,7 +9,7 @@ import { brandFormSchema, BrandType } from "@/types/products/brand";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { addBrand } from "@/features/products/brands/brandSlice";
+import { addBrand, editBrandById } from "@/features/products/brands/brandSlice";
 import { addImages } from "@/features/images/imageSlice";
 import { fetchSocialNetworks } from "@/features/products/socialNetworks/socialNetworkSlice";
 import toast from "react-hot-toast";
@@ -17,7 +17,7 @@ import confirmAction from "../../components/confirmation";
 import BrandInfoForm from "./brandInfoForm";
 import BrandDescriptionForm from "./brandDescription";
 import BrandSocialNetworksForm from "./brandSocialNetworksForm";
-
+import { useParams } from "react-router-dom";
 type BrandFormValues = z.infer<typeof brandFormSchema>;
 
 export default function BrandFormContainer() {
@@ -28,6 +28,8 @@ export default function BrandFormContainer() {
   const { brands } = useAppSelector((state) => state.brands);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { id } = useParams<{ id?: string }>();
+  const isEdit = Boolean(id);
 
   const form = useForm<BrandFormValues>({
     resolver: zodResolver(brandFormSchema),
@@ -50,19 +52,45 @@ export default function BrandFormContainer() {
   }, [dispatch]);
 
   useEffect(() => {
-    const brandName = form.watch("name");
+      console.log(id, isEdit)
+      dispatch(fetchSocialNetworks());
+    }, [dispatch]);
+  
+  
+    useEffect(() => {
+      if (isEdit) {
+        const brandToEdit = brands.find((brand) => brand.id === Number(id));
+        if (brandToEdit) {
+          form.setValue("name", brandToEdit.name);
+          form.setValue("image_url", brandToEdit.image_url);
+          form.setValue("purpose", brandToEdit.purpose);
+          form.setValue("description", brandToEdit.description);
+          form.setValue("social_networks", brandToEdit.social_networks.map(network => ({
+            social_network_id: network.social_network.id,
+            description: network.description,
+            url: network.url
+          })));
+          setImagePreview(brandToEdit.image_url);
+        }
+      }
+    }, [isEdit, id, brands]);
 
-    if (!brandName) return;
-
-    const exist = brands.some(
-      (brand) => brand.name.toLowerCase() === brandName.toLowerCase()
-    );
-
-    if (exist) {
-      toast.error("La marca ya existe", { id: "brand-exists" });
-      form.setValue("name", brandName || "");
-    }
-  }, [form.watch("name")]);
+    useEffect(() => {
+      if(!isEdit){
+        const brandName = form.watch("name");
+  
+      if (!brandName) return;
+  
+      const exist = brands.some(
+        (brand) => brand.name.toLowerCase() === brandName.toLowerCase()
+      );
+  
+      if (exist) {
+        toast.error("La marca ya existe", { id: "brand-exists" });
+        form.setValue("name", brandName || "");
+      }
+      }
+    }, [form.watch("name")]);
 
   const uploadImage = async (file: File) => {
     try {
@@ -96,6 +124,7 @@ export default function BrandFormContainer() {
     form.setValue("image_url", imageUrl);
 
     const brandData: BrandType = {
+      id: isEdit ? Number(id) : undefined,
       name: data.name,
       image_url: imageUrl,
       purpose: data.purpose,
@@ -106,20 +135,29 @@ export default function BrandFormContainer() {
         url: network.url
       }))
     };
-    
-    dispatch(addBrand(brandData))
-      .unwrap()
-      .then(() => {
-        confirmAction(
-          "¿Desea agregar otra marca?", 
-          "¡La marca fue creada con éxito!", 
-          () => reset(), 
-          () => navigate("/brands")
-        );
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
+
+   
+   if (isEdit) {
+      dispatch(editBrandById({ id: brandData.id!, brand: brandData })) 
+        .unwrap()
+        .then(() => {
+          toast.success("Marca actualizada");
+          reset();
+          navigate("/brands");
+        })
+        .catch((error) => toast.error(error));
+
+        
+    } else {
+      dispatch(addBrand(brandData))
+        .unwrap()
+        .then(() => {
+          confirmAction("¿Desea agregar otra marca?", "¡La marca fue creada con éxito!", 
+            () => reset(), 
+            () => navigate("/brands"));
+        })
+        .catch((error) => toast.error(error));
+    }
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {

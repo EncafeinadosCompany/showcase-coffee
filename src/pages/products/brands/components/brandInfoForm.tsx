@@ -20,7 +20,7 @@ export default function BrandInfoForm({ form, imagePreview, handleImageChange }:
         <img
           width={"70%"}
           className="mx-auto"
-          src="./public/coffee bean-pana.svg"
+          src="/coffee bean-pana.svg"
           alt=""
         />
       </div>

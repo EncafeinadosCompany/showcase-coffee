@@ -5,7 +5,7 @@ export type brandType = {
   id: number;
   name: string;
   image_url: string | null;
-  razon: string | null;
+  purpose: string | null;
   description: string;
   created_at: string;
   updated_at: string;
@@ -21,7 +21,7 @@ export type brandType = {
 };
 
 export type BrandType = {
-  id?: number;
+  id?: number | undefined;
   name: string;
   image_url: string | null;
   purpose: string | null;
