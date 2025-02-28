@@ -1,67 +1,65 @@
-import React, { useState, useMemo } from "react"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Card, CardContent } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { useAppDispatch } from "@/hooks/useAppDispatch"
-import { useAppSelector } from "@/hooks/useAppSelector"
-import { fetchShoppingVariantsByShoppingId } from "@/features/transactions/shoppingSlice"
-import { Search } from "lucide-react"
+import React, { useState, useMemo, useEffect } from "react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { fetchShoppingVariantsByShoppingId, fetchShopping } from "@/features/transactions/shoppingSlice";
+import { Search } from "lucide-react";
 import { formatDate, formatCurrency } from "@/features/common/formatters/formatters";
-import { usePagination } from "@/components/hooks/usePagination"
-import Paginator from "@/components/common/paginator"
-import { ShoppingTableProps, ShoppingwhitDetail } from "@/types/transactions/shoppingModel"
+import { usePagination } from "@/components/hooks/usePagination";
+import Paginator from "@/components/common/paginator";
+import { ShoppingwhitDetail } from "@/types/transactions/shoppingModel";
 
-export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: ShoppingTableProps) => {
+const ShoppingTable = React.memo(() => {
+  const dispatch = useAppDispatch();
+  const { shopping, shoppingVariant, isLoading } = useAppSelector((state) => state.shopping);
 
-  const dispatch = useAppDispatch()
-  const { shoppingVariant, isLoading } = useAppSelector((state) => state.shopping)
-
-  const [selectedShopping, setSelectedShopping] = useState<ShoppingwhitDetail | null>(null)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [selectedShopping, setSelectedShopping] = useState<ShoppingwhitDetail | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Cargar los datos de shopping al montar el componente
+  useEffect(() => {
+    dispatch(fetchShopping());
+  }, [dispatch]);
+
   const handleShoppingClick = (shopping: ShoppingwhitDetail) => {
-    setSelectedShopping(shopping)
-    setIsDialogOpen(true)
+    setSelectedShopping(shopping);
+    setIsDialogOpen(true);
 
     dispatch(fetchShoppingVariantsByShoppingId(String(shopping.id))).then((action) => {
       if (Array.isArray(action.payload)) {
         setSelectedShopping((prev) => ({
           ...prev!,
           shopping_variant: action.payload,
-        }))
+        }));
       }
-    })
-
-    if (onShoppingClick) {
-      onShoppingClick(shopping)
-    }
-  }
+    });
+  };
 
   const filteredShopping = useMemo(() => {
     return shopping.filter(
       (item) =>
         item.id.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
         formatDate(item.date_entry).toLowerCase().includes(searchTerm.toLowerCase()),
-    )
-  }, [shopping, searchTerm])
+    );
+  }, [shopping, searchTerm]);
 
   const pagination = usePagination<ShoppingwhitDetail>({
-    initialItemsPerPage: 5
+    initialItemsPerPage: 5,
   });
 
   const totalShoppingValue = useMemo(() => {
     if (!selectedShopping || !selectedShopping.shopping_variant) return 0;
     return selectedShopping.shopping_variant.reduce((total, variant) => total + (variant.shopping_price * variant.quantity), 0);
   }, [selectedShopping]);
-  
 
   const currentPage = pagination.paginatedData(filteredShopping);
 
   return (
     <div className="space-y-1 h-full flex flex-col">
-
       <div className="flex gap-4 mb-6">
         <div className="relative flex-1 max-w-md">
           <Input
@@ -127,10 +125,8 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
               pageSizeOptions={[5, 10, 20, 50]}
             />
           </div>
-
         </CardContent>
       </Card>
-
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent aria-describedby="shopping-details-description" className="max-w-2xl">
@@ -160,7 +156,6 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
                       <TableHead className="text-coffee-700">Cantidad</TableHead>
                       <TableHead className="text-coffee-700">Precio de Compra</TableHead>
                       <TableHead className="text-coffee-700">Precio de Venta</TableHead>
-
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -173,7 +168,6 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
                           <TableCell className="text-coffee-700">{formatCurrency(variant.shopping_price)}</TableCell>
                           <TableCell className="text-coffee-700">{formatCurrency(variant.sale_price)}</TableCell>
                         </TableRow>
-                        
                       ))}
                   </TableBody>
                 </Table>
@@ -186,6 +180,7 @@ export const ShoppingTable = React.memo(({ shopping, onShoppingClick }: Shopping
         </DialogContent>
       </Dialog>
     </div>
-  )
-})
+  );
+});
 
+export default ShoppingTable;
