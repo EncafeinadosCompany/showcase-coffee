@@ -1,10 +1,11 @@
-import { SocialNetwork, SocialBrandType } from "@/types/products/socialNetwork";
+import { SocialNetwork} from "@/types/products/socialNetwork";
+import { BrandType } from "@/types/products/brand";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { createSocialBrand, getSocialNetworks } from "./socialNetworkService";
 
 interface SocialNetworkState {
     socialNetworks: SocialNetwork[];
-    socialBrand: SocialBrandType[];
+    socialBrand: BrandType[];
     selectedSocialNetwork?: SocialNetwork | null;
     isLoading: boolean;
     error: string | null;
@@ -26,7 +27,7 @@ export const fetchSocialNetworks = createAsyncThunk("socialNetworks/fetchAll", a
     }
 });
 
-export const addSocialBrand = createAsyncThunk("socialNetworks/add", async (socialNetwork: Omit<SocialBrandType, "id">, { rejectWithValue }) => {
+export const addSocialBrand = createAsyncThunk("socialNetworks/add", async (socialNetwork: Omit<BrandType, "id">, { rejectWithValue }) => {
     try {
         return await createSocialBrand(socialNetwork);
     } catch (error: any) {

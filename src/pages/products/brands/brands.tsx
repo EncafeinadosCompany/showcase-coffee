@@ -73,6 +73,7 @@ export default function Brands() {
         <Link to="/form-brands">
           <Button
             variant="outline"
+            data-cy="add-brand-button"
             className="bg-white hover:bg-amber-100 rounded-full text-amber-800 hover:text-amber-800 text-sm font-medium">
             <Plus className="mr-1 h-4 w-4 text-amber-800 " /> Registrar Marca
           </Button>
@@ -95,7 +96,7 @@ export default function Brands() {
               ) : (
                 <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-6">
                   {currentPage.map((coffee) => (
-                    <Dialog key={coffee.id}>
+                    <Dialog data-cy="brand-list" key={coffee.id}>
                       <CartsBrands brands={coffee}></CartsBrands>
                       <DialogContent className="sm:max-w-[550px]">
                         <DialogHeader>

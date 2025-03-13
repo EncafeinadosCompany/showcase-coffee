@@ -29,12 +29,13 @@ export default function BrandInfoForm({ form, imagePreview, handleImageChange }:
           <FormField
             control={form.control}
             name="name"
+
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-lg font-semibold text-[#6F4E37]">
                   Nombre de la Marca
                 </FormLabel>
-                <FormControl>
+                <FormControl data-cy="brand-name">
                   <Input
                     placeholder="Ingrese el nombre de la marca de café"
                     {...field}
