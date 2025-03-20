@@ -48,7 +48,7 @@ export default function CafePreview() {
     e.preventDefault();
 
     try {
-      let imageUrl;
+      //let imageUrl = "";
 
       if (logoPreview) {
         const fileInput = document.getElementById(
@@ -56,10 +56,10 @@ export default function CafePreview() {
         ) as HTMLInputElement;
         const file = fileInput.files?.[0];
 
-        if (file) {
-          const response = await dispatch(addImages(file));
-          imageUrl = response.payload.image_url;
-        }
+        //if (file) {
+        //  const response = await dispatch(addImages(file));
+        //  imageUrl = response.payload.image_url;
+        //}
       }
       if (employee) {
         dispatch(
