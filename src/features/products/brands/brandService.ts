@@ -1,5 +1,5 @@
 import { axiosInstance } from "../../../API/axiosInstance";
-import { brandType, BrandType } from "@/types/products/brand";
+import { BrandType } from "@/types/products/brand";
 
 export const getBrandById = async (id: string | number) => {
   const response = await axiosInstance.get(`/products/brands/${id}`);
@@ -16,7 +16,10 @@ export const createBrand = async (brand: Omit<BrandType, "id">) => {
   return response.data;
 };
 
-export const editBrand = async (id: string | number, brand: Partial<BrandType>) => {
+export const editBrand = async (
+  id: string | number,
+  brand: Partial<BrandType>
+) => {
   const response = await axiosInstance.put(`/products/brands/${id}`, brand);
   return response.data;
 };
