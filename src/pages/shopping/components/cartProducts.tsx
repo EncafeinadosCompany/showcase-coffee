@@ -23,7 +23,6 @@ export default function CartShopping({
     const quantity = Math.max(0, newQuantity);
     
     setcartProducts((prev) => {
-      // Si la cantidad es 0, eliminamos el producto
       if (quantity === 0) {
         return prev.filter((p) => Number(p.id_variant_products) !== Number(variantId));
       }

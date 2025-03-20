@@ -44,7 +44,6 @@ export default function RightCard({
       </CardHeader>
 
       <CardContent>
-
         <div className="flex gap-2">
           <div className="relative w-full">
             <Input
@@ -53,56 +52,95 @@ export default function RightCard({
               value={searchTerm}
               onChange={(e) => setSearch(e.target.value)}
             />
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-amber-700" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-amber-700 transition-all duration-100" />
           </div>
         </div>
 
-        <ScrollArea className="min-h-[50px] transition-all duration-300">
-          <Accordion type="single" collapsible className="w-full mb-2">
-            {productosFiltrados.map((producto) => (
-              <AccordionItem value={producto.id.toString()} key={producto.id}>
-                <AccordionTrigger className="text-left">
-                  {producto.name}
-                </AccordionTrigger>
-                <AccordionContent className="overflow-hidden">
-                  <div className="flex justify-center">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 max-w-6xl">
-                      {producto.product?.map((variante) => (
-                        <Card
-                          key={variante.id}
-                          className="bg-white shadow-md hover:shadow-lg transition-shadow duration-200 w-full max-w-sm"
-                        >
-                          <CardContent className="p-4">
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="flex-1 min-w-0">
-                                <h3 className="text-lg font-semibold text-gray-800 truncate">
-                                  {/* {producto.name} */}
-                                </h3>
-                                <p className="text-sm text-gray-600 break-words">
-                                  {variante.grammage}
-                                </p>
+        <ScrollArea className="h-80 max-h-[600px] overflow-y-auto ">
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full max-h-full mb-2 mt-10 transition-shadow duration-300"
+          >
+            {productosFiltrados.length === 0 ? (
+               searchTerm.trim() === "" ? (
+                <>
+                  <h3 className="text-xl font-semibold mb-2 mt-10">
+                    No hay productos disponibles
+                  </h3>
+                  <img
+                    width={"50%"}
+                    className="mx-auto"
+                    src="./public/undraw_search-app_cpm0.svg"
+                  ></img>
+                  <p className="text-muted-foreground text-center">
+                    ¡Agregue un producto para comenzar!.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-xl font-semibold mb-2 mt-10">
+                    No se encontraron productos
+                  </h3>
+                  <img
+                    width="60%"
+                    className="mx-auto"
+                    src="./public/undraw_page-not-found_6wni .svg"
+                    alt="No se encontraron productos"
+                  />
+                  <p className="text-muted-foreground text-center">
+                    Intenta con otro término de búsqueda.
+                  </p>
+                </>
+              )
+            ) : (
+              productosFiltrados.map((producto) => (
+                <AccordionItem
+                  value={producto?.id.toString()}
+                  key={producto.id}
+                >
+                  <AccordionTrigger className="text-left">
+                    {producto.name}
+                  </AccordionTrigger>
+                  <AccordionContent className="overflow-hidden transition-all duration-300 ease-in-out">
+                    <div className="flex justify-center">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 max-w-6xl">
+                        {producto.product?.map((variante) => (
+                          <Card
+                            key={variante.id}
+                            className="bg-white shadow-md hover:shadow-lg transition-shadow duration-200 w-full max-w-sm"
+                          >
+                            <CardContent className="p-4">
+                              <div className="flex items-start justify-between gap-2">
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="text-lg font-semibold text-gray-800 truncate">
+                                  </h3>
+                                  <p className="text-sm text-gray-600 break-words">
+                                    {variante.grammage}
+                                  </p>
+                                </div>
+                                <Coffee className="h-5 w-5 text-amber-700 flex-shrink-0" />
                               </div>
-                              <Coffee className="h-5 w-5 text-amber-700 flex-shrink-0" />
-                            </div>
 
-                            <div className="mt-3 space-y-2">
-                              <FormShopping
-                                variant_id={Number(variante.id)}
-                                cartProducts={cartProducts}
-                                setcartProducts={setcartProducts}
-                              />
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
+                              <div className="mt-3 space-y-2">
+                                <FormShopping
+                                  variant_id={Number(variante.id)}
+                                  cartProducts={cartProducts}
+                                  setcartProducts={setcartProducts}
+                                />
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  <div className="mt-4 flex justify-center">
-                    <NewVariantDialog productoId={producto.id} />
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
+                    <div className="mt-4 flex justify-center">
+                      <NewVariantDialog productoId={producto.id} />
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))
+            )}
           </Accordion>
         </ScrollArea>
       </CardContent>

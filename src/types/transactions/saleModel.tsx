@@ -1,4 +1,4 @@
-export interface Sales1 {
+export interface Sales {
   date: string;
   type_payment: string;
 }
@@ -8,8 +8,19 @@ export interface SaleDetail {
   quantity: number;
 }
 
+export interface Sale {
+  id: number;
+  date: string;
+  type_payment: string;
+  total: string | null;
+  status: boolean;
+  created_at?: string;
+  updated_at?: string;
+  sales_variant: SaleVariant[];
+}
+
 export interface SalesPayload {
-  sale: Sales1;
+  sale: Sales;
   details: SaleDetail[];
 }
 
@@ -20,17 +31,7 @@ export interface SaleVariant {
   quantity: number;
   subtotal: string;
   status: boolean;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
-export interface Sales {
-  id: number;
-  date: string;
-  type_payment: string;
-  total: string | null;
-  status: boolean;
-  created_at: string;
-  updated_at: string;
-  sales_variant: SaleVariant[];
-}

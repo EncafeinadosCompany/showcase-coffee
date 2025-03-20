@@ -45,6 +45,17 @@ export const fetchDepositsByLiquidation = createAsyncThunk(
   }
 );
 
+export const fetchTotalDepositsByLiquidation = createAsyncThunk(
+  "deposits/fetchTotalByLiquidation",
+  async (liquidationId: string, { rejectWithValue }) => {
+    try {
+      return await getDepositByLiquidations(liquidationId);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error al obtener depósitos");
+    }
+  }
+);
+
 const depositSlice = createSlice({
   name: "deposits",
   initialState,
@@ -79,6 +90,7 @@ const depositSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload as string;
     });
+
     builder.addCase(fetchDepositsByLiquidation.pending, (state) => {
       state.isLoading = true;
       state.error = null;
@@ -88,6 +100,19 @@ const depositSlice = createSlice({
       state.deposits = action.payload;
     });
     builder.addCase(fetchDepositsByLiquidation.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload as string;
+    });
+
+    builder.addCase(fetchTotalDepositsByLiquidation.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(fetchTotalDepositsByLiquidation.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.deposits = action.payload;
+    });
+    builder.addCase(fetchTotalDepositsByLiquidation.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload as string;
     });

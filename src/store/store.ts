@@ -12,6 +12,7 @@ import variantReducer from "../features/products/variants/vatiantSlice";
 import brandReducer from "../features/products/brands/brandSlice";
 import attributeReducer from "../features/products/attributes/attributeSlice";
 
+import socialNetworkReducer from "../features/products/socialNetworks/socialNetworkSlice";
 import shoppingReducer from "../features/transactions/shoppingSlice";
 import saleReducer from "../features/transactions/saleSlice";
 
@@ -20,7 +21,8 @@ import liquidationReducer from "../features/payments/liquidations/liquidationSli
 import imageReducer from "../features/images/imageSlice";
 
 import dashboardReducer from "../features/dashboard/dashboardSlice";
-
+import toastReducer from "../features/common/toast/toastSlice";
+import paginationReducer from "../features/common/pagination/paginationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -35,6 +37,7 @@ export const store = configureStore({
     brands: brandReducer,
     attributes: attributeReducer,
 
+    socialNetworks: socialNetworkReducer,
     shopping: shoppingReducer,
     sales: saleReducer,
 
@@ -44,6 +47,9 @@ export const store = configureStore({
     images: imageReducer,
 
     dashboard: dashboardReducer,
+
+    toast: toastReducer,
+    pagination: paginationReducer,
   },
 });
 

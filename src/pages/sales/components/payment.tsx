@@ -6,17 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { CreditCard, Banknote, AlertCircle, ChevronLeft, CircleDollarSign } from "lucide-react";
-
-interface PaymentSectionProps {
-    total: number;
-    onCompleteSale: (paymentMethod: string) => void;
-    onCancelSale: () => void;
-}
+import { formatCurrency } from '@/features/common/formatters/formatters';
+import { PaymentSectionProps } from '@/types/transactions/salesModuleInterfaces';
 
 const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionProps) => {
-    const [paymentMethod, setPaymentMethod] = useState("efectivo");
+    const [paymentMethod, setPaymentMethod] = useState("Efectivo");
     const [receivedAmount, setReceivedAmount] = useState("");
-    const change = paymentMethod === "efectivo" ?
+    const change = paymentMethod === "Efectivo" ?
         Number(receivedAmount) - total : 0;
 
     const handlePaymentMethodChange = (value: string) => {
@@ -24,7 +20,7 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
     };
 
     const handleCompleteSale = () => {
-        if (paymentMethod === "efectivo" && Number(receivedAmount) < total) {
+        if (paymentMethod === "Efectivo" && Number(receivedAmount) < total) {
             console.error("Monto insuficiente.");
             return;
         }
@@ -56,28 +52,28 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
                     className="space-y-3"
                 >
                     <div
-                        className={`flex items-center space-x-2 border rounded-xl p-3 hover:bg-amber-50 cursor-pointer ${paymentMethod === "efectivo" ? "bg-amber-50" : ""}`}
-                        onClick={() => handlePaymentMethodChange("efectivo")}
+                        className={`flex items-center space-x-2 border rounded-xl p-3 hover:bg-amber-50 cursor-pointer ${paymentMethod === "Efectivo" ? "bg-amber-50" : ""}`}
+                        onClick={() => handlePaymentMethodChange("Efectivo")}
                     >
-                        <RadioGroupItem value="efectivo" id="efectivo" />
-                        <Label htmlFor="efectivo" className="flex items-center gap-2 cursor-pointer w-full">
+                        <RadioGroupItem value="Efectivo" id="Efectivo" />
+                        <Label htmlFor="Efectivo" className="flex items-center gap-2 cursor-pointer w-full">
                             <Banknote className="h-4 w-4 text-amber-700" />
                             Efectivo
                         </Label>
                     </div>
                     <div
-                        className={`flex items-center space-x-2 border rounded-xl p-3 hover:bg-amber-50 cursor-pointer ${paymentMethod === "transferencia" ? "bg-amber-50" : ""}`}
-                        onClick={() => handlePaymentMethodChange("transferencia")}
+                        className={`flex items-center space-x-2 border rounded-xl p-3 hover:bg-amber-50 cursor-pointer ${paymentMethod === "Transferencia" ? "bg-amber-50" : ""}`}
+                        onClick={() => handlePaymentMethodChange("Transferencia")}
                     >
-                        <RadioGroupItem value="transferencia" id="transferencia" />
-                        <Label htmlFor="transferencia" className="flex items-center gap-2 cursor-pointer w-full">
+                        <RadioGroupItem value="Transferencia" id="Transferencia" />
+                        <Label htmlFor="Transferencia" className="flex items-center gap-2 cursor-pointer w-full">
                             <CreditCard className="h-4 w-4 text-amber-700" />
                             Transferencia
                         </Label>
                     </div>
                 </RadioGroup>
 
-                {paymentMethod === "efectivo" && (
+                {paymentMethod === "Efectivo" && (
                     <div className="space-y-4">
                         <div>
                             <Label htmlFor="received">Monto Recibido</Label>
@@ -85,15 +81,19 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
                                 id="received"
                                 type="number"
                                 value={receivedAmount}
+
                                 onChange={(e) => setReceivedAmount(e.target.value)}
                                 className="mt-1 rounded-xl"
                                 placeholder="Ingrese el monto recibido"
                             />
+                            <p className="mt-2 text-sm text-gray-600 overflow-hidden text-ellipsis whitespace-nowrap max-w-[240px]">
+                                {receivedAmount !== "" ? formatCurrency(receivedAmount) : "$0"}
+                            </p>
                         </div>
                         <div className="flex justify-between items-center bg-amber-50 p-3 rounded-xl">
                             <span className="text-amber-800">Cambio:</span>
-                            <span className="text-lg font-semibold text-amber-800 ">
-                                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(Math.max(0, change))}
+                            <span className="max-w-[160px] text-lg font-semibold text-amber-800 overflow-hidden text-ellipsis whitespace-nowrap">
+                                {formatCurrency(Math.max(0, change))}
                             </span>
                         </div>
                     </div>
@@ -104,7 +104,7 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
                     className="flex gap-2 w-full bg-[#db8935] hover:bg-[#966637] text-black rounded-2xl"
                     onClick={handleCompleteSale}
                     disabled={
-                        paymentMethod === "efectivo" &&
+                        paymentMethod === "Efectivo" &&
                         (Number(receivedAmount) < total || !receivedAmount)
                     }
                 >
@@ -138,6 +138,7 @@ const Payment = memo(({ total, onCompleteSale, onCancelSale }: PaymentSectionPro
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
+
             </CardFooter>
         </Card>
     );

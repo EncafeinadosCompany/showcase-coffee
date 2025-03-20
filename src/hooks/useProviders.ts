@@ -9,6 +9,7 @@ import {
     editProvider,
     associateProvider,
 } from "@/features/companies/providerSlice";
+import { showToast } from "@/features/common/toast/toastSlice";
 
 export const useProviders = (itemsPerPage: number = 6) => {
     const dispatch = useAppDispatch();
@@ -28,7 +29,7 @@ export const useProviders = (itemsPerPage: number = 6) => {
                 .unwrap()
                 .catch((error) => {
                     console.error(error);
-                    toast.error("No se pudieron cargar los proveedores");
+                    dispatch(showToast({ message: "Error al cargar los proveedores", type: "error" }));
                 });
         }
     }, [storeId, dispatch]);
@@ -61,8 +62,8 @@ export const useProviders = (itemsPerPage: number = 6) => {
                 toast("El nombre es obligatorio", { icon: "⚠️" });
                 return false;
             }
-            if (!formData.nit?.trim() || !/^\d+$/.test(formData.nit)) {
-                toast("El NIT debe ser un valor numérico", { icon: "⚠️" });
+            if (!formData.nit?.trim() || !/^[\d-]+$/.test(formData.nit)) {
+                toast("El  NIT debe ser un valor numérico o contener guiones", { icon: "⚠️" });
                 return false;
             }
             if (
@@ -89,19 +90,19 @@ export const useProviders = (itemsPerPage: number = 6) => {
       
           if (!employee?.id_store) {
             toast.error("No se encontró el ID de la tienda");
-            return;
+            return; 
           }
       
           try {
             if (editingId !== null) {
-                await dispatch(
-                    editProvider({ id: editingId.toString(), provider: providerData })
-                  ).unwrap();
-                  toast.success("Proveedor actualizado correctamente");
-                        setEditingId(null);
+              await dispatch(
+                editProvider({ id: editingId.toString(), provider: providerData })
+              ).unwrap();
+              toast.success("Proveedor actualizado correctamente");
             } else {
+            
               const newProvider = await dispatch(addProvider(providerData)).unwrap();
-              
+      
               if (newProvider?.id) {
                 try {
                   await dispatch(
@@ -111,22 +112,30 @@ export const useProviders = (itemsPerPage: number = 6) => {
                     })
                   ).unwrap();
                 } catch (error) {
-                  console.error("Error creating alliance:", error);
+                  console.error("Error asociando proveedor con la tienda:", error);
                   toast.error("Error al asociar el proveedor con la tienda");
                   return;
                 }
               }
-              
-              toast.success("Proveedor creado correctamente");
+              toast.success("¡Proveedor creado con éxito!");
             }
+
+            setEditingId(null);
             setShowDialog(false);
+      
+            await dispatch(fetchProvidersByStore(employee.id_store)).unwrap();
           } catch (error) {
-            toast.error("Error al guardar el proveedor");
+            console.error("Error en handleSubmit:", error);
+
+            if (typeof error === "object" && error !== null && "message" in error) {
+              toast.error(`Error: ${error.message}`); 
+            } else {
+              toast.error("Error al guardar el proveedor"); 
+            }
           }
         },
         [dispatch, employee?.id_store, editingId, validateForm]
       );
-
     return {
         providers: currentItems,
         isLoading,

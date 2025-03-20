@@ -8,12 +8,13 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { addVariant } from "@/features/products/variants/vatiantSlice";
 import { fetchProducts } from "@/features/products/products/productSlice";
-import toast from "react-hot-toast";
+import { showToast } from "@/features/common/toast/toastSlice";
 
 export default function NewVariantDialog({ productoId }: { productoId: number; }) {
   const [gramaje, setGramaje] = useState("");
   const { error } = useAppSelector((state) => state.variants);
   const dispatch = useAppDispatch();
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -27,27 +28,34 @@ export default function NewVariantDialog({ productoId }: { productoId: number; }
     };
 
     if (error) {
-      toast.error("Error al agregar la variante")
+      dispatch(showToast({ message: "Error al agregar la variante", type: "error" }));
     } else {
-      dispatch(addVariant(nuevaVariante));
-      console.log("Variante agregada", nuevaVariante);
-      toast.success(`La variante de ${gramaje}g ha sido agregada`)
+      dispatch(addVariant(nuevaVariante))
+      .unwrap()
+      .then(() => {
+        dispatch(showToast({ message: `La variante de ${gramaje} ha sido agregada`, type: "success" }));
+        dispatch(fetchProducts());
+      })
+      .catch(() => {
+        dispatch(showToast({ message: "La variante ya existe", type: "error" }));
+      })
+    
     }
     setGramaje("");
     setIsModalOpen(false);
-    dispatch(fetchProducts());
+    
   };
 
   return (
     <Dialog onOpenChange={setIsModalOpen} open={isModalOpen}>
       <DialogTrigger asChild>
         <Button className="mt-4 bg-[#6F4E37] hover:bg-[#5A3E2B] text-white">
-          <Coffee className="mr-2 h-4 w-4" /> Agregar Variante
+          <Coffee className="mr-2 h-4 w-4" /> Agregar Gramaje
         </Button>
       </DialogTrigger>
       <DialogContent aria-describedby="dialog-description">
         <DialogHeader>
-          <DialogTitle>Agregar Nueva Variante</DialogTitle>
+          <DialogTitle className="mx-auto">Agregar una nueva referencia</DialogTitle>
         </DialogHeader>
         <p id="dialog-description" className="sr-only">
           Por favor, completa los campos a continuación para agregar una nueva
@@ -66,16 +74,19 @@ export default function NewVariantDialog({ productoId }: { productoId: number; }
               type="text"
               value={gramaje}
               onChange={(e) => setGramaje(e.target.value)}
+              className="rouned-sm mt-2 border border-gray-300 focus:border-coffee-500 focus:rounded-sm focus:ring-coffee-500"
               required
             />
           </div>
 
+          <div className="flex justify-center">
           <Button
             type="submit"
-            className="bg-[#6F4E37] hover:bg-[#5A3E2B] text-white"
+            className="bg-[#6F4E37] hover:bg-[#5A3E2B] text-white rounded-sm w-1/2"
           >
             Agregar
           </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

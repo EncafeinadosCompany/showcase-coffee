@@ -78,9 +78,8 @@ const productSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getID.fulfilled, (state, action) => {
+      .addCase(getID.fulfilled, (state) => {
         state.isLoading = false;
-        console.log("Producto obtenido:", action.payload);
       })
       .addCase(getID.rejected, (state, action) => {
         state.isLoading = false;
