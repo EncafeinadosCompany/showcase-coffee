@@ -10,9 +10,7 @@ import { useAppSelector } from "@/hooks/useAppSelector";
 import { fetchStoresID, editStore } from "@/features/companies/storeSlice";
 import { addImages } from "@/features/images/imageSlice";
 import toast, { Toaster } from "react-hot-toast";
-import { FormData
-  
- } from "@/types/companies/store";
+import { FormData } from "@/types/companies/store";
 export default function CafePreview() {
   const { stores } = useAppSelector((state) => state.stores);
   const employee = useAppSelector((state) => state.auth.employee);
@@ -47,10 +45,10 @@ export default function CafePreview() {
   }, [dispatch, employee]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      let imageUrl = "";
+      let imageUrl;
 
       if (logoPreview) {
         const fileInput = document.getElementById(
@@ -64,33 +62,32 @@ export default function CafePreview() {
         }
       }
       if (employee) {
-        dispatch(editStore({
-          id: String(employee.id_store),
-          store: {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            address: formData.address,
-            logo: logoPreview
-          }
-        }))
+        dispatch(
+          editStore({
+            id: String(employee.id_store),
+            store: {
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+              address: formData.address,
+              logo: logoPreview,
+            },
+          })
+        );
 
-        toast.success('¡Perfil actualizado con éxito! ☕', {
-          icon: '🎉',
+        toast.success("¡Perfil actualizado con éxito! ☕", {
+          icon: "🎉",
           duration: 4000,
           style: {
-            background: '#4A3428',
-            color: '#fff',
-          }
-        })
-
+            background: "#4A3428",
+            color: "#fff",
+          },
+        });
       }
-
     } catch (error: any) {
       toast.error("¡Error al guardar los cambios!");
     }
-
-  }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -114,7 +111,7 @@ export default function CafePreview() {
     const phoneRegex = /^3[0-9]{9}$/;
     return phoneRegex.test(phone);
   };
-  
+
   return (
     <div className=" pt-4 flex items-center justify-center">
       <Toaster position="top-right" />
@@ -192,8 +189,9 @@ export default function CafePreview() {
               ].map((field) => (
                 <div
                   key={field.id}
-                  className={`relative transform transition-all duration-300 ${isHovered === field.id ? "scale-105" : ""
-                    }`}
+                  className={`relative transform transition-all duration-300 ${
+                    isHovered === field.id ? "scale-105" : ""
+                  }`}
                   onMouseEnter={() => setIsHovered(field.id)}
                   onMouseLeave={() => setIsHovered("")}
                 >
@@ -224,13 +222,16 @@ export default function CafePreview() {
               onClick={(e) => {
                 if (!validatePhone(formData.phone) && formData.phone) {
                   e.preventDefault();
-                  toast.error('El número de teléfono debe tener 10 dígitos y comenzar con 3', {
-                    duration: 4000,
-                    style: {
-                      background: '#4A3428',
-                      color: '#fff',
+                  toast.error(
+                    "El número de teléfono debe tener 10 dígitos y comenzar con 3",
+                    {
+                      duration: 4000,
+                      style: {
+                        background: "#4A3428",
+                        color: "#fff",
+                      },
                     }
-                  });
+                  );
                 }
               }}
             >
