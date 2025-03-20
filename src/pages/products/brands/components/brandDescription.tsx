@@ -21,7 +21,7 @@ export default function BrandDescriptionForm({ form }: BrandDescriptionFormProps
               <FormLabel className="text-lg font-semibold text-[#6F4E37]">
                 Propósito
               </FormLabel>
-              <FormControl>
+              <FormControl data-cy="brand-purpose">
                 <Input
                   placeholder="Cuentanos tu historia..."
                   {...field}
@@ -41,7 +41,7 @@ export default function BrandDescriptionForm({ form }: BrandDescriptionFormProps
               <FormLabel className="text-lg font-semibold text-[#6F4E37]">
                 Descripción
               </FormLabel>
-              <FormControl>
+              <FormControl data-cy="brand-description">
                 <Textarea
                   placeholder="Describa su marca de café"
                   {...field}

@@ -211,6 +211,7 @@ export default function BrandFormContainer() {
             {currentPage < totalPages ? (
               <Button
                 type="button"
+                data-cy="next-button"
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
@@ -223,6 +224,7 @@ export default function BrandFormContainer() {
               <Button
                 type="button"
                 onClick={form.handleSubmit(onSubmit)}
+                 data-cy="submit-button"
                 className="bg-[#6F4E37] hover:bg-[#5D3E2E] text-white rounded-[5px]"
               >
                 Guardar Marca

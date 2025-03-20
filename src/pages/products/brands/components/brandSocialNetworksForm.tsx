@@ -67,6 +67,7 @@ export default function BrandSocialNetworksForm({
           </h2>
           <Button
             type="button"
+            data-cy="add-network"
             onClick={() =>
               append({ social_network_id: 0, url: "", description: "" })
             }
@@ -110,21 +111,23 @@ export default function BrandSocialNetworksForm({
                     control={form.control}
                     name={`social_networks.${index}.social_network_id`}
                     render={({ field }) => (
-                      <FormItem className="mb-3">
+                      <FormItem className="mb-3" >
                         <Select
+                        
                           onValueChange={(value) =>
                             field.onChange(Number.parseInt(value))
                           }
                           defaultValue={field.value?.toString()}
                         >
-                          <FormControl>
-                            <SelectTrigger className="w-full text-[#6F4E37] border-[#6F4E37] rounded-xl">
+                          <FormControl >
+                            <SelectTrigger   data-cy="select-network"  className="w-full text-[#6F4E37] border-[#6F4E37] rounded-xl">
                               <SelectValue placeholder="Selecciona una red social" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent data-cy="social-network-list">
                             {socialNetworks.map((network) => (
                               <SelectItem
+                              data-cy={`option-${network.name.toLowerCase()}`} 
                                 key={network.id}
                                 value={network.id.toString()}
                                 className="text-[#6F4E37]"
@@ -150,7 +153,7 @@ export default function BrandSocialNetworksForm({
                               {fieldType === "tel" ? "Número de teléfono" : 
                                 fieldType === "text" ? "Usuario" : "URL"}
                             </FormLabel>
-                            <FormControl>
+                            <FormControl data-cy="social-network-type">
                               <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                   {icon}
@@ -176,7 +179,7 @@ export default function BrandSocialNetworksForm({
                             <FormLabel className="text-[#6F4E37]">
                               Descripción
                             </FormLabel>
-                            <FormControl>
+                            <FormControl data-cy="social-network-description" >
                               <Input
                                 placeholder="Ej: Síguenos en Instagram"
                                 {...field}

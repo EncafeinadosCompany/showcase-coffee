@@ -201,7 +201,7 @@ export default function BrandForms() {
                         <FormLabel className="text-lg font-semibold text-[#6F4E37]">
                           Nombre de la Marca
                         </FormLabel>
-                        <FormControl>
+                        <FormControl >
                           <Input
                             placeholder="Ingrese el nombre de la marca de café"
                             {...field}
