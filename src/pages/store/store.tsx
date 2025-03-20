@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { fetchStoresID, editStore } from "@/features/companies/storeSlice";
-import { addImages } from "@/features/images/imageSlice";
+//import { addImages } from "@/features/images/imageSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { FormData } from "@/types/companies/store";
 export default function CafePreview() {
@@ -50,17 +50,17 @@ export default function CafePreview() {
     try {
       //let imageUrl = "";
 
-      if (logoPreview) {
+      /*if (logoPreview) {
         const fileInput = document.getElementById(
           "logo-upload"
         ) as HTMLInputElement;
         const file = fileInput.files?.[0];
 
-        //if (file) {
-        //  const response = await dispatch(addImages(file));
-        //  imageUrl = response.payload.image_url;
-        //}
-      }
+        if (file) {
+          const response = await dispatch(addImages(file));
+          imageUrl = response.payload.image_url;
+        }
+      }*/
       if (employee) {
         dispatch(
           editStore({
