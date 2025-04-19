@@ -38,7 +38,7 @@ export default function Brands() {
   const brands = useAppSelector((state) => state.brands?.brands ?? []);
 
   const pagination = usePagination<Brand>({
-    initialItemsPerPage: 4
+    initialItemsPerPage: 10
   });
 
   const filteredCoffee = (brands ?? []).filter((coffee) =>
@@ -126,7 +126,7 @@ export default function Brands() {
                             <div>
                               <h4 className="font-semibold text-lg mb-2">Redes Sociales</h4>
                               <div className="grid grid-cols-2 gap-4">
-                                {coffee.social_networks.map((network, index) => (
+                                {coffee.social_networks && coffee.social_networks.map((network, index) => (
                                   <a
                                     key={index}
                                     href={network.url}
