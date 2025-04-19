@@ -5,6 +5,7 @@ import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { logoutUser } from "@/features/auth/authSlice";
 import { useAuth } from "@/context/AuthContext1";
 import { ModuleSection } from '@/types/common/sidebar';
+import logo from "@/assets/images/logos/dark-logo.svg";
 
 const Sidebar: FC = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
@@ -152,7 +153,7 @@ const Sidebar: FC = () => {
               className="flex items-center space-x-3 focus:outline-none"
             >
               <img
-                src="../src/assets/images/logos/dark-logo.svg"
+                src={logo}
                 alt="Logo"
                 className="w-50 h-8 cursor-pointer"
               />
